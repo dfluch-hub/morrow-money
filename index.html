@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <title>Morrow Money</title>
+<link rel="manifest" href="./manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Morrow Money">
+  <link rel="apple-touch-icon" href="./icon-192x192.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <style>
+    [x-cloak] { display: none !important; }
+
+    html, body {
+      height: 100%;
+      overscroll-behavior: none;
+      background: #0f172a;
+    }
+
+    body {
+      min-height: 100dvh;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-slate-900 text-slate-100 h-screen w-screen overflow-hidden flex flex-col font-sans antialiased selection:bg-emerald-500/30"
+  x-data
+>
+
+  <main
+    x-show="$store.spine.currentView === 'dashboard'"
+    x-transition.opacity.duration.200ms
+    class="flex-1 flex flex-col p-6 h-full"
+  >
+    <header class="flex justify-between items-center mb-8 mt-2">
+      <h1 class="text-2xl font-bold tracking-tight text-white">Morrow Money</h1>
+
+      <button
+        type="button"
+        class="p-3 bg-slate-800 rounded-full border border-slate-700/50 text-slate-400 hover:text-white transition-colors active:scale-90"
+        aria-label="Einstellungen"
+      >
+        <i data-lucide="settings" class="w-5 h-5"></i>
+      </button>
+    </header>
+
+    <div class="bg-slate-800 rounded-[2rem] p-8 text-center border border-slate-700/50 shadow-lg mb-8">
+      <span class="text-slate-400 text-xs font-bold uppercase tracking-widest">Diesen Monat gespart</span>
+      <div
+        class="text-5xl font-extrabold text-emerald-400 mt-3 tracking-tight"
+        x-text="$store.spine.formatMoney($store.spine.monthlySaved)"
+      ></div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 flex-1 content-start">
+      <button
+        @click="$store.spine.openCostTime()"
+        class="bg-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-4 border border-slate-700/50 active:scale-95 transition-all"
+      >
+        <div class="bg-indigo-500/10 p-4 rounded-2xl text-indigo-400">
+          <i data-lucide="calculator" class="w-8 h-8"></i>
+        </div>
+        <span class="text-sm font-semibold text-slate-200">Cost / Time</span>
+      </button>
+
+      <button
+        type="button"
+        @click="$store.spine.openImpulse()"
+        class="bg-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-4 border border-slate-700/50 active:scale-95 transition-all relative"
+      >
+        <div
+          x-show="$store.spine.impulses.length > 0"
+          x-text="$store.spine.impulses.length"
+          class="absolute top-4 right-4 bg-rose-500 text-white text-xs font-bold min-w-6 h-6 px-1.5 rounded-full flex items-center justify-center shadow-md"
+        ></div>
+
+        <div class="bg-rose-500/10 p-4 rounded-2xl text-rose-400">
+          <i data-lucide="timer" class="w-8 h-8"></i>
+        </div>
+        <span class="text-sm font-semibold text-slate-200">Impulse</span>
+      </button>
+
+      <button
+        type="button"
+        @click="$store.spine.openGraveyard()"
+        class="bg-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-4 border border-slate-700/50 active:scale-95 transition-all relative"
+      >
+        <div
+          x-show="$store.spine.graveyard.length > 0"
+          x-text="$store.spine.graveyard.length"
+          class="absolute top-4 right-4 bg-emerald-500 text-white text-xs font-bold min-w-6 h-6 px-1.5 rounded-full flex items-center justify-center shadow-md"
+        ></div>
+
+        <div class="bg-emerald-500/10 p-4 rounded-2xl text-emerald-400">
+          <i data-lucide="ghost" class="w-8 h-8"></i>
+        </div>
+        <span class="text-sm font-semibold text-slate-200">Graveyard</span>
+      </button>
+
+      <button
+        type="button"
+        @click="$store.spine.openFutureMe()"
+        class="bg-slate-800 p-6 rounded-3xl flex flex-col items-center justify-center gap-4 border border-slate-700/50 active:scale-95 transition-all"
+      >
+        <div class="bg-emerald-500/10 p-4 rounded-2xl text-emerald-400">
+          <i data-lucide="trending-up" class="w-8 h-8"></i>
+        </div>
+        <span class="text-sm font-semibold text-slate-200">Future Me</span>
+      </button>
+    </div>
+  </main>
+
+  <section
+    x-cloak
+    x-show="$store.spine.currentView === 'shouldIBuyIt'"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 translate-y-4"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    class="flex-1 flex flex-col bg-slate-900 h-full absolute inset-0 z-10"
+  >
+    <header class="sticky top-0 bg-slate-900/90 backdrop-blur-md flex items-center p-6 border-b border-slate-800 z-20">
+      <button
+        @click="$store.spine.currentView = 'dashboard'; $store.spine.refreshIcons()"
+        class="p-3 -ml-2 bg-slate-800 rounded-full mr-4 active:scale-90 transition-transform"
+        aria-label="Zurück"
+      >
+        <i data-lucide="arrow-left" class="w-5 h-5 text-slate-300"></i>
+      </button>
+
+      <div class="min-w-0">
+        <h2 class="text-xl font-bold">Arbeitszeit statt Preis</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Was kostet dich der Kauf wirklich?</p>
+      </div>
+    </header>
+
+    <div class="p-6 overflow-y-auto pb-[max(2rem,env(safe-area-inset-bottom))] h-full">
+      <div class="bg-slate-800 rounded-[2rem] p-6 border border-slate-700/50">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 pl-1">
+              Was willst du kaufen?
+            </label>
+
+            <input
+              type="text"
+              x-model="$store.spine.costTime.product"
+              @input="$store.spine.calculateCostTime()"
+              @focus="setTimeout(() => $el.scrollIntoView({behavior:'smooth', block:'center'}), 250)"
+              maxlength="80"
+              class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600"
+              placeholder="Neue Kopfhörer"
+            >
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 pl-1">
+              Preis
+            </label>
+
+            <div class="relative">
+              <input
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="0.01"
+                x-model.number="$store.spine.costTime.price"
+                @input="$store.spine.calculateCostTime()"
+                @focus="setTimeout(() => $el.scrollIntoView({behavior:'smooth', block:'center'}), 250)"
+                class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 pr-12 text-white text-xl font-bold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all placeholder:text-slate-600"
+                placeholder="180"
+              >
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-semibold"> </span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-2 pl-1">
+              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Netto pro Stunde
+              </label>
+              <span class="text-[10px] text-slate-600">wird lokal gespeichert</span>
+            </div>
+
+            <div class="relative">
+              <input
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="0.01"
+                x-model.number="$store.spine.settings.hourlyWage"
+                @input="$store.spine.updateHourlyWage()"
+                @focus="setTimeout(() => $el.scrollIntoView({behavior:'smooth', block:'center'}), 250)"
+                class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 pr-12 text-white text-xl font-bold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600"
+                placeholder="20"
+              >
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-semibold"> </span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 pl-1">
+              Arbeitsstunden pro Woche
+            </label>
+
+            <div class="relative">
+              <input
+                type="number"
+                inputmode="decimal"
+                min="1"
+                max="100"
+                step="0.5"
+                x-model.number="$store.spine.settings.weeklyHours"
+                @input="$store.spine.updateWeeklyHours()"
+                @focus="setTimeout(() => $el.scrollIntoView({behavior:'smooth', block:'center'}), 250)"
+                class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 pr-16 text-white font-semibold focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-slate-600"
+                placeholder="38.5"
+              >
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-semibold">h/Woche</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <template x-if="$store.spine.costTime.valid">
+        <div class="mt-5 space-y-4">
+          <div class="bg-slate-800 rounded-[2rem] p-6 border border-slate-700/50">
+            <div class="flex items-center justify-between gap-4">
+              <div class="min-w-0">
+                <div class="text-xs uppercase tracking-widest font-bold text-slate-500">
+                  Dieser Kauf kostet dich
+                </div>
+
+                <div
+                  class="mt-2 text-3xl font-extrabold text-white tracking-tight"
+                  x-text="$store.spine.costTime.workTimeLabel"
+                ></div>
+              </div>
+              <div class="bg-indigo-500/10 text-indigo-400 rounded-2xl p-4 shrink-0">
+                <i data-lucide="clock-3" class="w-7 h-7"></i>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mt-5">
+              <div class="bg-slate-900/70 rounded-2xl p-4 border border-slate-700/40 overflow-hidden">
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+                  Arbeitstage
+                </div>
+                <div
+                  class="mt-1 text-lg font-bold text-slate-200 whitespace-nowrap truncate"
+                  x-text="$store.spine.costTime.workDaysLabel"
+                ></div>
+              </div>
+
+              <div class="bg-slate-900/70 rounded-2xl p-4 border border-slate-700/40 overflow-hidden">
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+                  Wochenlohn
+                </div>
+                <div
+                  class="mt-1 text-lg font-bold text-slate-200 whitespace-nowrap truncate"
+                  x-text="$store.spine.costTime.weeklyShareLabel"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="rounded-[2rem] p-6 border"
+            :class="$store.spine.costTime.verdictToneClasses"
+          >
+            <div class="flex items-start gap-4">
+              <div
+                class="rounded-2xl p-3 shrink-0"
+                :class="$store.spine.costTime.verdictIconClasses"
+              >
+                <i :data-lucide="$store.spine.costTime.verdictIcon" class="w-6 h-6"></i>
+              </div>
+              <div class="min-w-0">
+                <div class="text-[10px] font-bold uppercase tracking-widest opacity-70">
+                  Verdict
+                </div>
+                <h3
+                  class="text-xl font-bold mt-1"
+                  x-text="$store.spine.costTime.verdictTitle"
+                ></h3>
+                <p
+                  class="mt-2 text-sm leading-relaxed opacity-80"
+                  x-text="$store.spine.costTime.verdictText"
+                ></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center text-[10px] leading-4 text-slate-600 px-3">
+            Das Verdict ist ein Reflexions-Impuls, keine finanzielle Beratung.
+          </div>
+
+          <button
+            type="button"
+            @click="$store.spine.addCurrentToImpulse()"
+            class="w-full bg-rose-500 hover:bg-rose-400 text-white font-bold py-4 rounded-2xl transition-colors active:scale-[0.99] flex items-center justify-center gap-2"
+          >
+            <i data-lucide="timer-reset" class="w-5 h-5"></i>
+            Auf die Impuls-Liste setzen
+          </button>
+        </div>
+      </template>
+
+      <template x-if="!$store.spine.costTime.valid">
+        <div class="mt-5 rounded-[2rem] border border-dashed border-slate-700 p-6 text-center">
+          <i data-lucide="sparkles" class="w-6 h-6 mx-auto text-slate-600"></i>
+          <p class="mt-3 text-sm text-slate-500">
+            Preis und Netto-Stundenlohn eingeben – Morrow Money übersetzt den Kauf in Lebenszeit.
+          </p>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <section
+    x-cloak
+    x-show="$store.spine.currentView === 'impulse'"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 translate-y-4"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    class="flex-1 flex flex-col bg-slate-900 h-full absolute inset-0 z-10"
+  >
+    <header class="sticky top-0 bg-slate-900/90 backdrop-blur-md flex items-center p-6 border-b border-slate-800 z-20">
+      <button
+        @click="$store.spine.currentView = 'dashboard'; $store.spine.refreshIcons()"
+        class="p-3 -ml-2 bg-slate-800 rounded-full mr-4 active:scale-90 transition-transform"
+        aria-label="Zurück"
+      >
+        <i data-lucide="arrow-left" class="w-5 h-5 text-slate-300"></i>
+      </button>
+
+      <div class="min-w-0">
+        <h2 class="text-xl font-bold">Impulse</h2>
+        <p class="text-xs text-slate-500 mt-0.5">72 Stunden Abstand vor der Entscheidung.</p>
+      </div>
+    </header>
+
+    <div class="p-6 overflow-y-auto pb-[max(2rem,env(safe-area-inset-bottom))] h-full">
+      <template x-if="$store.spine.impulses.length === 0">
+        <div class="h-full flex items-center justify-center">
+          <div class="text-center max-w-xs]">
+            <div class="w-20 h-20 mx-auto rounded-[1.75rem] bg-rose-500/10 text-rose-400 flex items-center justify-center border border-rose-500/10">
+              <i data-lucide="timer-off" class="w-9 h-9"></i>
+            </div>
+            <h3 class="mt-5 text-lg font-bold text-white">Noch keine Impulse</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+              Setze einen Kauf über Cost / Time auf die Liste. Danach läuft automatisch die 72-Stunden-Pause.
+            </p>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="$store.spine.impulses.length > 0">
+        <div class="space-y-4">
+          <template x-for="item in $store.spine.impulses" :key="item.id">
+            <article
+              class="bg-slate-800 rounded-[2rem] p-5 border transition-colors"
+              :class="$store.spine.isImpulseDue(item)
+                ? 'border-rose-500/30'
+                : 'border-slate-700/50'"
+            >
+              <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+                    Kaufimpuls
+                  </div>
+                  <h3
+                    class="mt-1 text-lg font-bold text-white truncate"
+                    x-text="item.product || 'Unbenannter Kauf'"
+                  ></h3>
+                  <div
+                    class="mt-1 text-sm font-semibold text-slate-400"
+                    x-text="$store.spine.formatMoney(item.price)"
+                  ></div>
+                </div>
+                <div
+                  class="shrink-0 rounded-2xl p-3"
+                  :class="$store.spine.isImpulseDue(item)
+                    ? 'bg-rose-500/10 text-rose-400'
+                    : 'bg-slate-700/50 text-slate-400'"
+                >
+                  <i
+                    :data-lucide="$store.spine.isImpulseDue(item) ? 'circle-alert' : 'timer'"
+                    class="w-6 h-6"
+                  ></i>
+                </div>
+              </div>
+
+              <div class="mt-5 bg-slate-900/70 rounded-2xl p-4 border border-slate-700/40">
+                <div class="flex items-center justify-between gap-4">
+                  <div class="text-xs font-semibold"
+                       :class="$store.spine.isImpulseDue(item) ? 'text-rose-300' : 'text-slate-300'">
+                    <span x-text="$store.spine.impulseStatusLabel(item)"></span>
+                  </div>
+                  <div class="text-[10px] text-slate-600 whitespace-nowrap"
+                       x-text="$store.spine.addedAgoLabel(item)"></div>
+                </div>
+                <div class="mt-3 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div
+                    class="h-full rounded-full transition-all duration-500"
+                    :class="$store.spine.isImpulseDue(item) ? 'bg-rose-400' : 'bg-rose-500'"
+                    :style="`width: ${$store.spine.impulseProgress(item)}%`"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="mt-4 grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  @click="$store.spine.markImpulseBought(item.id)"
+                  class="rounded-2xl border border-slate-700/60 bg-slate-900/40 py-3 px-3 text-sm font-semibold text-slate-400 active:scale-[0.99]"
+                >
+                  Doch gekauft
+                </button>
+
+                <button
+                  type="button"
+                  @click="$store.spine.moveImpulseToGraveyard(item.id)"
+                  class="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.07] py-3 px-3 text-sm font-semibold text-emerald-300 active:scale-[0.99]"
+                >
+                  Nicht gekauft
+                </button>
+              </div>
+
+              <button
+                type="button"
+                @click="$store.spine.moveImpulseToGraveyard(item.id)"
+                class="mt-3 w-full rounded-2xl bg-emerald-500 text-slate-950 py-3.5 text-sm font-bold active:scale-[0.99]"
+              >
+                Geld gespart!
+              </button>
+            </article>
+          </template>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <section
+    x-cloak
+    x-show="$store.spine.currentView === 'graveyard'"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 translate-y-4"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    class="flex-1 flex flex-col bg-slate-900 h-full absolute inset-0 z-10"
+  >
+    <header class="sticky top-0 bg-slate-900/90 backdrop-blur-md flex items-center p-6 border-b border-slate-800 z-20">
+      <button
+        @click="$store.spine.currentView = 'dashboard'; $store.spine.refreshIcons()"
+        class="p-3 -ml-2 bg-slate-800 rounded-full mr-4 active:scale-90 transition-transform"
+        aria-label="Zurück"
+      >
+        <i data-lucide="arrow-left" class="w-5 h-5 text-slate-300"></i>
+      </button>
+
+      <div class="min-w-0">
+        <h2 class="text-xl font-bold">Graveyard</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Nicht gekauft. Geld behalten.</p>
+      </div>
+    </header>
+
+    <div class="p-6 overflow-y-auto pb-[max(2rem,env(safe-area-inset-bottom))] h-full">
+      <template x-if="$store.spine.graveyard.length === 0">
+        <div class="h-full flex items-center justify-center">
+          <div class="text-center max-w-xs]">
+            <div class="w-20 h-20 mx-auto rounded-[1.75rem] bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/10">
+              <i data-lucide="ghost" class="w-9 h-9"></i>
+            </div>
+            <h3 class="mt-5 text-lg font-bold text-white">Noch nichts beerdigt</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+              Sobald du einen Impuls bewusst nicht kaufst, landet er hier– zy– das Geld, das du behalten hast.
+            </p>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="$store.spine.graveyard.length > 0">
+        <div class="space-y-4">
+          <div class="bg-emerald-500/[0.06] border border-emerald-500/20 rounded-[2rem] p-5">
+            <div class="text-[10px] uppercase tracking-widest text-emerald-300/70 font-bold">
+              Insgesamt behalten
+            </div>
+            <div
+              class="mt-2 text-3xl font-extrabold text-emerald-400 tracking-tight"
+              x-text="$store.spine.formatMoney($store.spine.graveyardTotal)"
+            ></div>
+          </div>
+
+          <template x-for="item in $store.spine.graveyard" :key="item.id">
+            <article class="bg-slate-800 rounded-[2rem] p-5 border border-emerald-500/10">
+              <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0 flex-1">
+                  <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+                    Nicht gekauft
+                  </div>
+
+                  <h3
+                    class="mt-1 text-lg font-bold text-white truncate"
+                    x-text="item.product || 'Unbenannter Kauf'"
+                  ></h3>
+
+                  <div
+                    class="mt-1 text-sm font-semibold text-emerald-400"
+                    x-text="$store.spine.formatMoney(item.price)"
+                  ></div>
+                </div>
+
+                <div class="shrink-0 rounded-2xl p-3 bg-emerald-500/10 text-emerald-400">
+                  <i data-lucide="badge-check" class="w-6 h-6"></i>
+                </div>
+              </div>
+
+              <div class="mt-4 flex items-center justify-between gap-3 text-[10px]">
+                <span class="text-slate-600">Geld behalten</span>
+                <span
+                  class="text-slate-500"
+                  x-text="$store.spine.graveyardDateLabel(item)"
+                ></span>
+              </div>
+            </article>
+          </template>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <section
+    x-cloak
+    x-show="$store.spine.currentView === 'futureMe'"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 translate-y-4"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    class="flex-1 flex flex-col bg-slate-900 h-full absolute inset-0 z-10"
+  >
+    <header class="sticky top-0 bg-slate-900/90 backdrop-blur-md flex items-center p-6 border-b border-slate-800 z-20">
+      <button
+        @click="$store.spine.closeFutureMe()"
+        class="p-3 -ml-2 bg-slate-800 rounded-full mr-4 active:scale-90 transition-transform"
+        aria-label="Zurück"
+      >
+        <i data-lucide="arrow-left" class="w-5 h-5 text-slate-300"></i>
+      </button>
+
+      <div class="min-w-0">
+        <h2 class="text-xl font-bold">Future Me</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Was dein behaltenes Geld werden könnte.</p>
+      </div>
+    </header>
+
+    <div class="p-6 overflow-y-auto pb-[max(2rem,env(safe-area-inset-bottom))] h-full">
+      <template x-if="$store.spine.graveyardTotal <= 0">
+        <div class="h-full flex items-center justify-center">
+          <div class="text-center max-w-xs]">
+            <div class="w-20 h-20 mx-auto rounded-[1.75rem] bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/10">
+              <i data-lucide="sprout" class="w-9 h-9"></i>
+            </div>
+
+            <h3 class="mt-5 text-lg font-bold text-white">Noch kein Startkapital</h3>
+
+            <p class="mt-2 text-sm leading-relaxed text-slate-500">
+              Sobald du Geld im Graveyard behaltenhast, zeigt dir Future Me, was daraus über 30 Jahre werden könnte.
+            </p>
+          </div>
+        </div>
+      </template>
+
+      <template x-if="$store.spine.graveyardTotal > 0">
+        <div class="space-y-4">
+          <div class="bg-emerald-500/[0.06] border border-emerald-500/20 rounded-[2rem] p-6">
+            <div class="text-[10px] uppercase tracking-widest text-emerald-300/70 font-bold">
+              In 30 Jahren bei 7 % p.a.
+            </div>
+
+            <div
+              class="mt-2 text-4xl font-extrabold text-emerald-400 tracking-tight"
+              x-text="$store.spine.formatMoney($store.spine.futureMeValue30)"
+            ></div>
+
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <div class="bg-slate-900/50 rounded-2xl p-4 border border-slate-700/40">
+                <div class="text-[9px] uppercase tracking-wider text-slate-600 font-bold">
+                  Heute
+                </div>
+                <div
+                  class="mt-1 text-sm font-bold text-slate-200 truncate"
+                  x-text="$store.spine.formatMoney($store.spine.graveyardTotal)"
+                ></div>
+              </div>
+
+              <div class="bg-slate-900/50 rounded-2xl p-4 border border-emerald-500/10">
+                <div class="text-[9px] uppercase tracking-wider text-emerald-300/50 font-bold">
+                  Potenzieller Zuwachs
+                </div>
+                <div
+                  class="mt-1 text-sm font-bold text-emerald-300 truncate"
+                  x-text="$store.spine.formatMoney($store.spine.futureMeGain30)"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-800 rounded-[2rem] p-5 border border-slate-700/50">
+            <div class="flex items-center justify-between gap-4 mb-4">
+              <div>
+                <div class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">
+                  Wachstum
+                </div>
+                <div class="mt-1 text-sm font-semibold text-slate-300">
+                  Einmalanlage · 7 % p.a.
+                </div>
+              </div>
+
+              <div class="bg-emerald-500/10 text-emerald-400 rounded-2xl p-3">
+                <i data-lucide="chart-no-axes-combined" class="w-5 h-5"></i>
+              </div>
+            </div>
+
+            <div class="h-[280px] w-full">
+              <canvas id="futureMeChart"></canvas>
+            </div>
+          </div>
+
+          <div class="text-center text-[10px] leading-4 text-slate-600 px-3">
+            Modellrechnung mit konstanter Rendite von 7 % p.a. – keine Renditegarantie und keine Anlageberatung.
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('spine', {
+        STORAGE_KEY: 'morrow-money-v1',
+
+        currentView: 'dashboard',
+        futureChart: null,
+
+        settings: {
+          hourlyWage: 20,
+          weeklyHours: 38.5
+        },
+
+        impulses: [],
+        graveyard: [],
+
+        costTime: {
+          product: '',
+          price: null,
+          valid: false,
+          hours: 0,
+          minutes: 0,
+          workDays: 0,
+          weeklyPay: 0,
+          weeklyShare: 0,
+          workTimeLabel: '',
+          workDaysLabel: '',
+          weeklyShareLabel: '',
+          verdictTitle: '',
+          verdictText: '',
+          verdictIcon: 'circle-help',
+          verdictToneClasses: 'bg-slate-800 border-slate-700/50 text-slate-200',
+          verdictIconClasses: 'bg-slate-700/50 text-slate-300'
+        },
+
+        init() {
+          this.loadSettings();
+          this.loadImpulses();
+          this.loadGraveyard();
+          this.calculateCostTime();
+
+          setInterval(() => {
+            if (this.currentView === 'impulse') {
+              this.refreshIcons();
+            }
+          }, 60000);
+
+          queueMicrotask(() => this.refreshIcons());
+        },
+
+        openCostTime() {
+          this.currentView = 'shouldIBuyIt';
+          requestAnimationFrame(() => this.refreshIcons());
+        },
+
+        openImpulse() {
+          this.currentView = 'impulse';
+          requestAnimationFrame(() => this.refreshIcons());
+        },
+
+        openGraveyard() {
+          this.currentView = 'graveyard';
+          requestAnimationFrame(() => this.refreshIcons());
+        },
+
+        openFutureMe() {
+          this.currentView = 'futureMe';
+
+          requestAnimationFrame(() => {
+            this.refreshIcons();
+            this.renderFutureMeChart();
+          });
+        },
+
+        closeFutureMe() {
+          this.currentView = 'dashboard';
+
+          if (this.futureChart) {
+            this.futureChart.destroy();
+            this.futureChart = null;
+          }
+
+          requestAnimationFrame(() => this.refreshIcons());
+        },
+
+        loadSettings() {
+          try {
+            const raw = localStorage.getItem(this.STORAGE_KEY);
+            if (!raw) return;
+
+            const parsed = JSON.parse(raw);
+
+            if (parsed?.settings) {
+              const wage = Number(parsed.settings.hourlyWage);
+              const weeklyHours = Number(parsed.settings.weeklyHours);
+
+              if (Number.isFinite(wage) && wage > 0) {
+                this.settings.hourlyWage = wage;
+              }
+
+              if (Number.isFinite(weeklyHours) && weeklyHours > 0) {
+                this.settings.weeklyHours = weeklyHours;
+              }
+            }
+          } catch (error) {
+            console.warn('[Morrow Money] Einstellungen konnten nicht geladen werden.');
+          }
+        },
+
+        persistSettings() {
+          try {
+            const existingRaw = localStorage.getItem(this.STORAGE_KEY);
+            let existing = {};
+
+            if (existingRaw) {
+              try {
+                existing = JSON.parse(existingRaw) || {};
+              } catch (_) {
+              existing = {};
+              }
+            }
+
+            existing.settings = {
+              ...(existing.settings || {}),
+              hourlyWage: Number(this.settings.hourlyWage) || 0,
+              weeklyHours: Number(this.settings.weeklyHours) || 0
+            };
+
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(existing));
+          } catch (error) {
+            console.warn('[Morrow Money] Einstellungen konnten nicht gespeichert werden.');
+          }
+        },
+
+        updateHourlyWage() {
+          this.persistSettings();
+          this.calculateCostTime();
+        },
+
+        updateWeeklyHours() {
+          this.persistSettings();
+          this.calculateCostTime();
+        },
+
+        loadImpulses() {
+          try {
+            const raw = localStorage.getItem(this.STORAGE_KEY);
+            if (!raw) return;
+
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed?.impulses)) {
+              this.impulses = parsed.impulses
+                .filter(item =>
+                  item &&
+                  Number.isFinite(Number(item.price)) &&
+                  Number.isFinite(Number(item.createdAt))
+                )
+                .map(item => ({
+                  id: item.id || `impulse-${item.createdAt}`,
+                  product: String(item.product || ''),
+                  price: Number(item.price),
+                  createdAt: Number(item.createdAt),
+                  expiresAt: Number(item.expiresAt) || (Number(item.createdAt) + 72 * 60 * 60 * 1000)
+                }));
+            }
+          } catch (error) {
+            console.warn('[Morrow Money] Impuls-Liste konnte nicht geladen werden.');
+          }
+        },
+
+        persistImpulses() {
+          try {
+            const existingRaw = localStorage.getItem(this.STORAGE_KEY);
+            let existing = {};
+
+            if (existingRaw) {
+              try {
+                existing = JSON.parse(existingRaw) || {};
+              } catch (_) {
+                existing = {};
+              }
+            }
+
+            existing.impulses = this.impulses;
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(existing));
+          } catch (error) {
+            console.warn('[Morrow Money] Impuls-Liste konnte nicht gespeichert werden.');
+          }
+        },
+
+        addCurrentToImpulse() {
+          if (!this.costTime.valid) return;
+
+          const now = Date.now();
+          const product = String(this.costTime.product || '').trim() || 'Unbenannter Kauf';
+          const price = Number(this.costTime.price);
+
+          const item = {
+            id: `impulse-${now}-${Math.random().toString(36).slice(2, 8)}`,
+            product,
+            price,
+            createdAt: now,
+            expiresAt: now + 72 * 60 * 60 * 1000
+          };
+
+          this.impulses.unshift(item);
+          this.persistImpulses();
+
+          this.costTime.product = '';
+          this.costTime.price = null;
+          this.calculateCostTime();
+
+          this.currentView = 'dashboard';
+          requestAnimationFrame(() => this.refreshIcons());
+        },
+
+        markImpulseBought(id) {
+          this.impulses = this.impulses.filter(item => item.id !== id);
+          this.persistImpulses();
+          requestAnimationFrame(() => this.refreshIcons());
+        },
+
+        moveImpulseToGraveyard(id) {
+          const item = this.impulses.find(entry => entry.id === id);
+          if (!item) return;
+
+          const graveItem = {
+            id: `grave-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            product: item.product,
+            price: Number(item.price) || 0,
+            sourceImpulseId: item.id,
+            savedAt: Date.now()
+          };
+
+          this.graveyard.unshift(graveItem);
+          this.impulses = this.impulses.filter(entry => entry.id !== id);
+
+          this.persistGraveyard();
+          this.persistImpulses();
+          requestAnimationFrame(() => this.refreshIcons());
+        },
+
+        loadGraveyard() {
+          try {
+            const raw = localStorage.getItem(this.STORAGE_KEY);
+            if (!raw) return;
+
+            const parsed = JSON.parse(raw);
+
+            if (Array.isArray(parsed?.graveyard)) {
+              this.graveyard = parsed.graveyard
+                .filter(item =>
+                  item &&
+                  Number.isFinite(Number(item.price))
+                )
+                .map(item => ({
+                  id: item.id || `grave-${item.savedAt || Date.now()}`,
+                  product: String(item.product || ''),
+                  price: Number(item.price) || 0,
+                  sourceImpulseId: item.sourceImpulseId || null,
+                  savedAt: Number(item.savedAt) || Date.now()
+                }));
+            }
+          } catch (error) {
+            console.warn('[Morrow Money] Graveyard konnte nicht geladen werden.');
+          }
+        },
+
+        persistGraveyard() {
+          try {
+            const existingRaw = localStorage.getItem(this.STORAGE_KEY);
+            let existing = {};
+
+            if (existingRaw) {
+              try {
+                existing = JSON.parse(existingRaw) || {};
+              } catch (_) {
+                existing = {};
+              }
+            }
+
+            existing.graveyard = this.graveyard;
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(existing));
+          } catch (error) {
+            console.warn('[Morrow Money] Graveyard konnte nicht gespeichert werden.');
+          }
+        },
+
+        graveyardDateLabel(item) {
+          const date = new Date(Number(item.savedAt));
+          if (Number.isNaN(date.getTime())) return '';
+
+          return new Intl.DateTimeFormat('de-DE', {
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit'
+          }).format(date);
+        },
+
+        get graveyardTotal() {
+          return this.graveyard.reduce((sum, item) => {
+            return sum + (Number(item.price) || 0);
+          }, 0);
+        },
+
+        get monthlySaved() {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = now.getMonth();
+
+          return this.graveyard.reduce((sum, item) => {
+            const date = new Date(Number(item.savedAt));
+            if (
+              !Number.isNaN(date.getTime()) &&
+              date.getFullYear() === year &&
+              date.getMonth() === month
+            ) {
+              return sum + (Number(item.price) || 0);
+            }
+            return sum;
+          }, 0);
+        },
+
+        get futureMeValue30() {
+          const principal = Number(this.graveyardTotal) || 0;
+          return principal * Math.pow(1.07, 30);
+        },
+
+        get futureMeGain30() {
+          return Math.max(0, this.futureMeValue30 - this.graveyardTotal);
+        },
+
+        futureMeSeries() {
+          const principal = Number(this.graveyardTotal) || 0;
+
+          return Array.from({ length: 31 }, (_, year) => ({
+            year,
+            value: principal * Math.pow(1.07, year)
+          }));
+        },
+
+        formatCompactMoney(value) {
+          const amount = Number(value) || 0;
+          const abs = Math.abs(amount);
+
+          if (abs >= 1000000) {
+            return `${this.formatNumber(amount / 1000000, 1)} Mio. ª`;
+          }
+
+          if (abs >= 1000) {
+            return `${this.formatNumber(amount / 1000, 1)} Tsd. ª`;
+          }
+
+          return this.formatMoney(amount);
+        },
+
+        renderFutureMeChart() {
+          if (this.currentView !== 'futureMe') return;
+          if (this.graveyardTotal <= 0) return;
+          if (!window.Chart) return;
+
+          const canvas = document.getElementById('futureMeChart');
+          if (!canvas) return;
+
+          if (this.futureChart) {
+            this.futureChart.destroy();
+            this.futureChart = null;
+          }
+
+          const series = this.futureMeSeries();
+
+          this.futureChart = new Chart(canvas, {
+            type: 'line',
+            data: {
+              labels: series.map(point => point.year),
+              datasets: [{
+                label: 'Wert',
+                data: series.map(point => point.value),
+                borderColor: '#34d399',
+                backgroundColor: 'rgba(52, 211, 153, 0.08)',
+                borderWidth: 3,
+                pointRadius: 0,
+                pointHoverRadius: 4,
+                pointBackgroundColor: '#34d399',
+                fill: true,
+                tension: 0.35
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              animation: {
+                duration: 450
+              },
+              interaction: {
+                mode: 'index',
+                intersect: false
+              },
+              plugins: {
+                legend: {
+                  display: false
+                },
+                tooltip: {
+                  displayColors: false,
+                  backgroundColor: '#020617',
+                  titleColor: '#94a3b8',
+                  bodyColor: '#f8fafc',
+                  borderColor: 'rgba(148, 163, 184, 0.15)',
+                  borderWidth: 1,
+                  padding: 12,
+                  callbacks: {
+                    title: items => `Jahr ${items[0].label}`,
+                    label: context => this.formatMoney(context.parsed.y)
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  grid: {
+                    display: false
+                  },
+                  border: {
+                    display: false
+                  },
+                  ticks: {
+                    color: '#64748b',
+                    maxTicksLimit: 7,
+                    font: {
+                      size: 10
+                    },
+                    callback: function(value, index) {
+                      const label = this.getLabelForValue(value);
+                      return Number(label) === 0 ? 'Heute' : `${label}J0`;
+                    }
+                  }
+                },
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    color: 'rgba(148, 163, 184, 0.08)'
+                  },
+                  border: {
+                    display: false
+                  },
+                  ticks: {
+                    color: '#64748b',
+                    maxTicksLimit: 5,
+                    font: {
+                      size: 10
+                    },
+                    callback: value => this.formatCompactMoney(value)
+                  }
+                }
+              }
+            }
+          });
+        },
+
+        isImpulseDue(item) {
+          return Date.now() >= Number(item.expiresAt);
+        },
+
+        impulseProgress(item) {
+          const start = Number(item.createdAt);
+          const end = Number(item.expiresAt);
+          const now = Date.now();
+
+          if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) {
+            return 100;
+          }
+
+          const progress = ((now - start) / (end - start)) * 100;
+          return Math.max(0, Math.min(100, progress));
+        },
+
+        impulseStatusLabel(item) {
+          const remaining = Number(item.expiresAt) - Date.now();
+
+          if (remaining <= 0) {
+            return 'Entscheidung fällig';
+          }
+
+          const totalMinutes = Math.ceil(remaining / 60000);
+          const days = Math.floor(totalMinutes / 1440);
+          const hours = Math.floor((totalMinutes % 1440) / 60);
+          const minutes = totalMinutes % 60;
+
+          if (days > 0) {
+            return `Noch ${days} ${days === 1 ? 'Tag' : 'Tage'} ${hours} Std.`;
+          }
+
+          if (hours > 0) {
+            return `Noch ${hours} Std. ${minutes} Min.`;
+          }
+
+          return `Noch ${Math.max(1, minutes)} Min.`;
+        },
+
+        addedAgoLabel(item) {
+          const diff = Math.max(0, Date.now() - Number(item.createdAt));
+          const minutes = Math.floor(diff / 60000);
+
+          if (minutes < 1) return 'gerade eben';
+          if (minutes < 60) return `vor ${minutes} Min.`;
+
+          const hours = Math.floor(minutes / 60);
+          if (hours < 24) return `vor ${hours} Std.`;
+
+          const days = Math.floor(hours / 24);
+          return `vor ${days} ${days === 1 ? 'Tag' : 'Tagen'}`;
+        },
+
+        formatMoney(value) {
+          return new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+          }).format(Number(value) || 0);
+        },
+
+        calculateCostTime() {
+          const price = Number(this.costTime.price);
+          const hourlyWage = Number(this.settings.hourlyWage);
+          const weeklyHours = Number(this.settings.weeklyHours);
+
+          if (
+            !Number.isFinite(price) ||
+            !Number.isFinite(hourlyWage) ||
+            !Number.isFinite(weeklyHours) ||
+            price <= 0 ||
+            hourlyWage <= 0 ||
+            weeklyHours <= 0
+          ) {
+            this.costTime.valid = false;
+            requestAnimationFrame(() => this.refreshIcons());
+            return;
+          }
+
+          const totalHours = price / hourlyWage;
+          const totalMinutes = Math.round(totalHours * 60);
+
+          const wholeHours = Math.floor(totalMinutes / 60);
+          const minutes = totalMinutes % 60;
+
+          const dailyHours = weeklyHours / 5;
+          const workDays = totalHours / dailyHours;
+
+          const weeklyPay = hourlyWage * weeklyHours;
+          const weeklyShare = (price / weeklyPay) * 100;
+
+          this.costTime.valid = true;
+          this.costTime.hours = totalHours;
+          this.costTime.minutes = totalMinutes;
+          this.costTime.workDays = workDays;
+          this.costTime.weeklyPay = weeklyPay;
+          this.costTime.weeklyShare = weeklyShare;
+
+          this.costTime.workTimeLabel =
+            wholeHours > 0
+              ? `${wholeHours} h ${minutes} min`
+              : `${minutes} min`;
+
+          this.costTime.workDaysLabel =
+            workDays < 0.1
+              ? '< 0,1 Tage'
+              : `${this.formatNumber(workDays, 1)} Tage`;
+
+          this.costTime.weeklyShareLabel =
+            `${this.formatNumber(weeklyShare, weeklyShare >= 10 ? 0 : 1)} %`;
+
+          this.buildVerdict(weeklyShare, totalHours);
+
+          requestAnimationFrame(() => this.refreshIcons());
+        },
+
+        buildVerdict(weeklyShare, totalHours) {
+          if (weeklyShare < 10) {
+            this.costTime.verdictTitle = 'Leichtgewicht';
+            this.costTime.verdictText =
+              'Der Kauf beansprucht nur einen kleinen Teil deines Wochenlohns. Prüfe trotzdem kurz, ob er dir wirklich etwas bringt.';
+            this.costTime.verdictIcon = 'feather';
+            this.costTime.verdictToneClasses =
+              'bg-emerald-500/[0.06] border-emerald-500/20 text-emerald-100';
+            this.costTime.verdictIconClasses =
+              'bg-emerald-500/10 text-emerald-400';
+            return;
+          }
+
+          if (weeklyShare < 25) {
+            this.costTime.verdictTitle = 'Spürbar';
+            this.costTime.verdictText =
+              'Der Kauf nimmt einen merklichen Teil deines Wochenlohns ein. Eine kurze Pause vor dem Kauf kann sich lohnen.';
+            this.costTime.verdictIcon = 'pause-circle';
+            this.costTime.verdictToneClasses =
+              'bg-indigo-500/[0.06] border-indigo-500/20 text-indigo-100';
+            this.costTime.verdictIconClasses =
+              'bg-indigo-500/10 text-indigo-400';
+            return;
+          }
+
+          if (weeklyShare < 50) {
+            this.costTime.verdictTitle = 'Schwergewicht';
+            this.costTime.verdictText =
+              'Das ist ein relevanter Teil deiner Arbeitswoche. Frag dich, ob du den Gegenstand auch nach ein paar Tagen noch genauso stark willst.';
+            this.costTime.verdictIcon = 'scale';
+            this.costTime.verdictToneClasses =
+              'bg-amber-500/[0.06] border-amber-500/20 text-amber-100';
+            this.costTime.verdictIconClasses =
+              'bg-amber-500/10 text-amber-400';
+            return;
+          }
+
+          this.costTime.verdictTitle = 'Große Entscheidung';
+          this.costTime.verdictText =
+            totalHours >= 40
+              ? 'Für diesen Kauf arbeitest du ungefähr eine volle Arbeitswoche oder länger. Nimm dir bewusst Zeit, bevor du entscheidest.'
+              : 'Der Kauf beansprucht mindestens die Hälfte eines Wochenlohns. Eine bewusste Wartezeit ist hier besonders sinnvoll.';
+          this.costTime.verdictIcon = 'triangle-alert';
+          this.costTime.verdictToneClasses =
+            'bg-rose-500/[0.06] border-rose-500/20 text-rose-100';
+          this.costTime.verdictIconClasses =
+            'bg-rose-500/10 text-rose-400';
+        },
+
+        formatNumber(value, digits = 1) {
+          return new Intl.NumberFormat('de-DE', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: digits
+          }).format(value);
+        },
+
+        refreshIcons() {
+          if (window.lucide) {
+            lucide.createIcons();
+          }
+        }
+      });
+    });
+
+    document.addEventListener('alpine:initialized', () => {
+      Alpine.store('spine').init();
+    });
+  </script>
+
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
+  </script>
+
+</body>
+</html>
