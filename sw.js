@@ -1,7 +1,6 @@
-const CACHE_NAME = 'morrow-money-core-v2';
-const DYNAMIC_CACHE = 'morrow-money-dynamic-v2';
+const CACHE_NAME = 'morrow-money-core-v3';
+const DYNAMIC_CACHE = 'morrow-money-dynamic-v3';
 
-// Nur lokale, garantierte Dateien für die initiale Installation
 const LOCAL_ASSETS = [
   './',
   './index.html',
@@ -20,39 +19,42 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.filter((name) => name !== CACHE_NAME && name !== DYNAMIC_CACHE)
-          .map((name) => caches.delete(name))
-      );
-    })
+    caches.keys().then((cacheNames) => Promise.all(
+      cacheNames
+        .filter((name) => name !== CACHE_NAME && name !== DYNAMIC_CACHE)
+        .map((name) => caches.delete(name))
+    )).then(() => self.clients.claim())
   );
 });
 
-// Cache First, Fallback to Network (inkl. dynamischem Caching für CDNs)
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', copy));
+          return response;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      
+      if (cachedResponse) return cachedResponse;
+
       return fetch(event.request).then((networkResponse) => {
         if (!networkResponse || networkResponse.status !== 200 || (networkResponse.type !== 'basic' && networkResponse.type !== 'cors')) {
           return networkResponse;
         }
-        
+
         const responseToCache = networkResponse.clone();
-        caches.open(DYNAMIC_CACHE).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-        
+        caches.open(DYNAMIC_CACHE).then((cache) => cache.put(event.request, responseToCache));
         return networkResponse;
-      }).catch(() => {
-        // Fallback für rein lokale Navigationsanfragen offline, falls nötig
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
       });
     })
   );
