@@ -1,6 +1,53 @@
-const CACHE_NAME = 'morrow-money-core-v30';
-const DYNAMIC_CACHE = 'morrow-money-dynamic-v30';
-const LOCAL_ASSETS = ['./','./index.html','./manifest.json','./icon-192x192.png','./icon-512x512.png'];
-self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(LOCAL_ASSETS)).then(()=>self.skipWaiting()))});
-self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(names=>Promise.all(names.filter(name=>name!==CACHE_NAME&&name!==DYNAMIC_CACHE).map(name=>caches.delete(name)))).then(()=>self.clients.claim()))});
-self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;if(event.request.mode==='navigate'){event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE_NAME).then(cache=>cache.put('./index.html',copy));return response}).catch(()=>caches.match('./index.html')));return}event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{if(!response||response.status!==200||(response.type!=='basic'&&response.type!=='cors'))return response;const copy=response.clone();caches.open(DYNAMIC_CACHE).then(cache=>cache.put(event.request,copy));return response}))) });
+const CACHE_NAME = 'morrow-money-core-v31';
+const DYNAMIC_CACHE = 'morrow-money-dynamic-v31';
+const LOCAL_ASSETS = ['./','./index.html','./manifest.webmanifest','./icon-192x192.png','./icon-512x512.png'];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(LOCAL_ASSETS))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(names => Promise.all(
+        names
+          .filter(name => name !== CACHE_NAME && name !== DYNAMIC_CACHE)
+          .map(name => caches.delete(name))
+      ))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put('./index.html', copy));
+          return response;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      return cached || fetch(event.request).then(response => {
+        if (!response || response.status !== 200 || (response.type !== 'basic' && response.type !== 'cors')) {
+          return response;
+        }
+        const copy = response.clone();
+        caches.open(DYNAMIC_CACHE).then(cache => cache.put(event.request, copy));
+        return response;
+      });
+    })
+  );
+});
