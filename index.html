@@ -18,6 +18,64 @@ tailwind.config={theme:{extend:{fontFamily:{serif:['Newsreader','Georgia','serif
 </script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;padding:0;background:#f0eee6;color:#1a1917;min-height:100dvh;font-family:'Inter',system-ui,sans-serif;overflow:hidden}body{display:flex;justify-content:center;align-items:center}.app-shell{width:100vw;height:100dvh;max-width:420px;max-height:900px;background-color:#fcfbf9;background-image:linear-gradient(to right,#e8e4db 1px,transparent 1px),linear-gradient(to bottom,#e8e4db 1px,transparent 1px);background-size:26px 26px;display:flex;flex-direction:column;overflow:hidden;position:relative;border:1px solid #d4d0c5;box-shadow:0 25px 50px rgba(0,0,0,.12)}@media(min-width:768px){.app-shell{border-radius:36px;height:88dvh}}.editorial-card{background:#fff;border:1px solid #1a1917;box-shadow:3px 3px 0 #1a1917}.editorial-card-interactive{background:#fff;border:1px solid #1a1917;box-shadow:3px 3px 0 #1a1917;transition:all .12s ease}.editorial-card-interactive:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #1a1917}.scrollable-area{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}.scrollable-area::-webkit-scrollbar{display:none}.view-section{animation:fadeIn .2s ease-out forwards}.pop-anim{animation:popIn .26s ease-out forwards}@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}@keyframes popIn{from{opacity:0;transform:scale(.97) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}.sheet-backdrop{position:absolute;inset:0;background:rgba(26,25,23,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:60;display:none;align-items:flex-end;justify-content:center}.sheet-backdrop.open{display:flex}.sheet-panel{width:100%;max-width:420px;background:#fcfbf9;border-top:1px solid #1a1917;border-left:1px solid #1a1917;border-right:1px solid #1a1917;border-top-left-radius:24px;border-top-right-radius:24px;box-shadow:0 -8px 30px rgba(0,0,0,.08);padding:16px 16px calc(16px + env(safe-area-inset-bottom));animation:slideUp .18s ease-out forwards}@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}.logo-mark svg{display:block}#impulse-badge{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;font-variant-numeric:tabular-nums;line-height:1}.toast{position:absolute;left:50%;bottom:22px;transform:translateX(-50%) translateY(12px);background:#1a1917;color:#fff;padding:10px 14px;border-radius:999px;font:700 11px 'Inter',sans-serif;opacity:0;pointer-events:none;z-index:90;transition:.2s ease;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}@media(prefers-reduced-motion:reduce){.view-section,.pop-anim,.sheet-panel{animation:none!important}*{transition-duration:.01ms!important}}
+
+/* one-screen compact v1 */
+.app-shell>header{padding:10px 14px!important;min-height:62px}
+.app-shell>header .logo-mark{width:36px!important;height:36px!important;border-radius:12px!important}
+.app-shell>header .logo-mark svg{width:20px!important;height:20px!important}
+.app-shell>header h1{font-size:1.55rem!important}
+.app-shell>header span{font-size:8px!important}
+.app-shell>header #back-btn{width:38px!important;height:38px!important;border-radius:12px!important}
+.app-shell>header button[onclick="openDataSheet()"]{height:38px!important;padding-left:12px!important;padding-right:12px!important;font-size:12px!important;border-radius:12px!important}
+.app-shell>main{padding:12px 14px!important}
+
+#view-welcome{overflow:hidden!important;padding:0!important;gap:8px!important}
+#view-welcome>div:first-child{display:flex!important;flex-direction:column!important;gap:10px!important}
+#view-welcome .inline-flex{padding:4px 8px!important;border-radius:8px!important;font-size:8px!important}
+#view-welcome .space-y-3{display:flex!important;flex-direction:column!important;gap:6px!important}
+#view-welcome h2{font-size:2.05rem!important;line-height:.98!important;letter-spacing:-.03em!important}
+#view-welcome p{font-size:12px!important;line-height:1.45!important;max-width:none!important}
+#view-welcome .editorial-card.rounded-\[28px\]{padding:12px!important;border-radius:18px!important}
+#view-welcome label{font-size:8px!important;margin-bottom:6px!important}
+#view-welcome #welcome-wage{height:52px!important;border-radius:14px!important;padding:0 16px!important;font-size:1.9rem!important}
+#view-welcome #welcome-wage+div>div:first-child{font-size:1.9rem!important}
+#view-welcome #welcome-wage+div>div:last-child{font-size:1.2rem!important;margin-top:0!important}
+#view-welcome .grid.grid-cols-3{gap:7px!important}
+#view-welcome .grid.grid-cols-3>.editorial-card{padding:8px 5px!important;border-radius:16px!important}
+#view-welcome .grid.grid-cols-3 .w-10{width:30px!important;height:30px!important;margin-bottom:4px!important;border-radius:10px!important}
+#view-welcome .grid.grid-cols-3 .w-5{width:15px!important;height:15px!important}
+#view-welcome .grid.grid-cols-3 .font-medium{font-size:11px!important}
+#view-welcome>div:last-child{padding-top:8px!important}
+#view-welcome>div:last-child button{height:52px!important;border-radius:17px!important;font-size:14px!important;box-shadow:0 5px 0 #d9381e!important}
+
+#view-dashboard{overflow:hidden!important;gap:9px!important;padding-top:0!important}
+#view-dashboard>.editorial-card{padding:12px 14px!important;border-radius:18px!important}
+#view-dashboard #hero-saved{font-size:2.55rem!important}
+#view-dashboard .mt-4{margin-top:8px!important}
+#view-dashboard .pt-4{padding-top:8px!important}
+#view-dashboard .mt-4.pt-2{margin-top:7px!important;padding-top:4px!important}
+#view-dashboard .text-sm{font-size:11px!important}
+#view-dashboard .grid.grid-cols-1{gap:8px!important;padding-bottom:0!important}
+#view-dashboard .editorial-card-interactive{padding:10px 12px!important;border-radius:18px!important;min-height:62px!important}
+#view-dashboard .editorial-card-interactive .w-12{width:38px!important;height:38px!important;border-radius:12px!important}
+#view-dashboard .editorial-card-interactive .w-5{width:17px!important;height:17px!important}
+#view-dashboard .editorial-card-interactive h3{font-size:1.05rem!important}
+#view-dashboard .editorial-card-interactive p{font-size:10px!important;margin-top:2px!important}
+#view-dashboard #impulse-badge{top:7px!important;right:32px!important;min-width:22px!important;height:22px!important;font-size:10px!important}
+
+@media(max-height:720px){
+  .app-shell>header{padding-top:8px!important;padding-bottom:8px!important;min-height:56px}
+  .app-shell>main{padding-top:9px!important;padding-bottom:9px!important}
+  #view-welcome h2{font-size:1.8rem!important}
+  #view-welcome p{font-size:11px!important}
+  #view-welcome #welcome-wage{height:46px!important}
+  #view-welcome .grid.grid-cols-3>.editorial-card{padding:6px 4px!important}
+  #view-welcome>div:last-child button{height:46px!important}
+  #view-dashboard>.editorial-card{padding:10px 12px!important}
+  #view-dashboard #hero-saved{font-size:2.2rem!important}
+  #view-dashboard .editorial-card-interactive{min-height:56px!important;padding:8px 10px!important}
+}
+
 </style>
 </head>
 <body onload="initApp()">
