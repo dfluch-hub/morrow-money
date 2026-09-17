@@ -1,0 +1,17 @@
+{
+  "name": "Morrow Money — Financial Mindset OS",
+  "short_name": "Morrow Money",
+  "description": "Privacy-first Financial Mindset OS for conscious spending.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#fcfbf9",
+  "theme_color": "#fcfbf9",
+  "categories": ["finance", "productivity", "lifestyle"],
+  "icons": [
+    {"src":"./icon-192x192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"./icon-512x512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
