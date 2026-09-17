@@ -70,37 +70,31 @@
             background: #fff;
             border: 1px solid #1a1917;
             box-shadow: 3px 3px 0 #1a1917;
-            transition: all .15s cubic-bezier(.4,0,.2,1);
         }
         .editorial-card-interactive {
             background: #fff;
             border: 1px solid #1a1917;
             box-shadow: 3px 3px 0 #1a1917;
-            transition: all .15s cubic-bezier(.4,0,.2,1);
+            transition: all .1s ease;
         }
         .editorial-card-interactive:active {
-            transform: translate(2px,2px);
+            transform: translate(1px,1px);
             box-shadow: 1px 1px 0 #1a1917;
         }
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(.95) translateY(6px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .pop-anim { animation: popIn .3s cubic-bezier(.16,1,.3,1) forwards; }
-        .scrollable-area { overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1; }
-        .scrollable-area::-webkit-scrollbar { display: none; }
-        .view-section { animation: fadeIn .2s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .scrollable-area { overflow-y:auto; -webkit-overflow-scrolling:touch; flex:1; }
+        .scrollable-area::-webkit-scrollbar { display:none; }
+        .view-section { animation:fadeIn .2s ease-out forwards; }
+        .pop-anim { animation:popIn .3s cubic-bezier(.16,1,.3,1) forwards; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes popIn { from { opacity:0; transform:scale(.96) translateY(5px); } to { opacity:1; transform:scale(1) translateY(0); } }
         @media (prefers-reduced-motion: reduce) {
-            .view-section, .pop-anim { animation: none !important; }
-            * { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+            .view-section, .pop-anim { animation:none !important; }
+            * { scroll-behavior:auto !important; transition-duration:.01ms !important; }
         }
     </style>
 </head>
 <body onload="initApp()">
+
 <div class="app-shell">
     <header class="px-6 py-4 flex justify-between items-center bg-[#fcfbf9]/95 backdrop-blur-md border-b border-[#1a1917] shrink-0 z-20">
         <div>
@@ -118,66 +112,69 @@
     </header>
 
     <main class="flex-1 relative flex flex-col overflow-hidden p-6 z-10">
-        <div id="view-dashboard" class="view-section flex-1 flex flex-col gap-4 scrollable-area pt-1">
-            <div class="editorial-card rounded-2xl p-5 relative overflow-hidden shrink-0 bg-white pop-anim">
+        <div id="view-welcome" class="view-section hidden flex-1 flex flex-col justify-between scrollable-area py-2">
+            <div class="space-y-5">
+                <div class="inline-block bg-editorial/10 text-editorial px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border border-editorial/20 font-mono">Financial Mindset OS</div>
+                <h2 class="text-3xl font-serif font-bold text-charcoal leading-tight">Meistere deine Impulse. Behalte dein Geld.</h2>
+                <p class="text-xs text-charcoal/80 font-mono leading-relaxed">Morrow Money ist kein klassisches Haushaltsbuch, sondern dein psychologischer Anker gegen unüberlegten Konsum. Übersetze Preise in echte Lebensarbeitszeit, parke Wünsche für 72 Stunden und verwandle Nicht-Kaufen in echte Trophäen.</p>
+
+                <div class="space-y-3 pt-2">
+                    <div class="editorial-card p-3.5 rounded-xl bg-white flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-editorial/10 text-editorial flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">1</div>
+                        <div><h3 class="font-serif font-bold text-sm text-charcoal">Arbeitszeit statt Preisschild</h3><p class="text-[10px] text-charcoal/70 font-mono mt-0.5">Erkenne sofort, wie viele Stunden du für einen Wunsch arbeiten musst.</p></div>
+                    </div>
+                    <div class="editorial-card p-3.5 rounded-xl bg-white flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-editorial/10 text-editorial flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">2</div>
+                        <div><h3 class="font-serif font-bold text-sm text-charcoal">72h Impuls-Sperre</h3><p class="text-[10px] text-charcoal/70 font-mono mt-0.5">Parke Wünsche sicher, um den ersten Dopamin-Druck zu brechen.</p></div>
+                    </div>
+                    <div class="editorial-card p-3.5 rounded-xl bg-white flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-editorial/10 text-editorial flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">3</div>
+                        <div><h3 class="font-serif font-bold text-sm text-charcoal">Der Purchase Graveyard</h3><p class="text-[10px] text-charcoal/70 font-mono mt-0.5">Sammle nicht getätigte Käufe als Siege und erfülle dir eigene Spar-Ziele.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button onclick="completeOnboarding()" class="w-full bg-[#1a1917] text-white font-bold py-4 px-6 rounded-2xl text-xs font-mono shadow-[3px_3px_0px_#d9381e] active:translate-x-0.5 active:translate-y-0.5 transition-all text-center">System starten →</button>
+            </div>
+        </div>
+
+        <div id="view-dashboard" class="view-section hidden flex-1 flex flex-col gap-4 scrollable-area pt-1">
+            <div class="editorial-card rounded-2xl p-5 relative overflow-hidden shrink-0 bg-white">
                 <div class="flex justify-between items-center mb-1">
                     <span class="text-[10px] font-bold uppercase tracking-widest text-charcoal/60">Diesen Monat gespart</span>
                     <span id="user-rank" class="text-[9px] bg-editorial text-white font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-[1px_1px_0px_#1a1917]">Novize</span>
                 </div>
-                <div id="hero-saved" class="text-4xl font-serif font-bold text-charcoal tracking-tight transition-all duration-300">0 €</div>
+                <div id="hero-saved" class="text-4xl font-serif font-bold text-charcoal tracking-tight">0 €</div>
                 <div class="mt-3 pt-3 border-t border-[#1a1917]/10">
-                    <div class="flex justify-between items-center text-[11px] text-charcoal/70 font-mono mb-2">
-                        <span id="hero-level-text">Noch 150 € bis zum nächsten Level</span>
-                        <span id="hero-level-percent" class="font-bold">0%</span>
-                    </div>
-                    <div class="w-full bg-[#1a1917]/10 h-1.5 rounded-full overflow-hidden">
-                        <div id="hero-progress-bar" class="bg-editorial h-full transition-all duration-700 ease-out" style="width:0%"></div>
-                    </div>
+                    <div class="flex justify-between items-center text-[11px] text-charcoal/70 font-mono mb-2"><span id="hero-level-text">Noch 150 € bis zum nächsten Level</span><span id="hero-level-percent" class="font-bold">0%</span></div>
+                    <div class="w-full bg-[#1a1917]/10 h-1.5 rounded-full overflow-hidden"><div id="hero-progress-bar" class="bg-editorial h-full transition-all duration-700 ease-out" style="width:0%"></div></div>
                 </div>
-                <div class="flex justify-between items-center mt-3 pt-2 text-xs text-charcoal/70 font-mono">
-                    <span id="hero-count">0 Käufe vermieden</span>
-                    <span id="hero-alltime" class="font-bold text-editorial">0 € insgesamt</span>
-                </div>
+                <div class="flex justify-between items-center mt-3 pt-2 text-xs text-charcoal/70 font-mono"><span id="hero-count">0 Käufe vermieden</span><span id="hero-alltime" class="font-bold text-editorial">0 € insgesamt</span></div>
             </div>
 
             <div class="grid grid-cols-1 gap-3 pb-2">
                 <button onclick="switchView('shouldIBuyIt')" class="editorial-card-interactive p-4 rounded-2xl flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-10 h-10 rounded-xl bg-editorial/10 border border-editorial/30 flex items-center justify-center text-editorial shrink-0"><i data-lucide="calculator" class="w-5 h-5"></i></div>
-                        <div><h2 class="font-serif font-bold text-charcoal text-base">Should I Buy It?</h2><p class="text-[10px] text-charcoal/60 font-mono">Preis, Arbeitszeit & Abo-Faktor</p></div>
-                    </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
+                    <div class="flex items-center gap-3.5"><div class="w-10 h-10 rounded-xl bg-editorial/10 border border-editorial/30 flex items-center justify-center text-editorial shrink-0"><i data-lucide="calculator" class="w-5 h-5"></i></div><div><h2 class="font-serif font-bold text-charcoal text-base">Should I Buy It?</h2><p class="text-[10px] text-charcoal/60 font-mono">Preis, Arbeitszeit & Abo-Faktor</p></div></div><i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
                 </button>
 
                 <button onclick="switchView('impulseTimer')" class="editorial-card-interactive p-4 rounded-2xl flex items-center justify-between text-left relative">
                     <div id="impulse-badge" class="absolute top-3 right-8 bg-editorial text-white text-[10px] font-bold min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center leading-none pt-[1px] hidden shadow-[1px_1px_0px_#1a1917]">0</div>
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-10 h-10 rounded-xl bg-charcoal/5 border border-charcoal/20 flex items-center justify-center text-charcoal shrink-0"><i data-lucide="timer" class="w-5 h-5"></i></div>
-                        <div><h2 class="font-serif font-bold text-charcoal text-base">Impulse</h2><p class="text-[10px] text-charcoal/60 font-mono">72 Stunden Abstand gewinnen</p></div>
-                    </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
+                    <div class="flex items-center gap-3.5"><div class="w-10 h-10 rounded-xl bg-charcoal/5 border border-charcoal/20 flex items-center justify-center text-charcoal shrink-0"><i data-lucide="timer" class="w-5 h-5"></i></div><div><h2 class="font-serif font-bold text-charcoal text-base">Impulse (Geparkt)</h2><p class="text-[10px] text-charcoal/60 font-mono">72 Stunden Abstand gewinnen</p></div></div><i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
                 </button>
 
                 <button onclick="switchView('graveyard')" class="editorial-card-interactive p-4 rounded-2xl flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-10 h-10 rounded-xl bg-charcoal/5 border border-charcoal/20 flex items-center justify-center text-charcoal shrink-0"><i data-lucide="ghost" class="w-5 h-5"></i></div>
-                        <div><h2 class="font-serif font-bold text-charcoal text-base">Graveyard</h2><p class="text-[10px] text-charcoal/60 font-mono">Trophäen & Selbstreflexion</p></div>
-                    </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
+                    <div class="flex items-center gap-3.5"><div class="w-10 h-10 rounded-xl bg-charcoal/5 border border-charcoal/20 flex items-center justify-center text-charcoal shrink-0"><i data-lucide="ghost" class="w-5 h-5"></i></div><div><h2 class="font-serif font-bold text-charcoal text-base">Graveyard</h2><p class="text-[10px] text-charcoal/60 font-mono">Trophäen & Selbstreflexion</p></div></div><i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
                 </button>
 
                 <button onclick="switchView('milestones')" class="editorial-card-interactive p-4 rounded-2xl flex items-center justify-between text-left">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-700 shrink-0"><i data-lucide="award" class="w-5 h-5"></i></div>
-                        <div><h2 class="font-serif font-bold text-charcoal text-base">Spar-Ziele</h2><p class="text-[10px] text-charcoal/60 font-mono">Eigene Meilensteine definieren</p></div>
-                    </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
+                    <div class="flex items-center gap-3.5"><div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-700 shrink-0"><i data-lucide="award" class="w-5 h-5"></i></div><div><h2 class="font-serif font-bold text-charcoal text-base">Spar-Ziele</h2><p class="text-[10px] text-charcoal/60 font-mono">Eigene Meilensteine definieren</p></div></div><i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
                 </button>
             </div>
         </div>
 
         <div id="view-shouldIBuyIt" class="view-section hidden flex-1 flex flex-col scrollable-area space-y-4 pb-4">
-            <div class="editorial-card rounded-2xl p-5 space-y-3 bg-white pop-anim">
+            <div class="editorial-card rounded-2xl p-5 space-y-3 bg-white">
                 <h2 class="text-base font-serif font-bold text-charcoal flex items-center gap-2 border-b border-[#1a1917]/10 pb-2"><i data-lucide="calculator" class="w-4 h-4 text-editorial"></i> Should I Buy It?</h2>
                 <div><label class="block text-[10px] font-bold text-charcoal/70 uppercase tracking-wider mb-1">Produkt / Wunsch</label><input type="text" id="calc-item" class="w-full bg-[#fcfbf9] border border-[#1a1917] rounded-xl p-3 text-charcoal text-sm focus:outline-none shadow-inner font-mono" placeholder="z.B. Neue Kopfhörer"></div>
                 <div class="grid grid-cols-2 gap-2.5">
@@ -193,30 +190,39 @@
                     <div id="calc-result-time" class="text-3xl font-serif font-bold text-charcoal mt-1">9 Std 0 Min</div>
                     <div id="calc-verdict" class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold bg-[#1a1917]/5 text-charcoal border border-[#1a1917]/20 font-mono">72h Schlafpause einlegen</div>
                 </div>
-                <div class="space-y-1.5 text-xs font-mono text-charcoal/80 pt-1">
-                    <div class="flex justify-between"><span>Gesamt-Impact:</span><span id="calc-yearly-sum" class="font-bold text-editorial">180 €</span></div>
-                    <div class="flex justify-between"><span>Äquivalent in Büchern (~20€):</span><span id="calc-books" class="font-bold">9 Stk</span></div>
-                </div>
+                <div class="space-y-1.5 text-xs font-mono text-charcoal/80 pt-1"><div class="flex justify-between"><span>Gesamt-Impact:</span><span id="calc-yearly-sum" class="font-bold text-editorial">180 €</span></div><div class="flex justify-between"><span>Äquivalent in Büchern (~20€):</span><span id="calc-books" class="font-bold">9 Stk</span></div></div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 pt-2">
-                <button onclick="sendToImpulse()" class="bg-white border border-[#1a1917] text-charcoal font-bold py-3.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-[2px_2px_0px_#1a1917] active:translate-x-0.5 active:translate-y-0.5 transition-all"><i data-lucide="timer" class="w-4 h-4 text-editorial"></i>72h Pause</button>
-                <button onclick="sendToGraveyardDirect()" class="bg-editorial text-white font-bold py-3.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-[2px_2px_0px_#1a1917] active:translate-x-0.5 active:translate-y-0.5 transition-all"><i data-lucide="ghost" class="w-4 h-4"></i>Nicht kaufen</button>
+                <button onclick="sendToImpulse()" class="bg-white border border-[#1a1917] text-charcoal font-bold py-3.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-[2px_2px_0px_#1a1917] active:translate-x-0.5 active:translate-y-0.5 transition-all"><i data-lucide="timer" class="w-4 h-4 text-editorial"></i> 72h Pause</button>
+                <button onclick="sendToGraveyardDirect()" class="bg-editorial text-white font-bold py-3.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 shadow-[2px_2px_0px_#1a1917] active:translate-x-0.5 active:translate-y-0.5 transition-all"><i data-lucide="ghost" class="w-4 h-4"></i> Nicht kaufen</button>
             </div>
         </div>
 
-        <div id="view-impulseTimer" class="view-section hidden flex-1 flex flex-col scrollable-area pb-4">
-            <div class="flex justify-between items-center mb-3"><h2 class="text-base font-serif font-bold text-charcoal flex items-center gap-2"><i data-lucide="timer" class="w-4 h-4 text-editorial"></i> Aktive Impulse</h2><span id="timers-count-label" class="text-xs bg-white border border-[#1a1917] px-2.5 py-0.5 rounded-full text-charcoal font-mono shadow-[1px_1px_0px_#1a1917]">0 aktiv</span></div>
-            <div id="timers-container" class="space-y-3"></div>
+        <div id="view-impulseTimer" class="view-section hidden flex-1 flex flex-col scrollable-area space-y-3 pb-4">
+            <div class="flex justify-between items-center"><h2 class="text-base font-serif font-bold text-charcoal flex items-center gap-2"><i data-lucide="timer" class="w-4 h-4 text-editorial"></i> Geparkte Impulse</h2><span id="timers-count-label" class="text-xs bg-white border border-[#1a1917] px-2.5 py-0.5 rounded-full text-charcoal font-mono shadow-[1px_1px_0px_#1a1917]">0 aktiv</span></div>
+
+            <div class="editorial-card p-3.5 rounded-xl bg-amber-50/50 text-xs font-mono text-charcoal/80 space-y-1">
+                <p class="font-bold font-serif text-charcoal text-sm flex items-center gap-1.5"><i data-lucide="info" class="w-4 h-4 text-amber-600"></i> Wie funktionieren geparkte Impulse?</p>
+                <p class="text-[11px] leading-relaxed text-charcoal/70">Hier ruhen deine Wunschkäufe für 72 Stunden. Dieser zeitliche Puffer bricht den emotionalen Kaufrausch. Nach Ablauf entscheidest du, ob der Wunsch erloschen ist (dann wandert er als Sieg in den Graveyard) oder ob du ihn wirklich kaufst.</p>
+            </div>
+
+            <div id="timers-container" class="space-y-3 pt-1"></div>
         </div>
 
-        <div id="view-graveyard" class="view-section hidden flex-1 flex flex-col scrollable-area pb-4">
-            <div class="flex justify-between items-center mb-3"><h2 class="text-base font-serif font-bold text-charcoal flex items-center gap-2"><i data-lucide="ghost" class="w-4 h-4 text-charcoal"></i> Purchase Graveyard</h2><span id="graveyard-total" class="text-xs bg-editorial text-white px-3 py-1 rounded-full font-bold shadow-[1px_1px_0px_#1a1917]">0 € behalten</span></div>
-            <div id="graveyard-container" class="space-y-3"></div>
+        <div id="view-graveyard" class="view-section hidden flex-1 flex flex-col scrollable-area space-y-3 pb-4">
+            <div class="flex justify-between items-center"><h2 class="text-base font-serif font-bold text-charcoal flex items-center gap-2"><i data-lucide="ghost" class="w-4 h-4 text-charcoal"></i> Purchase Graveyard</h2><span id="graveyard-total" class="text-xs bg-editorial text-white px-3 py-1 rounded-full font-bold shadow-[1px_1px_0px_#1a1917]">0 € behalten</span></div>
+
+            <div class="editorial-card p-3.5 rounded-xl bg-emerald-50/50 text-xs font-mono text-charcoal/80 space-y-1">
+                <p class="font-bold font-serif text-charcoal text-sm flex items-center gap-1.5"><i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i> Was ist der Graveyard?</p>
+                <p class="text-[11px] leading-relaxed text-charcoal/70">Der Friedhof der ungetätigten Käufe. Jedes Mal, wenn du standhaft bleibst und einen Impuls begräbst, wird das gesparte Geld offiziell als Sieg verbucht. Das stärkt dein Level und füllt deine definierten Spar-Ziele.</p>
+            </div>
+
+            <div id="graveyard-container" class="space-y-3 pt-1"></div>
         </div>
 
         <div id="view-milestones" class="view-section hidden flex-1 flex flex-col scrollable-area space-y-4 pb-4">
-            <div class="editorial-card rounded-2xl p-5 space-y-3 bg-white pop-anim">
+            <div class="editorial-card rounded-2xl p-5 space-y-3 bg-white">
                 <h2 class="text-base font-serif font-bold text-charcoal flex items-center gap-2 border-b border-[#1a1917]/10 pb-2"><i data-lucide="award" class="w-4 h-4 text-emerald-700"></i> Eigene Spar-Ziele</h2>
                 <p class="text-xs text-charcoal/80 leading-relaxed font-mono">Lege fest, worauf du mit deinem im Graveyard geretteten Geld sparst:</p>
                 <div class="space-y-2 pt-1">
@@ -230,236 +236,290 @@
 </div>
 
 <script>
-const STORE='morrow_money_v14';
-const LEGACY=['morrow_money_v13','morrow_money_v12','morrow_money_v11','morrow_money_v10','morrow_money_v9','morrow_money_v8','morrow_money_v7','morrow_money_v6','morrow_money_v5','morrow_money_data_v5','morrow_money_v4','morrow_money_data_v4','morrow_money_data_v3','morrow_money_v3','morrow_money_v2','morrow_money_v1','morrow_money_data'];
-const DEFAULTS={timers:[],graveyard:[],hourlyWage:20,milestones:[{id:1,title:'Wochenend-Trip',target:250},{id:2,title:'Tech-Gadget Wunsch',target:600}]};
-let appData=structuredClone(DEFAULTS);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const STORE = 'morrow_money_v15';
+    const LEGACY = [
+        'morrow_money_v14','morrow_money_v13','morrow_money_v12','morrow_money_v11','morrow_money_v10','morrow_money_v9','morrow_money_v8','morrow_money_v7','morrow_money_v6','morrow_money_v5','morrow_money_v4','morrow_money_data_v5','morrow_money_data_v4','morrow_money_data_v3','morrow_money_v3','morrow_money_v2','morrow_money_v1','morrow_money_data'
+    ];
 
-function normalizeData(raw){
-    const d=raw&&typeof raw==='object'?raw:{};
-    return {
-        timers:Array.isArray(d.timers)?d.timers:[],
-        graveyard:Array.isArray(d.graveyard)?d.graveyard:[],
-        hourlyWage:Number(d.hourlyWage)>0?Number(d.hourlyWage):20,
-        milestones:Array.isArray(d.milestones)?d.milestones:structuredClone(DEFAULTS.milestones)
-    };
-}
+    let appData = defaultData();
+    let timerRefresh = null;
 
-function loadData(){
-    const keys=[STORE,...LEGACY];
-    for(const key of keys){
-        const raw=localStorage.getItem(key);
-        if(!raw) continue;
-        try {
-            appData=normalizeData(JSON.parse(raw));
-            localStorage.setItem(STORE,JSON.stringify(appData));
-            return;
-        } catch(e) {}
-    }
-}
-
-function initApp(){
-    loadData();
-    document.getElementById('calc-wage').value=appData.hourlyWage||20;
-    calculateTime(false);
-    renderAll();
-    lucide.createIcons();
-    setInterval(()=>{ if(!document.getElementById('view-impulseTimer').classList.contains('hidden')) renderTimers(); },60000);
-    if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
-}
-
-function saveData(render=true){
-    localStorage.setItem(STORE,JSON.stringify(appData));
-    if(render) renderAll();
-}
-
-function switchView(viewName){
-    document.querySelectorAll('.view-section').forEach(el=>el.classList.add('hidden'));
-    document.getElementById('view-'+viewName).classList.remove('hidden');
-    document.getElementById('back-btn').classList.toggle('hidden',viewName==='dashboard');
-    lucide.createIcons();
-}
-
-function calculateTime(persist=true){
-    const price=parseFloat(document.getElementById('calc-price').value)||0;
-    const wage=parseFloat(document.getElementById('calc-wage').value)||20;
-    const freq=parseInt(document.getElementById('calc-frequency').value)||1;
-    appData.hourlyWage=wage;
-    if(persist) saveData(false);
-
-    const result=document.getElementById('calc-result-time');
-    const yearly=document.getElementById('calc-yearly-sum');
-    const books=document.getElementById('calc-books');
-    const verdict=document.getElementById('calc-verdict');
-
-    if(wage<=0||price<=0){
-        result.innerText='0 Std'; yearly.innerText='0 €'; books.innerText='0 Stk'; return;
+    function defaultData() {
+        return {
+            onboarded: false,
+            timers: [],
+            graveyard: [],
+            hourlyWage: 20,
+            milestones: [
+                { id: 1, title: 'Wochenend-Trip', target: 250 },
+                { id: 2, title: 'Tech-Gadget Wunsch', target: 600 }
+            ]
+        };
     }
 
-    const totalAmount=price*freq;
-    const totalHours=totalAmount/wage;
-    const h=Math.floor(totalHours);
-    let m=Math.round((totalHours-h)*60);
-    let hh=h;
-    if(m===60){ hh+=1; m=0; }
-    result.innerText=`${hh} Std ${m} Min`;
-    yearly.innerText=totalAmount.toLocaleString('de-DE')+' €';
-    books.innerText=Math.round(totalAmount/20)+' Stk';
-
-    if(totalHours<3){
-        verdict.className='inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-800 border border-emerald-500/30 font-mono';
-        verdict.innerText='Vertretbar – Kaufen';
-    } else if(totalHours<10){
-        verdict.className='inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-800 border border-amber-500/30 font-mono';
-        verdict.innerText='24h Schlafpause einlegen';
-    } else {
-        verdict.className='inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold bg-editorial/10 text-editorial border border-editorial/30 font-mono';
-        verdict.innerText='Starker Eingriff – 72h Sperre';
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
     }
-}
 
-function currentPurchase(){
-    const item=document.getElementById('calc-item').value.trim()||'Unbenannter Wunsch';
-    const price=parseFloat(document.getElementById('calc-price').value)||0;
-    const freq=parseInt(document.getElementById('calc-frequency').value)||1;
-    return {item,price,totalAmount:price*freq};
-}
-
-function sendToImpulse(){
-    const p=currentPurchase();
-    if(!p.price) return;
-    const now=Date.now();
-    appData.timers.push({id:now,item:p.item,price:p.totalAmount,createdAt:now,expiresAt:now+(72*3600*1000)});
-    saveData();
-    if(navigator.vibrate) navigator.vibrate(15);
-    switchView('impulseTimer');
-    document.getElementById('calc-item').value='';
-}
-
-function sendToGraveyardDirect(){
-    const p=currentPurchase();
-    if(!p.price) return;
-    const reason=prompt('Warum hast du dich dagegen entschieden? (Optionaler Reflexions-Notiz für dein Journal):','Bewusste Entscheidung gegen den Impuls');
-    appData.graveyard.unshift({id:Date.now(),item:p.item,price:p.totalAmount,reason:reason||'Keine Notiz',savedAt:new Date().toISOString()});
-    saveData();
-    if(navigator.vibrate) navigator.vibrate(25);
-    switchView('graveyard');
-    document.getElementById('calc-item').value='';
-}
-
-function resolveTimer(id,success){
-    const idx=appData.timers.findIndex(t=>String(t.id)===String(id));
-    if(idx<0) return;
-    const t=appData.timers[idx];
-    if(Date.now()<Number(t.expiresAt||0)) return;
-    appData.timers.splice(idx,1);
-    if(success){
-        const reason=prompt('Du hast 72h gewartet. Warum hast du den Kauf nun verworfen?','Impuls verflogen nach 3 Tagen');
-        appData.graveyard.unshift({id:t.id,item:t.item,price:Number(t.price)||0,reason:reason||'72h Sperre erfolgreich',savedAt:new Date().toISOString()});
+    function normalizeData(raw, migratedFromLegacy = false) {
+        const base = defaultData();
+        const data = raw && typeof raw === 'object' ? raw : {};
+        return {
+            onboarded: typeof data.onboarded === 'boolean' ? data.onboarded : migratedFromLegacy,
+            timers: Array.isArray(data.timers) ? data.timers.map(t => ({
+                id: t.id ?? Date.now() + Math.random(),
+                item: String(t.item || 'Unbenannter Wunsch'),
+                price: Number(t.price) || 0,
+                createdAt: Number(t.createdAt) || Date.now(),
+                expiresAt: Number(t.expiresAt) || ((Number(t.createdAt) || Date.now()) + 72 * 3600 * 1000)
+            })) : [],
+            graveyard: Array.isArray(data.graveyard) ? data.graveyard.map(g => ({
+                id: g.id ?? Date.now() + Math.random(),
+                item: String(g.item || 'Unbenannter Wunsch'),
+                price: Number(g.price) || 0,
+                reason: String(g.reason || 'Keine Notiz'),
+                savedAt: g.savedAt || new Date().toISOString()
+            })) : [],
+            hourlyWage: Number(data.hourlyWage) > 0 ? Number(data.hourlyWage) : base.hourlyWage,
+            milestones: Array.isArray(data.milestones) ? data.milestones.map(m => ({
+                id: m.id ?? Date.now() + Math.random(),
+                title: String(m.title || 'Sparziel'),
+                target: Number(m.target) || 0
+            })).filter(m => m.target > 0) : base.milestones
+        };
     }
-    saveData();
-    if(navigator.vibrate) navigator.vibrate(25);
-}
 
-function addMilestone(){
-    const titleInput=document.getElementById('new-goal-title');
-    const amountInput=document.getElementById('new-goal-amount');
-    const title=titleInput.value.trim();
-    const target=parseFloat(amountInput.value);
-    if(!title||!Number.isFinite(target)||target<=0) return;
-    appData.milestones.push({id:Date.now(),title,target});
-    titleInput.value=''; amountInput.value='';
-    saveData();
-    if(navigator.vibrate) navigator.vibrate(12);
-}
+    function loadData() {
+        const current = localStorage.getItem(STORE);
+        if (current) {
+            try { return normalizeData(JSON.parse(current), false); } catch(e) {}
+        }
+        for (const key of LEGACY) {
+            const saved = localStorage.getItem(key);
+            if (!saved) continue;
+            try {
+                const migrated = normalizeData(JSON.parse(saved), true);
+                localStorage.setItem(STORE, JSON.stringify(migrated));
+                return migrated;
+            } catch(e) {}
+        }
+        return defaultData();
+    }
 
-function deleteMilestone(id){
-    appData.milestones=appData.milestones.filter(m=>String(m.id)!==String(id));
-    saveData();
-}
-
-function renderTimers(){
-    const timersContainer=document.getElementById('timers-container');
-    document.getElementById('timers-count-label').innerText=appData.timers.length+' aktiv';
-    if(appData.timers.length===0){
-        timersContainer.innerHTML=`<div class="text-center py-16 text-charcoal/50 font-mono text-xs space-y-1 pop-anim"><i data-lucide="shield-check" class="w-8 h-8 mx-auto text-emerald-600 mb-2 opacity-80"></i><p class="font-bold font-serif text-sm text-charcoal">Der Geist ist klar.</p><p class="text-[10px]">Keine aktiven Versuchungen im Prüfstand.</p></div>`;
+    function initApp() {
+        appData = loadData();
+        document.getElementById('calc-wage').value = appData.hourlyWage || 20;
+        calculateTime(false);
+        switchView(appData.onboarded ? 'dashboard' : 'welcome');
+        renderAll();
         lucide.createIcons();
-        return;
-    }
-    timersContainer.innerHTML=appData.timers.map(t=>{
-        const expires=Number(t.expiresAt)||0;
-        const msLeft=Math.max(0,expires-Date.now());
-        const hoursLeft=Math.ceil(msLeft/3600000);
-        const expired=msLeft<=0;
-        const controls=expired
-            ? `<div class="flex items-center gap-1.5"><button onclick="resolveTimer('${esc(t.id)}',true)" class="bg-[#1a1917] text-white px-3 py-2 rounded-lg text-xs font-bold active:scale-95 shadow-[2px_2px_0px_#d9381e]">Gerettet</button><button onclick="resolveTimer('${esc(t.id)}',false)" class="bg-white border border-[#1a1917] text-charcoal p-2 rounded-lg" aria-label="Doch gekauft"><i data-lucide="x" class="w-4 h-4"></i></button></div>`
-            : `<span class="text-[10px] font-mono font-bold text-charcoal/50">Entscheidung gesperrt</span>`;
-        return `<div class="editorial-card p-4 rounded-xl flex justify-between items-center gap-3 bg-white pop-anim"><div class="min-w-0"><h3 class="font-serif font-bold text-charcoal text-base truncate">${esc(t.item)}</h3><div class="flex items-center gap-2 mt-0.5 font-mono text-xs"><span class="text-editorial font-bold">${Number(t.price||0).toLocaleString('de-DE')} €</span><span class="text-charcoal/50">${expired?'72h abgeschlossen':'Noch '+hoursLeft+' Std'}</span></div></div>${controls}</div>`;
-    }).join('');
-    lucide.createIcons();
-}
-
-function renderAll(){
-    const now=new Date();
-    const currentMonth=now.getMonth();
-    const currentYear=now.getFullYear();
-    const monthlySaved=appData.graveyard.filter(item=>{const d=new Date(item.savedAt); return d.getMonth()===currentMonth&&d.getFullYear()===currentYear;}).reduce((s,i)=>s+(Number(i.price)||0),0);
-    const totalSavedAllTime=appData.graveyard.reduce((s,i)=>s+(Number(i.price)||0),0);
-
-    document.getElementById('hero-saved').innerText=monthlySaved.toLocaleString('de-DE')+' €';
-    document.getElementById('hero-count').innerText=appData.graveyard.length+' Käufe vermieden';
-    document.getElementById('hero-alltime').innerText=totalSavedAllTime.toLocaleString('de-DE')+' € insgesamt';
-
-    const rankEl=document.getElementById('user-rank');
-    let nextLevelTarget=150;
-    let currentLevelName='Novize';
-    if(totalSavedAllTime>=1000){currentLevelName='💎 Stoiker';nextLevelTarget=2500;}
-    else if(totalSavedAllTime>=500){currentLevelName='🔥 Diszipliniert';nextLevelTarget=1000;}
-    else if(totalSavedAllTime>=150){currentLevelName='🛡️ Bewusst';nextLevelTarget=500;}
-    rankEl.innerText=currentLevelName;
-
-    const progressPercent=Math.min(100,Math.round((totalSavedAllTime/nextLevelTarget)*100));
-    const remainingToNext=Math.max(0,nextLevelTarget-totalSavedAllTime);
-    document.getElementById('hero-level-text').innerText=`Noch ${remainingToNext.toLocaleString('de-DE')} € bis zum nächsten Level`;
-    document.getElementById('hero-level-percent').innerText=progressPercent+'%';
-    document.getElementById('hero-progress-bar').style.width=progressPercent+'%';
-
-    const badge=document.getElementById('impulse-badge');
-    if(appData.timers.length>0){badge.innerText=appData.timers.length;badge.classList.remove('hidden');}else badge.classList.add('hidden');
-    renderTimers();
-
-    const gyContainer=document.getElementById('graveyard-container');
-    document.getElementById('graveyard-total').innerText=totalSavedAllTime.toLocaleString('de-DE')+' € behalten';
-    if(appData.graveyard.length===0){
-        gyContainer.innerHTML=`<div class="text-center py-16 text-charcoal/50 font-mono text-xs space-y-1 pop-anim"><i data-lucide="feather" class="w-8 h-8 mx-auto text-editorial mb-2 opacity-80"></i><p class="font-bold font-serif text-sm text-charcoal">„Manchmal ist Nicht-Kaufen die eleganteste Entscheidung.“</p><p class="text-[10px] mt-1">Hier ruhen deine bewussten Siege über den Impuls.</p></div>`;
-    } else {
-        gyContainer.innerHTML=appData.graveyard.map(item=>`<div class="editorial-card p-4 rounded-xl space-y-2 bg-white pop-anim"><div class="flex justify-between items-center gap-3"><div class="min-w-0"><h3 class="font-serif font-bold text-charcoal text-base line-through decoration-editorial">${esc(item.item)}</h3><p class="text-[10px] text-charcoal/50 font-mono mt-0.5">${new Date(item.savedAt).toLocaleDateString('de-DE')} — Reflexion: „${esc(item.reason||'Keine Notiz')}“</p></div><span class="text-editorial font-bold font-mono text-sm bg-editorial/10 px-2.5 py-1 rounded-lg border border-editorial/20 shrink-0">+${Number(item.price||0).toLocaleString('de-DE')} €</span></div></div>`).join('');
+        if (timerRefresh) clearInterval(timerRefresh);
+        timerRefresh = setInterval(() => {
+            if (!document.getElementById('view-impulseTimer').classList.contains('hidden')) renderAll();
+        }, 60000);
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
 
-    const milestonesList=document.getElementById('milestones-list');
-    if(appData.milestones.length===0){
-        milestonesList.innerHTML=`<div class="text-center py-8 text-charcoal/50 font-mono text-xs">Keine Ziele definiert. Füge oben dein erstes Ziel hinzu!</div>`;
-    } else {
-        milestonesList.innerHTML=appData.milestones.map(m=>{
-            const target=Number(m.target)||0;
-            const unlocked=target>0&&totalSavedAllTime>=target;
-            const progress=target>0?Math.min(100,Math.round((totalSavedAllTime/target)*100)):0;
-            return `<div class="editorial-card p-4 rounded-xl relative overflow-hidden bg-white pop-anim"><div class="flex justify-between items-start mb-1"><div><span class="text-[9px] uppercase font-mono tracking-wider text-editorial font-bold">${target.toLocaleString('de-DE')} € Ziel</span><h3 class="font-serif font-bold text-charcoal text-base">${esc(m.title)}</h3></div><div class="flex items-center gap-2"><span class="text-xs font-mono font-bold px-2 py-1 rounded border ${unlocked?'bg-editorial text-white border-editorial shadow-[1px_1px_0px_#1a1917]':'bg-white border-[#1a1917]/20 text-charcoal/50'}">${unlocked?'Erreicht ✓':progress+'%'}</span><button onclick="deleteMilestone('${esc(m.id)}')" class="text-charcoal/40 hover:text-editorial p-1" aria-label="Ziel löschen"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div><div class="w-full bg-[#1a1917]/10 h-1.5 rounded-full mt-3 overflow-hidden"><div class="bg-editorial h-full transition-all duration-500 ease-out" style="width:${progress}%"></div></div></div>`;
-        }).join('');
+    function persist() {
+        localStorage.setItem(STORE, JSON.stringify(appData));
     }
-    lucide.createIcons();
-}
 
-function exportData(){
-    const blob=new Blob([JSON.stringify(appData,null,2)],{type:'application/json'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download='morrow-money-backup.json';
-    a.click();
-    setTimeout(()=>URL.revokeObjectURL(url),0);
-}
+    function saveData() {
+        persist();
+        renderAll();
+    }
+
+    function completeOnboarding() {
+        appData.onboarded = true;
+        saveData();
+        switchView('dashboard');
+    }
+
+    function switchView(viewName) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+        document.getElementById('view-' + viewName).classList.remove('hidden');
+        const backBtn = document.getElementById('back-btn');
+        if (viewName === 'dashboard' || viewName === 'welcome') backBtn.classList.add('hidden');
+        else backBtn.classList.remove('hidden');
+        lucide.createIcons();
+    }
+
+    function calculateTime(shouldPersist = true) {
+        const price = parseFloat(document.getElementById('calc-price').value) || 0;
+        const wage = parseFloat(document.getElementById('calc-wage').value) || 20;
+        const freq = parseInt(document.getElementById('calc-frequency').value) || 1;
+        appData.hourlyWage = wage;
+        if (shouldPersist && appData.onboarded) persist();
+
+        if (wage <= 0 || price <= 0) {
+            document.getElementById('calc-result-time').innerText = '0 Std';
+            document.getElementById('calc-yearly-sum').innerText = '0 €';
+            document.getElementById('calc-books').innerText = '0 Stk';
+            return;
+        }
+
+        const totalAmount = price * freq;
+        const totalHours = totalAmount / wage;
+        const h = Math.floor(totalHours);
+        const m = Math.round((totalHours - h) * 60);
+
+        document.getElementById('calc-result-time').innerText = `${h} Std ${m} Min`;
+        document.getElementById('calc-yearly-sum').innerText = totalAmount.toLocaleString('de-DE') + ' €';
+        document.getElementById('calc-books').innerText = Math.round(totalAmount / 20) + ' Stk';
+
+        const verdictEl = document.getElementById('calc-verdict');
+        if (totalHours < 3) {
+            verdictEl.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-800 border border-emerald-500/30 font-mono';
+            verdictEl.innerText = 'Vertretbar – Kaufen';
+        } else if (totalHours < 10) {
+            verdictEl.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-800 border border-amber-500/30 font-mono';
+            verdictEl.innerText = '24h Schlafpause einlegen';
+        } else {
+            verdictEl.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold bg-editorial/10 text-editorial border border-editorial/30 font-mono';
+            verdictEl.innerText = 'Starker Eingriff – 72h Sperre';
+        }
+    }
+
+    function sendToImpulse() {
+        const item = document.getElementById('calc-item').value.trim() || 'Unbenannter Wunsch';
+        const price = parseFloat(document.getElementById('calc-price').value) || 0;
+        const freq = parseInt(document.getElementById('calc-frequency').value) || 1;
+        const totalAmount = price * freq;
+        if (!price) return;
+        const now = Date.now();
+        appData.timers.push({ id: now, item, price: totalAmount, createdAt: now, expiresAt: now + 72 * 3600 * 1000 });
+        saveData();
+        if (navigator.vibrate) navigator.vibrate(15);
+        switchView('impulseTimer');
+        document.getElementById('calc-item').value = '';
+    }
+
+    function sendToGraveyardDirect() {
+        const item = document.getElementById('calc-item').value.trim() || 'Unbenannter Wunsch';
+        const price = parseFloat(document.getElementById('calc-price').value) || 0;
+        const freq = parseInt(document.getElementById('calc-frequency').value) || 1;
+        const totalAmount = price * freq;
+        if (!price) return;
+        const reason = prompt('Warum hast du dich dagegen entschieden? (Reflexions-Notiz):', 'Bewusste Entscheidung gegen den Impuls');
+        appData.graveyard.unshift({ id: Date.now(), item, price: totalAmount, reason: reason || 'Keine Notiz', savedAt: new Date().toISOString() });
+        saveData();
+        if (navigator.vibrate) navigator.vibrate(25);
+        switchView('graveyard');
+        document.getElementById('calc-item').value = '';
+    }
+
+    function resolveTimer(id, success) {
+        const idx = appData.timers.findIndex(t => String(t.id) === String(id));
+        if (idx < 0) return;
+        const t = appData.timers[idx];
+        if (Date.now() < t.expiresAt) return;
+        appData.timers.splice(idx, 1);
+        if (success) {
+            const reason = prompt('Du hast 72h gewartet. Warum hast du den Kauf nun verworfen?', 'Impuls verflogen nach 3 Tagen');
+            appData.graveyard.unshift({ id: t.id, item: t.item, price: t.price, reason: reason || '72h Sperre erfolgreich', savedAt: new Date().toISOString() });
+        }
+        saveData();
+        if (navigator.vibrate) navigator.vibrate(25);
+    }
+
+    function addMilestone() {
+        const titleInput = document.getElementById('new-goal-title');
+        const amountInput = document.getElementById('new-goal-amount');
+        const title = titleInput.value.trim();
+        const target = parseFloat(amountInput.value);
+        if (!title || isNaN(target) || target <= 0) return;
+        appData.milestones.push({ id: Date.now(), title, target });
+        titleInput.value = '';
+        amountInput.value = '';
+        saveData();
+        if (navigator.vibrate) navigator.vibrate(8);
+    }
+
+    function deleteMilestone(id) {
+        appData.milestones = appData.milestones.filter(m => String(m.id) !== String(id));
+        saveData();
+    }
+
+    function renderAll() {
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+        const monthlySaved = appData.graveyard.filter(item => {
+            const d = new Date(item.savedAt);
+            return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+        }).reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+        const totalSavedAllTime = appData.graveyard.reduce((s, i) => s + (Number(i.price) || 0), 0);
+
+        document.getElementById('hero-saved').innerText = monthlySaved.toLocaleString('de-DE') + ' €';
+        document.getElementById('hero-count').innerText = appData.graveyard.length + ' Käufe vermieden';
+        document.getElementById('hero-alltime').innerText = totalSavedAllTime.toLocaleString('de-DE') + ' € insgesamt';
+
+        const rankEl = document.getElementById('user-rank');
+        let nextLevelTarget = 150;
+        let currentLevelName = 'Novize';
+        if (totalSavedAllTime >= 1000) { currentLevelName = '💎 Stoiker'; nextLevelTarget = 2500; }
+        else if (totalSavedAllTime >= 500) { currentLevelName = '🔥 Diszipliniert'; nextLevelTarget = 1000; }
+        else if (totalSavedAllTime >= 150) { currentLevelName = '🛡️ Bewusst'; nextLevelTarget = 500; }
+        rankEl.innerText = currentLevelName;
+
+        const progressPercent = Math.min(100, Math.round((totalSavedAllTime / nextLevelTarget) * 100));
+        const remainingToNext = Math.max(0, nextLevelTarget - totalSavedAllTime);
+        document.getElementById('hero-level-text').innerText = `Noch ${remainingToNext.toLocaleString('de-DE')} € bis zum nächsten Level`;
+        document.getElementById('hero-level-percent').innerText = progressPercent + '%';
+        document.getElementById('hero-progress-bar').style.width = progressPercent + '%';
+
+        const badge = document.getElementById('impulse-badge');
+        if (appData.timers.length > 0) { badge.innerText = appData.timers.length; badge.classList.remove('hidden'); }
+        else badge.classList.add('hidden');
+        document.getElementById('timers-count-label').innerText = appData.timers.length + ' aktiv';
+
+        const timersContainer = document.getElementById('timers-container');
+        if (appData.timers.length === 0) {
+            timersContainer.innerHTML = `<div class="text-center py-12 text-charcoal/50 font-mono text-xs space-y-1 editorial-card rounded-xl bg-white p-6"><i data-lucide="shield-check" class="w-8 h-8 mx-auto text-emerald-600 mb-2 opacity-80"></i><p class="font-bold font-serif text-sm text-charcoal">Der Geist ist klar.</p><p class="text-[10px]">Keine aktiven Impulse im Prüfstand.</p></div>`;
+        } else {
+            timersContainer.innerHTML = appData.timers.map(t => {
+                const msLeft = Math.max(0, t.expiresAt - Date.now());
+                const hoursLeft = Math.ceil(msLeft / 3600000);
+                const expired = msLeft <= 0;
+                const actionHtml = expired
+                    ? `<div class="flex items-center gap-1.5"><button onclick="resolveTimer('${String(t.id)}', true)" class="bg-[#1a1917] text-white px-3 py-2 rounded-lg text-xs font-bold active:scale-95 shadow-[2px_2px_0px_#d9381e]">Gerettet</button><button onclick="resolveTimer('${String(t.id)}', false)" class="bg-white border border-[#1a1917] text-charcoal p-2 rounded-lg" aria-label="Doch gekauft"><i data-lucide="x" class="w-4 h-4"></i></button></div>`
+                    : `<div class="text-[10px] font-mono text-charcoal/45 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> gesperrt</div>`;
+                return `<div class="editorial-card p-4 rounded-xl flex justify-between items-center bg-white pop-anim"><div><h3 class="font-serif font-bold text-charcoal text-base">${esc(t.item)}</h3><div class="flex items-center gap-2 mt-0.5 font-mono text-xs"><span class="text-editorial font-bold">${Number(t.price).toLocaleString('de-DE')} €</span><span class="text-charcoal/50">${expired ? '72h abgeschlossen' : `Noch ${hoursLeft} Std`}</span></div></div>${actionHtml}</div>`;
+            }).join('');
+        }
+
+        const gyContainer = document.getElementById('graveyard-container');
+        document.getElementById('graveyard-total').innerText = totalSavedAllTime.toLocaleString('de-DE') + ' € behalten';
+        if (appData.graveyard.length === 0) {
+            gyContainer.innerHTML = `<div class="text-center py-12 text-charcoal/50 font-mono text-xs space-y-1 editorial-card rounded-xl bg-white p-6"><i data-lucide="feather" class="w-8 h-8 mx-auto text-editorial mb-2 opacity-80"></i><p class="font-bold font-serif text-sm text-charcoal">„Manchmal ist Nicht-Kaufen die eleganteste Entscheidung.“</p><p class="text-[10px] mt-1">Hier ruhen deine bewussten Siege über den Impuls.</p></div>`;
+        } else {
+            gyContainer.innerHTML = appData.graveyard.map(item => `<div class="editorial-card p-4 rounded-xl space-y-2 bg-white pop-anim"><div class="flex justify-between items-center"><div class="min-w-0 pr-3"><h3 class="font-serif font-bold text-charcoal text-base line-through decoration-editorial break-words">${esc(item.item)}</h3><p class="text-[10px] text-charcoal/50 font-mono mt-0.5 break-words">${new Date(item.savedAt).toLocaleDateString('de-DE')} — Notiz: "${esc(item.reason || 'Keine Notiz')}"</p></div><span class="text-editorial font-bold font-mono text-sm bg-editorial/10 px-2.5 py-1 rounded-lg border border-editorial/20 shrink-0">+${Number(item.price).toLocaleString('de-DE')} €</span></div></div>`).join('');
+        }
+
+        const milestonesList = document.getElementById('milestones-list');
+        if (appData.milestones.length === 0) {
+            milestonesList.innerHTML = `<div class="text-center py-8 text-charcoal/50 font-mono text-xs">Keine Ziele definiert. Füge oben dein erstes Ziel hinzu!</div>`;
+        } else {
+            milestonesList.innerHTML = appData.milestones.map(m => {
+                const unlocked = totalSavedAllTime >= m.target;
+                const progress = Math.min(100, Math.round((totalSavedAllTime / m.target) * 100));
+                return `<div class="editorial-card p-4 rounded-xl relative overflow-hidden bg-white pop-anim"><div class="flex justify-between items-start mb-1"><div class="min-w-0 pr-2"><span class="text-[9px] uppercase font-mono tracking-wider text-editorial font-bold">${Number(m.target).toLocaleString('de-DE')} € Ziel</span><h3 class="font-serif font-bold text-charcoal text-base break-words">${esc(m.title)}</h3></div><div class="flex items-center gap-2 shrink-0"><span class="text-xs font-mono font-bold px-2 py-1 rounded border ${unlocked ? 'bg-editorial text-white border-editorial shadow-[1px_1px_0px_#1a1917]' : 'bg-white border-[#1a1917]/20 text-charcoal/50'}">${unlocked ? 'Erreicht ✓' : progress + '%'}</span><button onclick="deleteMilestone('${String(m.id)}')" class="text-charcoal/40 hover:text-editorial p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div></div><div class="w-full bg-[#1a1917]/10 h-1.5 rounded-full mt-3 overflow-hidden"><div class="bg-editorial h-full transition-all duration-500 ease-out" style="width:${progress}%"></div></div></div>`;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function exportData() {
+        const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'morrow-money-backup.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 0);
+    }
 </script>
 </body>
 </html>
