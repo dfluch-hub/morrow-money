@@ -1,5 +1,5 @@
-const CACHE_NAME = 'morrow-money-core-v3';
-const DYNAMIC_CACHE = 'morrow-money-dynamic-v3';
+const CACHE_NAME = 'morrow-money-core-v4';
+const DYNAMIC_CACHE = 'morrow-money-dynamic-v4';
 
 const LOCAL_ASSETS = [
   './',
@@ -46,12 +46,8 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;
-
       return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || (networkResponse.type !== 'basic' && networkResponse.type !== 'cors')) {
-          return networkResponse;
-        }
-
+        if (!networkResponse || networkResponse.status !== 200 || (networkResponse.type !== 'basic' && networkResponse.type !== 'cors')) return networkResponse;
         const responseToCache = networkResponse.clone();
         caches.open(DYNAMIC_CACHE).then((cache) => cache.put(event.request, responseToCache));
         return networkResponse;
