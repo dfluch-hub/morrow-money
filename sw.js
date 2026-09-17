@@ -1,5 +1,5 @@
-const CACHE_NAME = 'morrow-money-core-v23';
-const DYNAMIC_CACHE = 'morrow-money-dynamic-v23';
+const CACHE_NAME = 'morrow-money-core-v24';
+const DYNAMIC_CACHE = 'morrow-money-dynamic-v24';
 const LOCAL_ASSETS = ['./','./index.html','./manifest.json','./icon-192x192.png','./icon-512x512.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(LOCAL_ASSETS)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(names=>Promise.all(names.filter(name=>name!==CACHE_NAME&&name!==DYNAMIC_CACHE).map(name=>caches.delete(name)))).then(()=>self.clients.claim()))});
