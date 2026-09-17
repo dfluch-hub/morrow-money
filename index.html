@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#080c16">
+  <meta name="theme-color" content="#0b0f19">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Morrow Money">
@@ -13,202 +13,89 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
-    tailwind.config={darkMode:'class',theme:{extend:{colors:{dark:{950:'#03050a',900:'#080c16',850:'#101626',800:'#182136',700:'#24304d'}}}}}
+    tailwind.config={darkMode:'class',theme:{extend:{colors:{dark:{950:'#05070c',900:'#0b0f19',850:'#111726',800:'#1a2338',700:'#2a3756'}}}}}
   </script>
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;padding:0;min-height:100%;background:#020305}
-    body{background:#020305;color:#f8fafc;display:flex;justify-content:center;align-items:center;min-height:100dvh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow:hidden}
-    .app-shell{width:100vw;height:100dvh;max-width:430px;max-height:932px;background:#080c16;display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 0 50px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.08)}
+    html,body{margin:0;padding:0;min-height:100%;background:#030508}
+    body{background-color:#030508;color:#f8fafc;display:flex;justify-content:center;align-items:center;min-height:100dvh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+    .app-shell{width:100%;max-width:420px;height:100dvh;max-height:900px;background:linear-gradient(180deg,#0b0f19 0%,#070a12 100%);display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:0 25px 60px -15px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.08)}
+    @media (min-width:768px){.app-shell{border-radius:44px}}
     .view{display:none;min-height:0}.view.active{display:flex}
-    .scrollable-area{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;min-height:0;scrollbar-width:none}.scrollable-area::-webkit-scrollbar{display:none}
+    .scrollable-area{overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;min-height:0}.scrollable-area::-webkit-scrollbar{display:none}
+    .glow-emerald{box-shadow:0 0 30px -5px rgba(16,185,129,.15)}.glow-indigo{box-shadow:0 0 30px -5px rgba(99,102,241,.15)}
     input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}
-    @media (min-width:768px){.app-shell{border-radius:44px;height:90dvh}}
   </style>
 </head>
 <body>
-<div class="app-shell flex flex-col">
-  <header class="px-6 pt-[max(1rem,env(safe-area-inset-top))] pb-4 flex justify-between items-center bg-dark-900 border-b border-white/5 shrink-0 z-20">
-    <div>
-      <span class="text-[10px] uppercase tracking-widest text-emerald-400 font-extrabold">Morrow Tools</span>
-      <h1 class="text-lg font-black tracking-tight text-white leading-none mt-0.5">Morrow Money</h1>
-    </div>
+<div class="app-shell">
+  <header class="px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-4 flex justify-between items-center z-10 shrink-0">
+    <div><span class="text-[10px] uppercase tracking-widest text-emerald-400 font-extrabold">Morrow Tools</span><h1 class="text-lg font-black tracking-tight text-white">Morrow Money</h1></div>
     <div class="flex items-center gap-2">
-      <button id="homeBtn" class="hidden p-2.5 bg-dark-800 rounded-2xl border border-white/10 text-slate-300 active:scale-95 transition-all" aria-label="Home"><i data-lucide="home" class="w-4 h-4"></i></button>
-      <button id="exportBtn" class="p-2.5 bg-dark-800 rounded-2xl border border-white/10 text-slate-300 active:scale-95 transition-all" title="Backup JSON"><i data-lucide="download" class="w-4 h-4"></i></button>
+      <button id="homeBtn" class="hidden p-2.5 bg-dark-800/80 backdrop-blur-md rounded-2xl border border-white/10 text-slate-300 active:scale-95 transition-all" aria-label="Home"><i data-lucide="home" class="w-4 h-4"></i></button>
+      <button id="exportBtn" class="p-2.5 bg-dark-800/80 backdrop-blur-md rounded-2xl border border-white/10 text-slate-300 active:scale-95 transition-all" title="Backup JSON"><i data-lucide="download" class="w-4 h-4"></i></button>
     </div>
   </header>
 
-  <main class="flex-1 relative flex flex-col overflow-hidden p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-    <section id="dashboard" class="view active flex-1 flex-col gap-5">
-      <div class="bg-gradient-to-br from-dark-800 to-dark-850 rounded-[2.5rem] p-6 text-center border border-white/10 shadow-2xl relative overflow-hidden shrink-0">
+  <div class="flex-1 relative flex flex-col overflow-hidden px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+    <section id="dashboard" class="view active flex-1 flex-col gap-4 scrollable-area">
+      <div class="bg-gradient-to-br from-dark-800 to-dark-850 rounded-[2.5rem] p-6 text-center border border-white/10 glow-emerald relative overflow-hidden shrink-0">
+        <div class="absolute -right-8 -bottom-8 opacity-5 text-emerald-400 pointer-events-none"><i data-lucide="shield-check" class="w-36 h-36"></i></div>
         <span class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Diesen Monat gespart</span>
         <div id="monthlySaved" class="text-4xl font-black text-emerald-400 mt-2 tracking-tight">0 €</div>
         <div id="graveyardCount" class="text-xs text-slate-400 mt-1 font-medium">0 Siege im Graveyard</div>
       </div>
-
-      <div class="grid grid-cols-2 gap-3.5 flex-1 pb-1">
-        <button data-view="cost" class="bg-dark-800/80 p-5 rounded-[2rem] flex flex-col justify-between border border-white/5 active:scale-95 transition-all text-left min-h-36">
-          <div class="bg-indigo-500/10 w-11 h-11 rounded-2xl flex items-center justify-center text-indigo-400 border border-indigo-500/20"><i data-lucide="calculator" class="w-5 h-5"></i></div>
-          <div><h2 class="font-bold text-white text-sm">Cost / Time</h2><p class="text-[11px] text-slate-400 mt-0.5">Arbeitszeit-Rechner</p></div>
-        </button>
-        <button data-view="impulse" class="bg-dark-800/80 p-5 rounded-[2rem] flex flex-col justify-between border border-white/5 active:scale-95 transition-all text-left relative min-h-36">
-          <div id="timerBadge" class="hidden absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-black min-w-5 h-5 px-1 rounded-full items-center justify-center shadow-lg">0</div>
-          <div class="bg-rose-500/10 w-11 h-11 rounded-2xl flex items-center justify-center text-rose-400 border border-rose-500/20"><i data-lucide="timer" class="w-5 h-5"></i></div>
-          <div><h2 class="font-bold text-white text-sm">Impulse</h2><p class="text-[11px] text-slate-400 mt-0.5">72h Sperre</p></div>
-        </button>
-        <button data-view="graveyard" class="bg-dark-800/80 p-5 rounded-[2rem] flex flex-col justify-between border border-white/5 active:scale-95 transition-all text-left min-h-36">
-          <div class="bg-slate-700/30 w-11 h-11 rounded-2xl flex items-center justify-center text-slate-300 border border-white/10"><i data-lucide="ghost" class="w-5 h-5"></i></div>
-          <div><h2 class="font-bold text-white text-sm">Graveyard</h2><p class="text-[11px] text-slate-400 mt-0.5">Nicht gekaufte Items</p></div>
-        </button>
-        <button data-view="future" class="bg-dark-800/80 p-5 rounded-[2rem] flex flex-col justify-between border border-white/5 active:scale-95 transition-all text-left min-h-36">
-          <div class="bg-emerald-500/10 w-11 h-11 rounded-2xl flex items-center justify-center text-emerald-400 border border-emerald-500/20"><i data-lucide="trending-up" class="w-5 h-5"></i></div>
-          <div><h2 class="font-bold text-white text-sm">Future Me</h2><p class="text-[11px] text-slate-400 mt-0.5">Zinseszins 30J</p></div>
-        </button>
+      <div class="grid grid-cols-2 gap-3.5 flex-1 pb-2">
+        <button data-view="cost" class="bg-dark-800/60 hover:bg-dark-800 p-5 rounded-[2rem] flex flex-col justify-between border border-white/5 active:scale-95 transition-all text-left group glow-indigo"><div class="bg-indigo-500/10 w-11 h-11 rounded-2xl flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform border border-indigo-500/20"><i data-lucide="calculator" class="w-5 h-5"></i></div><div><h2 class="font-bold text-white text-sm">Cost / Time</h2><p class="text-[11px] text-slate-400 mt-0.5">Arbeitszeit-Rechner</p></div></button>
+        <button data-view="impulse" class="bg-dark-800/60 hover:bg-dark-800 p-5 rounded-[2rem] flex flex-col justify-between border border-white/5 active:scale-95 transition-all text-left group relative"><div id="timerBadge" class="hidden absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-black min-w-5 h-5 px-1 rounded-full items-center justify-center shadow-lg animate-pulse">0</div><div class="bg-rose-500/10 w-11 h-11 rounded-2xl flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform border border-rose-500/20"><i data-lucide="timer" class="w-5 h-5"></i></div><div><h2 class="font-bold text-white text-sm">Impulse</h2><p class="text-[11px] text-slate-400 mt-0.5">72h Sperre</p></div></button>
+        <button data-view="graveyard" class="bg-dark-800/60 hover:bg-dark-800 p-5 rounded-[2rem] flex flex-col justify-between border border-white/5 active:scale-95 transition-all text-left group"><div class="bg-slate-700/30 w-11 h-11 rounded-2xl flex items-center justify-center text-slate-300 group-hover:scale-110 transition-transform border border-white/10"><i data-lucide="ghost" class="w-5 h-5"></i></div><div><h2 class="font-bold text-white text-sm">Graveyard</h2><p class="text-[11px] text-slate-400 mt-0.5">Nicht gekaufte Items</p></div></button>
+        <button data-view="future" class="bg-dark-800/60 hover:bg-dark-800 p-5 rounded-[2rem] flex flex-col justify-between border border-white/5 active:scale-95 transition-all text-left group"><div class="bg-emerald-500/10 w-11 h-11 rounded-2xl flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform border border-emerald-500/20"><i data-lucide="trending-up" class="w-5 h-5"></i></div><div><h2 class="font-bold text-white text-sm">Future Me</h2><p class="text-[11px] text-slate-400 mt-0.5">Zinseszins 30J</p></div></button>
       </div>
     </section>
 
     <section id="cost" class="view flex-1 flex-col scrollable-area space-y-4 pb-4">
-      <div class="bg-dark-800 rounded-[2.5rem] p-5 border border-white/10 space-y-3.5">
+      <div class="bg-dark-800/80 backdrop-blur-md rounded-[2.5rem] p-5 border border-white/10 space-y-3.5">
         <h2 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="calculator" class="w-4 h-4 text-indigo-400"></i> Arbeitszeit-Rechner</h2>
         <div><label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Produkt / Wunsch</label><input id="itemInput" type="text" class="w-full bg-dark-900 border border-white/10 rounded-2xl p-3 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-600" placeholder="z.B. Neue Kopfhörer"></div>
-        <div class="grid grid-cols-2 gap-2.5">
-          <div><label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Preis (€)</label><input id="priceInput" type="number" inputmode="decimal" value="180" class="w-full bg-dark-900 border border-white/10 rounded-2xl p-3 text-white text-base font-black focus:outline-none focus:border-indigo-500 transition-all"></div>
-          <div><label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Netto-Lohn / Std (€)</label><input id="wageInput" type="number" inputmode="decimal" value="20" class="w-full bg-dark-900 border border-white/10 rounded-2xl p-3 text-white text-base font-black focus:outline-none focus:border-indigo-500 transition-all"></div>
-        </div>
+        <div class="grid grid-cols-2 gap-2.5"><div><label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Preis (€)</label><input id="priceInput" type="number" inputmode="decimal" value="180" class="w-full bg-dark-900 border border-white/10 rounded-2xl p-3 text-white text-base font-black focus:outline-none focus:border-indigo-500 transition-all"></div><div><label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Netto-Lohn / Std (€)</label><input id="wageInput" type="number" inputmode="decimal" value="20" class="w-full bg-dark-900 border border-white/10 rounded-2xl p-3 text-white text-base font-black focus:outline-none focus:border-indigo-500 transition-all"></div></div>
       </div>
-
-      <div class="bg-gradient-to-br from-indigo-950/60 to-dark-800 rounded-[2.5rem] p-5 border border-indigo-500/30 text-center space-y-2.5">
-        <span class="text-[10px] uppercase tracking-widest text-indigo-300 font-bold">Das kostet dich effektiv</span>
-        <div id="workTime" class="text-3xl font-black text-white">9 Std 0 Min</div>
-        <div id="verdict" class="inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Spürbar — kurz Abstand nehmen</div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-3 pt-2">
-        <button id="impulseBtn" class="bg-rose-500/10 border border-rose-500/30 text-rose-400 font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95"><i data-lucide="timer" class="w-4 h-4"></i>72h Pause</button>
-        <button id="graveBtn" class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95"><i data-lucide="ghost" class="w-4 h-4"></i>Nicht kaufen</button>
-      </div>
+      <div class="bg-gradient-to-br from-indigo-950/60 to-dark-800 rounded-[2.5rem] p-5 border border-indigo-500/30 text-center space-y-2.5"><span class="text-[10px] uppercase tracking-widest text-indigo-300 font-bold">Das kostet dich effektiv</span><div id="workTime" class="text-3xl font-black text-white">9 Std 0 Min</div><div id="verdict" class="inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Spürbar — kurz Abstand nehmen</div></div>
+      <div class="grid grid-cols-2 gap-3 pt-2"><button id="impulseBtn" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"><i data-lucide="timer" class="w-4 h-4"></i>72h Pause</button><button id="graveBtn" class="bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95 transition-all"><i data-lucide="ghost" class="w-4 h-4"></i>Nicht kaufen</button></div>
     </section>
 
-    <section id="impulse" class="view flex-1 flex-col scrollable-area pb-4">
-      <div class="flex justify-between items-center mb-3"><h2 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="timer" class="w-4 h-4 text-rose-400"></i> Aktive 72h Impulse</h2><span id="timerCount" class="text-xs bg-dark-800 border border-white/10 px-2.5 py-0.5 rounded-full text-slate-400 font-medium">0 aktiv</span></div>
-      <div id="timersList" class="space-y-2.5"></div>
-    </section>
+    <section id="impulse" class="view flex-1 flex-col scrollable-area pb-4"><div class="flex justify-between items-center mb-3"><h2 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="timer" class="w-4 h-4 text-rose-400"></i> Aktive 72h Impulse</h2><span id="timerCount" class="text-xs bg-dark-800 border border-white/10 px-2.5 py-0.5 rounded-full text-slate-400 font-medium">0 aktiv</span></div><div id="timersList" class="space-y-2.5"></div></section>
 
-    <section id="graveyard" class="view flex-1 flex-col scrollable-area pb-4">
-      <div class="flex justify-between items-center mb-3"><h2 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="ghost" class="w-4 h-4 text-slate-400"></i> Purchase Graveyard</h2><span id="graveTotal" class="text-xs bg-dark-800 border border-white/10 px-3 py-1 rounded-full text-emerald-400 font-black">0 € behalten</span></div>
-      <div id="graveList" class="space-y-2.5"></div>
-    </section>
+    <section id="graveyard" class="view flex-1 flex-col scrollable-area pb-4"><div class="flex justify-between items-center mb-3"><h2 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="ghost" class="w-4 h-4 text-slate-400"></i> Purchase Graveyard</h2><span id="graveTotal" class="text-xs bg-dark-800 border border-white/10 px-3 py-1 rounded-full text-emerald-400 font-black">0 € behalten</span></div><div id="graveList" class="space-y-2.5"></div></section>
 
-    <section id="future" class="view flex-1 flex-col scrollable-area space-y-4 pb-4">
-      <div class="bg-dark-800 rounded-[2.5rem] p-5 border border-white/10 space-y-3"><h2 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> Future Me Simulator</h2><p class="text-xs text-slate-400 leading-relaxed">Dein gerettetes Kapital (<span id="futurePrincipal" class="text-emerald-400 font-bold">0 €</span>) angelegt mit 7 % p.a. Zinseszinseffekt.</p></div>
-      <div class="grid grid-cols-2 gap-3"><div class="bg-dark-800 p-5 rounded-3xl border border-white/10 text-center"><span class="text-[10px] uppercase font-bold text-slate-400">Nach 10 Jahren</span><div id="future10" class="text-xl font-black text-emerald-400 mt-2">0 €</div></div><div class="bg-dark-800 p-5 rounded-3xl border border-white/10 text-center"><span class="text-[10px] uppercase font-bold text-slate-400">Nach 30 Jahren</span><div id="future30" class="text-xl font-black text-emerald-400 mt-2">0 €</div></div></div>
-      <div class="text-[10px] text-slate-500 text-center pt-2">Modellrechnung mit konstanter Rendite von 7 % p.a. — keine Garantie.</div>
-    </section>
-  </main>
+    <section id="future" class="view flex-1 flex-col scrollable-area space-y-4 pb-4"><div class="bg-dark-800/80 backdrop-blur-md rounded-[2.5rem] p-5 border border-white/10 space-y-3"><h2 class="text-base font-bold text-white flex items-center gap-2"><i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> Future Me Simulator</h2><p class="text-xs text-slate-400 leading-relaxed">Dein gesamtes im Graveyard gerettetes Kapital (<span id="futurePrincipal" class="text-emerald-400 font-bold">0 €</span>) angelegt am Aktienmarkt mit 7 % p.a. Zinseszinseffekt.</p></div><div class="grid grid-cols-2 gap-3"><div class="bg-dark-800/60 p-5 rounded-3xl border border-white/10 text-center flex flex-col justify-center"><span class="text-[10px] uppercase font-bold text-slate-400">Nach 10 Jahren</span><div id="future10" class="text-xl font-black text-emerald-400 mt-2">0 €</div></div><div class="bg-dark-800/60 p-5 rounded-3xl border border-white/10 text-center flex flex-col justify-center"><span class="text-[10px] uppercase font-bold text-slate-400">Nach 30 Jahren</span><div id="future30" class="text-xl font-black text-emerald-400 mt-2">0 €</div></div></div><div class="text-[10px] text-slate-500 text-center pt-2">Modellrechnung mit konstanter Rendite von 7 % p.a. — keine Garantien, reiner mathematischer Zinseszinseffekt.</div></section>
+  </div>
 </div>
 
 <script>
 (()=>{
   const KEY='morrow_money_data_v5';
-  const OLD=['morrow_money_data_v4','morrow_money_data_v3','morrow_money_data_v2','morrow_money_v3','morrow_money_v2','morrow_money_v1','morrow_money_data'];
+  const OLD=['morrow_money_data_v4','morrow_money_data_v3','morrow_money_data_v2','morrow_money_v2','morrow_money_v1','morrow_money_data'];
   const state={timers:[],graveyard:[],hourlyWage:20};
   const $=id=>document.getElementById(id);
   const money=v=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',minimumFractionDigits:0,maximumFractionDigits:2}).format(Number(v)||0);
-  const esc=s=>String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+  const esc=s=>String(s).replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
-  function load(){
-    let raw=localStorage.getItem(KEY);
-    if(!raw){for(const k of OLD){raw=localStorage.getItem(k);if(raw)break}}
-    if(!raw)return;
-    try{
-      const d=JSON.parse(raw)||{};
-      state.hourlyWage=Number(d.hourlyWage||d?.settings?.hourlyWage)||20;
-      const ts=Array.isArray(d.timers)?d.timers:(Array.isArray(d.impulses)?d.impulses:[]);
-      state.timers=ts.map((t,i)=>{const createdAt=Number(t.createdAt||t.id)||Date.now()-i;return{id:String(t.id||`t-${createdAt}-${i}`),item:String(t.item||t.product||'Unbenannter Wunsch'),price:Number(t.price)||0,createdAt,expiresAt:Number(t.expiresAt)||createdAt+72*3600000}}).filter(t=>t.price>0);
-      state.graveyard=(Array.isArray(d.graveyard)?d.graveyard:[]).map((g,i)=>({id:String(g.id||`g-${Date.now()}-${i}`),item:String(g.item||g.product||'Unbenannter Wunsch'),price:Number(g.price)||0,savedAt:Number(g.savedAt)||Date.parse(g.savedAt||g.date)||Date.now()})).filter(g=>g.price>0);
-      save();
-    }catch(e){console.warn('Morrow Money: Daten konnten nicht geladen werden',e)}
-  }
+  function load(){let raw=localStorage.getItem(KEY);if(!raw){for(const k of OLD){raw=localStorage.getItem(k);if(raw)break}}if(!raw)return;try{const d=JSON.parse(raw)||{};state.hourlyWage=Number(d.hourlyWage||d?.settings?.hourlyWage)||20;const ts=Array.isArray(d.timers)?d.timers:(Array.isArray(d.impulses)?d.impulses:[]);state.timers=ts.map((t,i)=>{const c=Number(t.createdAt||t.id)||Date.now()-i;return{id:t.id||`t-${c}-${i}`,item:String(t.item||t.product||'Unbenannter Wunsch'),price:Number(t.price)||0,createdAt:c,expiresAt:Number(t.expiresAt)||c+72*3600000}}).filter(t=>t.price>0);state.graveyard=(Array.isArray(d.graveyard)?d.graveyard:[]).map((g,i)=>({id:g.id||`g-${Date.now()}-${i}`,item:String(g.item||g.product||'Unbenannter Wunsch'),price:Number(g.price)||0,savedAt:Number(g.savedAt)||Date.parse(g.savedAt||g.date)||Date.now()})).filter(g=>g.price>0);save()}catch(e){console.warn('Morrow Money: Daten konnten nicht geladen werden',e)}}
 
-  function setView(id){
-    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-    $(id).classList.add('active');
-    $('homeBtn').classList.toggle('hidden',id==='dashboard');
-    render();
-  }
+  function setView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));$(id).classList.add('active');$('homeBtn').classList.toggle('hidden',id==='dashboard');render();}
+  function calc(){const p=Number($('priceInput').value),w=Number($('wageInput').value);if(w>0){state.hourlyWage=w;save()}const h=(p>0&&w>0)?p/w:0,mins=Math.round(h*60),hh=Math.floor(mins/60),mm=mins%60;$('workTime').textContent=h>0?(hh>0?`${hh} Std ${mm} Min`:`${mm} Min`):'0 Std';const v=$('verdict');if(h<=0){v.textContent='Preis und Lohn eingeben';v.className='inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-dark-700/60 text-slate-300 border border-white/10'}else if(h<3){v.textContent='Leichtgewicht';v.className='inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}else if(h<10){v.textContent='Spürbar — kurz Abstand nehmen';v.className='inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30'}else{v.textContent='Starker Eingriff — 72h Pause';v.className='inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30'}}
 
-  function calc(){
-    const p=Number($('priceInput').value),w=Number($('wageInput').value);
-    if(w>0){state.hourlyWage=w;save()}
-    const h=(p>0&&w>0)?p/w:0;
-    const mins=Math.round(h*60),hh=Math.floor(mins/60),mm=mins%60;
-    $('workTime').textContent=h>0?(hh>0?`${hh} Std ${mm} Min`:`${mm} Min`):'0 Std';
-    const v=$('verdict');
-    if(h<=0){v.textContent='Preis und Lohn eingeben';v.className='inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-slate-700/60 text-slate-300 border border-slate-600/40'}
-    else if(h<3){v.textContent='Leichtgewicht';v.className='inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}
-    else if(h<10){v.textContent='Spürbar — kurz Abstand nehmen';v.className='inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30'}
-    else{v.textContent='Große Entscheidung — 72h Pause';v.className='inline-block px-3.5 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30'}
-  }
-
-  function addImpulse(){
-    const item=$('itemInput').value.trim()||'Unbenannter Wunsch',price=Number($('priceInput').value);if(price<=0)return;
-    const now=Date.now();state.timers.unshift({id:`t-${now}`,item,price,createdAt:now,expiresAt:now+72*3600000});save();$('itemInput').value='';setView('impulse');
-  }
-
-  function addGrave(){
-    const item=$('itemInput').value.trim()||'Unbenannter Wunsch',price=Number($('priceInput').value);if(price<=0)return;
-    state.graveyard.unshift({id:`g-${Date.now()}`,item,price,savedAt:Date.now()});save();$('itemInput').value='';setView('graveyard');
-  }
-
-  function resolve(id,saved){
-    const t=state.timers.find(x=>x.id===id);
-    state.timers=state.timers.filter(x=>x.id!==id);
-    if(saved&&t)state.graveyard.unshift({id:`g-${Date.now()}`,item:t.item,price:t.price,savedAt:Date.now()});
-    save();render();
-  }
+  function addImpulse(){const item=$('itemInput').value.trim()||'Unbenannter Wunsch',price=Number($('priceInput').value);if(price<=0)return;const now=Date.now();state.timers.push({id:`t-${now}`,item,price,createdAt:now,expiresAt:now+72*3600000});save();$('itemInput').value='';setView('impulse')}
+  function addGrave(){const item=$('itemInput').value.trim()||'Unbenannter Wunsch',price=Number($('priceInput').value);if(price<=0)return;state.graveyard.unshift({id:`g-${Date.now()}`,item,price,savedAt:Date.now()});save();$('itemInput').value='';setView('graveyard')}
+  function resolve(id,saved){const t=state.timers.find(x=>String(x.id)===String(id));state.timers=state.timers.filter(x=>String(x.id)!==String(id));if(saved&&t)state.graveyard.unshift({id:`g-${Date.now()}`,item:t.item,price:t.price,savedAt:Date.now()});save();render()}
   window.mmResolve=resolve;
+  function timeLeft(t){const diff=t.expiresAt-Date.now();if(diff<=0)return'Abgelaufen';const hrs=Math.ceil(diff/3600000);return`Noch ${hrs} Std`}
 
-  function countdown(t){
-    const diff=t.expiresAt-Date.now();if(diff<=0)return'Abgelaufen';
-    const hrs=Math.ceil(diff/3600000);return`Noch ${hrs} Std`;
-  }
+  function render(){const now=new Date();const monthly=state.graveyard.filter(g=>{const d=new Date(g.savedAt);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()}).reduce((s,g)=>s+Number(g.price||0),0);const total=state.graveyard.reduce((s,g)=>s+Number(g.price||0),0);$('monthlySaved').textContent=money(monthly);$('graveyardCount').textContent=`${state.graveyard.length} Siege im Graveyard`;$('timerBadge').textContent=state.timers.length;$('timerBadge').classList.toggle('hidden',state.timers.length===0);$('timerBadge').classList.toggle('flex',state.timers.length>0);$('timerCount').textContent=`${state.timers.length} aktiv`;$('timersList').innerHTML=state.timers.length?state.timers.map(t=>`<div class="bg-dark-800/80 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex justify-between items-center shadow-lg"><div><h3 class="font-bold text-white text-sm">${esc(t.item)}</h3><div class="flex items-center gap-2 mt-1"><span class="text-emerald-400 font-black text-xs">${money(t.price)}</span><span class="text-[10px] text-slate-400 bg-dark-900 px-2 py-0.5 rounded-md border border-white/5">${timeLeft(t)}</span></div></div><div class="flex items-center gap-1.5"><button onclick="mmResolve('${t.id}',true)" class="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 px-3 py-2 rounded-xl text-xs font-bold active:scale-95 border border-emerald-500/30">Gerettet</button><button onclick="mmResolve('${t.id}',false)" class="bg-dark-900 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 p-2 rounded-xl border border-white/5 transition-colors">✕</button></div></div>`).join(''):`<div class="flex-1 flex flex-col items-center justify-center text-center p-6 text-slate-500 my-auto"><div class="w-14 h-14 rounded-2xl bg-dark-800 flex items-center justify-center mb-3 border border-white/5"><i data-lucide="shield-check" class="w-7 h-7 text-emerald-400/50"></i></div><p class="text-sm font-bold text-slate-300">Keine aktiven Versuchungen.</p><p class="text-xs mt-1 text-slate-500">Schicke Artikel aus dem Rechner hierher, um der Impuls-Falle zu entkommen.</p></div>`;$('graveTotal').textContent=`${money(total)} behalten`;$('graveList').innerHTML=state.graveyard.length?state.graveyard.map(g=>`<div class="bg-dark-800/60 backdrop-blur-md p-4 rounded-2xl border border-white/10 flex justify-between items-center"><div><h3 class="font-bold text-white text-sm line-through decoration-slate-500">${esc(g.item)}</h3><p class="text-[10px] text-slate-400 mt-0.5">${new Date(g.savedAt).toLocaleDateString('de-DE')}</p></div><span class="text-emerald-400 font-black text-sm bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20">+${money(g.price)}</span></div>`).join(''):`<div class="flex-1 flex flex-col items-center justify-center text-center p-6 text-slate-500 my-auto"><div class="w-14 h-14 rounded-2xl bg-dark-800 flex items-center justify-center mb-3 border border-white/5"><i data-lucide="ghost" class="w-7 h-7 text-slate-500/50"></i></div><p class="text-sm font-bold text-slate-300">Dein Graveyard ist leer.</p><p class="text-xs mt-1 text-slate-500">Hier landen alle nicht getätigten Käufe als Trophäen deiner Disziplin.</p></div>`;$('futurePrincipal').textContent=money(total);$('future10').textContent=money(total*Math.pow(1.07,10));$('future30').textContent=money(total*Math.pow(1.07,30));if(window.lucide)lucide.createIcons()}
+  function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='morrow-money-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),500)}
 
-  function render(){
-    const now=new Date();
-    const monthly=state.graveyard.filter(g=>{const d=new Date(g.savedAt);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()}).reduce((s,g)=>s+g.price,0);
-    const total=state.graveyard.reduce((s,g)=>s+g.price,0);
-    $('monthlySaved').textContent=money(monthly);
-    $('graveyardCount').textContent=`${state.graveyard.length} Siege im Graveyard`;
-    $('timerBadge').textContent=state.timers.length;
-    $('timerBadge').classList.toggle('hidden',state.timers.length===0);
-    $('timerBadge').classList.toggle('flex',state.timers.length>0);
-    $('timerCount').textContent=`${state.timers.length} aktiv`;
-
-    $('timersList').innerHTML=state.timers.length?state.timers.map(t=>`<div class="bg-dark-800 p-4 rounded-2xl border border-white/10 shadow-lg"><div class="flex justify-between items-center gap-3"><div class="min-w-0"><h3 class="font-bold text-white text-sm truncate">${esc(t.item)}</h3><div class="flex items-center gap-2 mt-1"><span class="text-emerald-400 font-black text-xs">${money(t.price)}</span><span class="text-[10px] text-slate-400 bg-dark-900 px-2 py-0.5 rounded-md border border-white/5">${countdown(t)}</span></div></div><div class="flex items-center gap-1.5 shrink-0"><button onclick="mmResolve('${t.id}',true)" class="bg-emerald-500/20 text-emerald-400 px-3 py-2 rounded-xl text-xs font-bold active:scale-95 border border-emerald-500/30">Gerettet</button><button onclick="mmResolve('${t.id}',false)" class="bg-dark-900 text-slate-400 p-2 rounded-xl border border-white/5" aria-label="Doch gekauft"><i data-lucide="x" class="w-4 h-4"></i></button></div></div></div>`).join(''):`<div class="flex-1 flex flex-col items-center justify-center text-center p-6 text-slate-500 my-auto"><div class="w-14 h-14 rounded-2xl bg-dark-800 flex items-center justify-center mb-3 border border-white/5"><i data-lucide="shield-check" class="w-7 h-7 text-emerald-400/50"></i></div><p class="text-sm font-bold text-slate-300">Keine aktiven Versuchungen.</p><p class="text-xs mt-1 text-slate-500">Schicke Artikel aus dem Rechner hierher.</p></div>`;
-
-    $('graveTotal').textContent=`${money(total)} behalten`;
-    $('graveList').innerHTML=state.graveyard.length?state.graveyard.map(g=>`<div class="bg-dark-800 p-4 rounded-2xl border border-white/10 flex justify-between items-center gap-3"><div class="min-w-0"><h3 class="font-bold text-white text-sm line-through decoration-slate-500 truncate">${esc(g.item)}</h3><p class="text-[10px] text-slate-400 mt-0.5">${new Date(g.savedAt).toLocaleDateString('de-DE')}</p></div><span class="text-emerald-400 font-black text-sm bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20 shrink-0">+${money(g.price)}</span></div>`).join(''):`<div class="flex-1 flex flex-col items-center justify-center text-center p-6 text-slate-500 my-auto"><div class="w-14 h-14 rounded-2xl bg-dark-800 flex items-center justify-center mb-3 border border-white/5"><i data-lucide="ghost" class="w-7 h-7 text-slate-500/50"></i></div><p class="text-sm font-bold text-slate-300">Dein Graveyard ist leer.</p><p class="text-xs mt-1 text-slate-500">Hier landen nicht getätigte Käufe als Trophäen.</p></div>`;
-
-    $('futurePrincipal').textContent=money(total);
-    $('future10').textContent=money(total*Math.pow(1.07,10));
-    $('future30').textContent=money(total*Math.pow(1.07,30));
-    if(window.lucide)lucide.createIcons();
-  }
-
-  function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='morrow-money-backup.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500)}
-
-  document.querySelectorAll('[data-view]').forEach(btn=>btn.addEventListener('click',()=>setView(btn.dataset.view)));
-  $('homeBtn').addEventListener('click',()=>setView('dashboard'));
-  $('exportBtn').addEventListener('click',exportData);
-  $('priceInput').addEventListener('input',calc);
-  $('wageInput').addEventListener('input',calc);
-  $('impulseBtn').addEventListener('click',addImpulse);
-  $('graveBtn').addEventListener('click',addGrave);
-
-  load();$('wageInput').value=state.hourlyWage;calc();render();setInterval(()=>{if($('impulse').classList.contains('active'))render()},60000);
-  if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));$('homeBtn').addEventListener('click',()=>setView('dashboard'));$('exportBtn').addEventListener('click',exportData);$('priceInput').addEventListener('input',calc);$('wageInput').addEventListener('input',calc);$('impulseBtn').addEventListener('click',addImpulse);$('graveBtn').addEventListener('click',addGrave);load();$('wageInput').value=state.hourlyWage;calc();render();setInterval(()=>{if($('impulse').classList.contains('active'))render()},60000);if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
 </script>
 </body>
