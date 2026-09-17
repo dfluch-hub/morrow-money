@@ -81,6 +81,12 @@
             transform: translate(1px,1px);
             box-shadow: 1px 1px 0 #1a1917;
         }
+        #impulse-badge {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+            padding-top: 0;
+        }
         .scrollable-area { overflow-y:auto; -webkit-overflow-scrolling:touch; flex:1; }
         .scrollable-area::-webkit-scrollbar { display:none; }
         .view-section { animation:fadeIn .2s ease-out forwards; }
@@ -159,7 +165,7 @@
                 </button>
 
                 <button onclick="switchView('impulseTimer')" class="editorial-card-interactive p-4 rounded-2xl flex items-center justify-between text-left relative">
-                    <div id="impulse-badge" class="absolute top-3 right-8 bg-editorial text-white text-[10px] font-bold min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center leading-none pt-[1px] hidden shadow-[1px_1px_0px_#1a1917]">0</div>
+                    <div id="impulse-badge" class="absolute top-3 right-8 bg-editorial text-white text-[10px] font-bold min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center leading-none hidden shadow-[1px_1px_0px_#1a1917]">0</div>
                     <div class="flex items-center gap-3.5"><div class="w-10 h-10 rounded-xl bg-charcoal/5 border border-charcoal/20 flex items-center justify-center text-charcoal shrink-0"><i data-lucide="timer" class="w-5 h-5"></i></div><div><h2 class="font-serif font-bold text-charcoal text-base">Impulse (Geparkt)</h2><p class="text-[10px] text-charcoal/60 font-mono">72 Stunden Abstand gewinnen</p></div></div><i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/40"></i>
                 </button>
 
