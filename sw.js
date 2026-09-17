@@ -1,5 +1,5 @@
-const CACHE_NAME = 'morrow-money-core-v8';
-const DYNAMIC_CACHE = 'morrow-money-dynamic-v8';
+const CACHE_NAME = 'morrow-money-core-v9';
+const DYNAMIC_CACHE = 'morrow-money-dynamic-v9';
 
 const LOCAL_ASSETS = [
   './',
