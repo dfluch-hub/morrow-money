@@ -1,525 +1,195 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#0b0f19">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Morrow Money">
-    <title>Morrow Money — Financial Mindset OS</title>
-
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="./icon-192x192.png">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        slate: {
-                            850: '#151f32',
-                            900: '#0b0f19',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        [x-cloak] { display: none !important; }
-        html, body { height: 100%; background: #0b0f19; overscroll-behavior: none; }
-        body { min-height: 100dvh; }
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Morrow Money">
+  <title>Morrow Money — Financial Mindset OS</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icon-192x192.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config={theme:{extend:{colors:{slate:{850:'#151f32',900:'#0b0f19'}}}}}
+  </script>
+  <style>
+    html,body{height:100%;background:#0b0f19;overscroll-behavior:none}body{min-height:100dvh}.view{display:none}.view.active{display:flex}input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}input[type=number]{-moz-appearance:textfield}
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 h-screen w-screen overflow-hidden flex flex-col font-sans antialiased select-none"
-      x-data="morrowApp()">
+<body class="bg-slate-900 text-slate-100 h-screen w-screen overflow-hidden flex flex-col font-sans antialiased select-none">
 
-    <header class="px-6 pt-[max(1.5rem,env(safe-area-inset-top))] pb-4 flex justify-between items-center bg-slate-900 z-10 shrink-0">
-        <div>
-            <span class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Morrow Tools</span>
-            <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2">Morrow Money</h1>
-        </div>
-        <div class="flex items-center gap-2">
-            <button @click="goHome()" x-show="currentView !== 'dashboard'" x-cloak class="p-2.5 bg-slate-800 rounded-2xl border border-slate-700/50 text-slate-300 active:scale-95 transition-all" aria-label="Startseite">
-                <i data-lucide="home" class="w-5 h-5"></i>
-            </button>
-            <button @click="exportData()" class="p-2.5 bg-slate-800 rounded-2xl border border-slate-700/50 text-slate-300 active:scale-95 transition-all" title="Backup JSON" aria-label="Backup exportieren">
-                <i data-lucide="download" class="w-5 h-5"></i>
-            </button>
-        </div>
-    </header>
+<header class="px-6 pt-6 pb-4 flex justify-between items-center bg-slate-900 z-10 shrink-0">
+  <div>
+    <span class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Morrow Tools</span>
+    <h1 class="text-xl font-extrabold tracking-tight text-white">Morrow Money</h1>
+  </div>
+  <div class="flex items-center gap-2">
+    <button id="homeBtn" class="hidden p-2.5 bg-slate-800 rounded-2xl border border-slate-700/50 text-slate-300 active:scale-95 transition-all" aria-label="Home"><i data-lucide="home" class="w-5 h-5"></i></button>
+    <button id="exportBtn" class="p-2.5 bg-slate-800 rounded-2xl border border-slate-700/50 text-slate-300 active:scale-95 transition-all" title="Backup JSON"><i data-lucide="download" class="w-5 h-5"></i></button>
+  </div>
+</header>
 
-    <main class="flex-1 overflow-hidden relative flex flex-col px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+<main class="flex-1 overflow-hidden relative flex flex-col px-6 pb-6">
+  <section id="dashboard" class="view active flex-1 flex-col gap-5 h-full">
+    <div class="bg-gradient-to-br from-slate-800 to-slate-850 rounded-[2.5rem] p-6 text-center border border-slate-700/60 shadow-xl relative overflow-hidden shrink-0">
+      <div class="absolute -right-6 -bottom-6 opacity-5 text-emerald-400"><i data-lucide="shield-check" class="w-32 h-32"></i></div>
+      <span class="text-slate-400 text-xs font-bold uppercase tracking-widest">Diesen Monat nicht ausgegeben</span>
+      <div id="monthlySaved" class="text-4xl font-black text-emerald-400 mt-2 tracking-tight">0 €</div>
+      <div id="graveyardCount" class="text-[11px] text-slate-400 mt-1">0 Gegenstände im Graveyard</div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 flex-1">
+      <button data-view="cost" class="bg-slate-800/90 p-5 rounded-[2rem] flex flex-col justify-between border border-slate-700/50 active:scale-95 transition-all text-left group">
+        <div class="bg-indigo-500/10 w-12 h-12 rounded-2xl flex items-center justify-center text-indigo-400"><i data-lucide="calculator" class="w-6 h-6"></i></div>
+        <div><h2 class="font-bold text-white text-base">Cost / Time</h2><p class="text-xs text-slate-400 mt-0.5">Arbeitszeit statt Preis</p></div>
+      </button>
+      <button data-view="impulse" class="bg-slate-800/90 p-5 rounded-[2rem] flex flex-col justify-between border border-slate-700/50 active:scale-95 transition-all text-left group relative">
+        <div id="timerBadge" class="hidden absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-extrabold min-w-5 h-5 px-1 rounded-full items-center justify-center shadow-md">0</div>
+        <div class="bg-rose-500/10 w-12 h-12 rounded-2xl flex items-center justify-center text-rose-400"><i data-lucide="timer" class="w-6 h-6"></i></div>
+        <div><h2 class="font-bold text-white text-base">Impulse</h2><p class="text-xs text-slate-400 mt-0.5">72h Pause</p></div>
+      </button>
+      <button data-view="graveyard" class="bg-slate-800/90 p-5 rounded-[2rem] flex flex-col justify-between border border-slate-700/50 active:scale-95 transition-all text-left group">
+        <div class="bg-slate-700/50 w-12 h-12 rounded-2xl flex items-center justify-center text-slate-300"><i data-lucide="ghost" class="w-6 h-6"></i></div>
+        <div><h2 class="font-bold text-white text-base">Graveyard</h2><p class="text-xs text-slate-400 mt-0.5">Nicht gekaufte Items</p></div>
+      </button>
+      <button data-view="future" class="bg-slate-800/90 p-5 rounded-[2rem] flex flex-col justify-between border border-slate-700/50 active:scale-95 transition-all text-left group">
+        <div class="bg-emerald-500/10 w-12 h-12 rounded-2xl flex items-center justify-center text-emerald-400"><i data-lucide="trending-up" class="w-6 h-6"></i></div>
+        <div><h2 class="font-bold text-white text-base">Future Me</h2><p class="text-xs text-slate-400 mt-0.5">Zinseszins Effekt</p></div>
+      </button>
+    </div>
+  </section>
 
-        <div x-show="currentView === 'dashboard'"
-             x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0 scale-95"
-             x-transition:enter-end="opacity-100 scale-100"
-             class="flex-1 flex flex-col gap-5 h-full">
+  <section id="cost" class="view flex-1 flex-col h-full overflow-y-auto pr-1">
+    <div class="bg-slate-800 rounded-[2.5rem] p-6 border border-slate-700/50 space-y-4 mb-4">
+      <h2 class="text-lg font-bold text-white flex items-center gap-2"><i data-lucide="calculator" class="w-5 h-5 text-indigo-400"></i> Arbeitszeit Rechner</h2>
+      <div><label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Produkt / Wunsch</label><input id="itemInput" type="text" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white text-sm focus:outline-none focus:border-indigo-500" placeholder="z.B. Neue Kopfhörer"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Preis (€)</label><input id="priceInput" type="number" inputmode="decimal" value="180" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white text-base font-bold focus:outline-none focus:border-indigo-500"></div>
+        <div><label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Netto-Lohn / Std (€)</label><input id="wageInput" type="number" inputmode="decimal" value="20" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white text-base font-bold focus:outline-none focus:border-indigo-500"></div>
+      </div>
+    </div>
+    <div class="bg-gradient-to-br from-indigo-950/40 to-slate-800 rounded-[2.5rem] p-6 border border-indigo-500/30 text-center space-y-3 mb-4">
+      <span class="text-xs uppercase tracking-widest text-indigo-300 font-semibold">Das kostet dich effektiv</span>
+      <div id="workTime" class="text-3xl font-black text-white">9 Std 0 Min</div>
+      <div id="verdict" class="inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Spürbar — kurz Abstand nehmen</div>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mt-auto pb-4">
+      <button id="impulseBtn" class="bg-rose-500/10 border border-rose-500/30 text-rose-400 font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95"><i data-lucide="timer" class="w-4 h-4"></i>72h Warten</button>
+      <button id="graveBtn" class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95"><i data-lucide="ghost" class="w-4 h-4"></i>Nicht kaufen (+Geld)</button>
+    </div>
+  </section>
 
-            <div class="bg-gradient-to-br from-slate-800 to-slate-850 rounded-[2.5rem] p-6 text-center border border-slate-700/60 shadow-xl relative overflow-hidden shrink-0">
-                <div class="absolute -right-6 -bottom-6 opacity-5 text-emerald-400">
-                    <i data-lucide="shield-check" class="w-32 h-32"></i>
-                </div>
-                <span class="text-slate-400 text-xs font-bold uppercase tracking-widest">Diesen Monat nicht ausgegeben</span>
-                <div class="text-4xl font-black text-emerald-400 mt-2 tracking-tight" x-text="formatMoney(monthlySaved)"></div>
-                <div class="text-[11px] text-slate-400 mt-1" x-text="graveyard.length + ' Gegenstände im Graveyard'"></div>
-            </div>
+  <section id="impulse" class="view flex-1 flex-col h-full overflow-y-auto">
+    <div class="flex justify-between items-center mb-4"><h2 class="text-lg font-bold text-white flex items-center gap-2"><i data-lucide="timer" class="w-5 h-5 text-rose-400"></i> Aktive Impulse</h2><span id="timerCount" class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400 font-medium">0 aktiv</span></div>
+    <div id="timersList" class="space-y-3"></div>
+  </section>
 
-            <div class="grid grid-cols-2 gap-4 flex-1">
-                <button @click="openView('shouldIBuyIt')" class="bg-slate-800/90 hover:bg-slate-800 p-5 rounded-[2rem] flex flex-col justify-between border border-slate-700/50 active:scale-95 transition-all text-left group">
-                    <div class="bg-indigo-500/10 w-12 h-12 rounded-2xl flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
-                        <i data-lucide="calculator" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-white text-base">Cost / Time</h2>
-                        <p class="text-xs text-slate-400 mt-0.5">Arbeitszeit statt Preis</p>
-                    </div>
-                </button>
+  <section id="graveyard" class="view flex-1 flex-col h-full overflow-y-auto">
+    <div class="flex justify-between items-center mb-4"><h2 class="text-lg font-bold text-white flex items-center gap-2"><i data-lucide="ghost" class="w-5 h-5 text-slate-400"></i> Purchase Graveyard</h2><span id="graveTotal" class="text-xs bg-slate-800 px-3 py-1 rounded-full text-emerald-400 font-bold">0 € behalten</span></div>
+    <div id="graveList" class="space-y-3"></div>
+  </section>
 
-                <button @click="openView('impulseTimer')" class="bg-slate-800/90 hover:bg-slate-800 p-5 rounded-[2rem] flex flex-col justify-between border border-slate-700/50 active:scale-95 transition-all text-left group relative">
-                    <div class="absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-extrabold min-w-5 h-5 px-1.5 rounded-full flex items-center justify-center shadow-md" x-show="activeTimersCount > 0" x-text="activeTimersCount"></div>
-                    <div class="bg-rose-500/10 w-12 h-12 rounded-2xl flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
-                        <i data-lucide="timer" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-white text-base">Impulse</h2>
-                        <p class="text-xs text-slate-400 mt-0.5">72h Pause</p>
-                    </div>
-                </button>
+  <section id="future" class="view flex-1 flex-col h-full overflow-y-auto">
+    <div class="bg-slate-800 rounded-[2.5rem] p-6 border border-slate-700/50 space-y-4 mb-4">
+      <h2 class="text-lg font-bold text-white flex items-center gap-2"><i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i> Future Me Simulator</h2>
+      <p class="text-xs text-slate-400 leading-relaxed">Was könnte aus deinem im Graveyard behaltenen Geld werden, wenn es langfristig mit 7 % p.a. wächst?</p>
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl p-4"><div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Startkapital aus Graveyard</div><div id="futurePrincipal" class="text-2xl font-black text-white mt-1">0 €</div></div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-slate-800 p-5 rounded-3xl border border-slate-700/50 text-center"><span class="text-[10px] uppercase font-bold text-slate-400">Nach 10 Jahren</span><div id="future10" class="text-xl font-black text-emerald-400 mt-2">0 €</div></div>
+      <div class="bg-slate-800 p-5 rounded-3xl border border-slate-700/50 text-center"><span class="text-[10px] uppercase font-bold text-slate-400">Nach 30 Jahren</span><div id="future30" class="text-xl font-black text-emerald-400 mt-2">0 €</div></div>
+    </div>
+    <div class="mt-4 text-center text-[10px] leading-relaxed text-slate-500 px-4">Modellrechnung mit konstanter Rendite von 7 % p.a. — keine Renditegarantie und keine Anlageberatung.</div>
+  </section>
+</main>
 
-                <button @click="openView('graveyard')" class="bg-slate-800/90 hover:bg-slate-800 p-5 rounded-[2rem] flex flex-col justify-between border border-slate-700/50 active:scale-95 transition-all text-left group">
-                    <div class="bg-slate-700/50 w-12 h-12 rounded-2xl flex items-center justify-center text-slate-300 group-hover:scale-110 transition-transform">
-                        <i data-lucide="ghost" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-white text-base">Graveyard</h2>
-                        <p class="text-xs text-slate-400 mt-0.5">Nicht gekaufte Items</p>
-                    </div>
-                </button>
+<script>
+(() => {
+  const KEY='morrow_money_data_v3';
+  const OLD=['morrow_money_data_v2','morrow_money_data'];
+  const state={timers:[],graveyard:[],hourlyWage:20};
+  const $=id=>document.getElementById(id);
+  const money=v=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',minimumFractionDigits:0,maximumFractionDigits:2}).format(Number(v)||0);
+  const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
 
-                <button @click="openView('futureMe')" class="bg-slate-800/90 hover:bg-slate-800 p-5 rounded-[2rem] flex flex-col justify-between border border-slate-700/50 active:scale-95 transition-all text-left group">
-                    <div class="bg-emerald-500/10 w-12 h-12 rounded-2xl flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                        <i data-lucide="trending-up" class="w-6 h-6"></i>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-white text-base">Future Me</h2>
-                        <p class="text-xs text-slate-400 mt-0.5">Zinseszins Effekt</p>
-                    </div>
-                </button>
-            </div>
-        </div>
+  function load(){
+    let raw=localStorage.getItem(KEY);
+    if(!raw){for(const k of OLD){raw=localStorage.getItem(k);if(raw)break;}}
+    if(!raw)return;
+    try{
+      const d=JSON.parse(raw)||{};
+      state.hourlyWage=Number(d.hourlyWage||d?.settings?.hourlyWage)||20;
+      const ts=Array.isArray(d.timers)?d.timers:(Array.isArray(d.impulses)?d.impulses:[]);
+      state.timers=ts.map((t,i)=>{const c=Number(t.createdAt||t.id)||Date.now()-i;return{id:t.id||`t-${c}-${i}`,item:String(t.item||t.product||'Unbenannter Kauf'),price:Number(t.price)||0,createdAt:c,expiresAt:Number(t.expiresAt)||c+72*3600000}}).filter(t=>t.price>0);
+      state.graveyard=(Array.isArray(d.graveyard)?d.graveyard:[]).map((g,i)=>({id:g.id||`g-${Date.now()}-${i}`,item:String(g.item||g.product||'Unbenannter Kauf'),price:Number(g.price)||0,savedAt:Number(g.savedAt)||Date.parse(g.date)||Date.now()})).filter(g=>g.price>0);
+      save();
+    }catch(e){console.warn('Morrow Money: data load failed',e)}
+  }
 
-        <div x-show="currentView === 'shouldIBuyIt'" x-cloak class="flex-1 flex flex-col h-full overflow-y-auto pr-1">
-            <div class="bg-slate-800 rounded-[2.5rem] p-6 border border-slate-700/50 space-y-4 mb-4">
-                <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="calculator" class="w-5 h-5 text-indigo-400"></i> Arbeitszeit Rechner
-                </h2>
+  function setView(id){
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    $(id).classList.add('active');
+    $('homeBtn').classList.toggle('hidden',id==='dashboard');
+    render();
+  }
 
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Produkt / Wunsch</label>
-                    <input type="text" x-model="calc.item" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white text-sm focus:outline-none focus:border-indigo-500 transition-all" placeholder="z.B. Neue Kopfhörer">
-                </div>
+  function calc(){
+    const p=Number($('priceInput').value),w=Number($('wageInput').value);
+    state.hourlyWage=w>0?w:state.hourlyWage; save();
+    const h=(p>0&&w>0)?p/w:0, mins=Math.round(h*60), hh=Math.floor(mins/60), mm=mins%60;
+    $('workTime').textContent=h>0?(hh>0?`${hh} Std ${mm} Min`:`${mm} Min`):'0 Std';
+    const v=$('verdict');
+    if(h<=0){v.textContent='Preis und Lohn eingeben';v.className='inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-slate-700/60 text-slate-300 border border-slate-600/40'}
+    else if(h<3){v.textContent='Leichtgewicht';v.className='inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}
+    else if(h<10){v.textContent='Spürbar — kurz Abstand nehmen';v.className='inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30'}
+    else{v.textContent='Große Entscheidung — 72h Pause';v.className='inline-block px-4 py-1.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30'}
+  }
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Preis (€)</label>
-                        <input type="number" min="0" step="0.01" inputmode="decimal" x-model.number="calc.price" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white text-base font-bold focus:outline-none focus:border-indigo-500 transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Netto-Lohn / Std (€)</label>
-                        <input type="number" min="0" step="0.01" inputmode="decimal" x-model.number="calc.hourlyWage" @input="saveSettings()" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-white text-base font-bold focus:outline-none focus:border-indigo-500 transition-all">
-                    </div>
-                </div>
-            </div>
+  function addImpulse(){
+    const item=$('itemInput').value.trim(),price=Number($('priceInput').value);if(!item||price<=0)return;
+    const now=Date.now();state.timers.unshift({id:`t-${now}`,item,price,createdAt:now,expiresAt:now+72*3600000});save();setView('impulse');
+  }
+  function addGrave(){
+    const item=$('itemInput').value.trim(),price=Number($('priceInput').value);if(!item||price<=0)return;
+    state.graveyard.unshift({id:`g-${Date.now()}`,item,price,savedAt:Date.now()});save();setView('graveyard');
+  }
+  function resolve(id,saved){
+    const t=state.timers.find(x=>x.id===id);state.timers=state.timers.filter(x=>x.id!==id);
+    if(saved&&t)state.graveyard.unshift({id:`g-${Date.now()}`,item:t.item,price:t.price,savedAt:Date.now()});
+    save();render();
+  }
+  window.mmResolve=resolve;
 
-            <div class="bg-gradient-to-br from-indigo-950/40 to-slate-800 rounded-[2.5rem] p-6 border border-indigo-500/30 text-center space-y-3 mb-4">
-                <span class="text-xs uppercase tracking-widest text-indigo-300 font-semibold">Das kostet dich effektiv</span>
-                <div class="text-3xl font-black text-white" x-text="formattedWorkTime"></div>
-                <div class="inline-block px-4 py-1.5 rounded-full text-xs font-bold" :class="verdict.class" x-text="verdict.text"></div>
-            </div>
+  function countdown(t){
+    let r=t.expiresAt-Date.now();if(r<=0)return '72h geschafft';
+    const m=Math.ceil(r/60000),d=Math.floor(m/1440),h=Math.floor((m%1440)/60),mi=m%60;
+    return d>0?`${d}T ${h}Std`:h>0?`${h}Std ${mi}Min`:`${Math.max(1,mi)}Min`;
+  }
+  function progress(t){return Math.max(0,Math.min(100,((Date.now()-t.createdAt)/(t.expiresAt-t.createdAt))*100))}
 
-            <div class="grid grid-cols-2 gap-3 mt-auto pb-4">
-                <button @click="sendToImpulse()" :disabled="!canSaveCurrent" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 disabled:opacity-35 font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
-                    <i data-lucide="timer" class="w-4 h-4"></i> 72h Warten
-                </button>
-                <button @click="sendToGraveyardDirect()" :disabled="!canSaveCurrent" class="bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 disabled:opacity-35 font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 active:scale-95 transition-all">
-                    <i data-lucide="ghost" class="w-4 h-4"></i> Nicht kaufen (+Geld)
-                </button>
-            </div>
-        </div>
+  function render(){
+    const now=new Date();
+    const month=state.graveyard.filter(g=>{const d=new Date(g.savedAt);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()}).reduce((s,g)=>s+g.price,0);
+    const total=state.graveyard.reduce((s,g)=>s+g.price,0);
+    $('monthlySaved').textContent=money(month);$('graveyardCount').textContent=`${state.graveyard.length} Gegenstände im Graveyard`;
+    $('timerBadge').textContent=state.timers.length;$('timerBadge').classList.toggle('hidden',state.timers.length===0);$('timerBadge').classList.toggle('flex',state.timers.length>0);
+    $('timerCount').textContent=`${state.timers.length} aktiv`;
+    $('timersList').innerHTML=state.timers.length?state.timers.map(t=>`<div class="bg-slate-800 p-4 rounded-2xl border border-slate-700/50"><div class="flex justify-between gap-3"><div><h3 class="font-bold text-white text-sm">${escapeHtml(t.item)}</h3><p class="text-xs text-emerald-400 font-bold mt-0.5">${money(t.price)}</p></div><div class="text-right"><div class="text-xs font-bold ${Date.now()>=t.expiresAt?'text-emerald-400':'text-rose-400'}">${countdown(t)}</div><div class="w-24 h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden"><div class="h-full bg-rose-500 rounded-full" style="width:${progress(t)}%"></div></div></div></div><div class="grid grid-cols-2 gap-2 mt-3"><button onclick="mmResolve('${t.id}',true)" class="bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 py-2.5 rounded-xl text-xs font-bold">Nicht gekauft</button><button onclick="mmResolve('${t.id}',false)" class="bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-bold">Doch gekauft</button></div></div>`).join(''):`<div class="flex-1 flex flex-col items-center justify-center text-center p-8 text-slate-500"><i data-lucide="shield-alert" class="w-12 h-12 mb-3 opacity-30"></i><p class="text-sm font-medium">Keine aktiven Timer.</p><p class="text-xs mt-1">Lege einen Kauf im Cost / Time Modul für 72 Stunden auf Eis.</p></div>`;
+    $('graveTotal').textContent=`${money(total)} behalten`;
+    $('graveList').innerHTML=state.graveyard.length?state.graveyard.map(g=>`<div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/50 flex justify-between items-center"><div><h3 class="font-bold text-white text-sm line-through decoration-slate-500">${escapeHtml(g.item)}</h3><p class="text-[10px] text-slate-400 mt-0.5">${new Date(g.savedAt).toLocaleDateString('de-DE')}</p></div><span class="text-emerald-400 font-black text-sm">+${money(g.price)}</span></div>`).join(''):`<div class="flex-1 flex flex-col items-center justify-center text-center p-8 text-slate-500"><i data-lucide="ghost" class="w-12 h-12 mb-3 opacity-30"></i><p class="text-sm font-medium">Dein Graveyard ist leer.</p></div>`;
+    $('futurePrincipal').textContent=money(total);$('future10').textContent=money(total*Math.pow(1.07,10));$('future30').textContent=money(total*Math.pow(1.07,30));
+    if(window.lucide)lucide.createIcons();
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+  function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='morrow-money-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),500)}
 
-        <div x-show="currentView === 'impulseTimer'" x-cloak class="flex-1 flex flex-col h-full overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="timer" class="w-5 h-5 text-rose-400"></i> Aktive Impulse
-                </h2>
-                <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400 font-medium" x-text="timers.length + ' aktiv'"></span>
-            </div>
-
-            <template x-if="timers.length === 0">
-                <div class="flex-1 flex flex-col items-center justify-center text-center p-6 text-slate-500">
-                    <i data-lucide="shield-alert" class="w-12 h-12 mb-3 opacity-30"></i>
-                    <p class="text-sm font-medium">Keine aktiven Timer.</p>
-                    <p class="text-xs mt-1">Schicke Artikel aus dem Cost/Time-Rechner hierher, um dem Impuls 72 Stunden Abstand zu geben.</p>
-                </div>
-            </template>
-
-            <div class="space-y-3">
-                <template x-for="timer in timers" :key="timer.id">
-                    <div class="bg-slate-800 p-4 rounded-2xl border border-slate-700/50">
-                        <div class="flex justify-between items-start gap-4">
-                            <div class="min-w-0">
-                                <h3 class="font-bold text-white text-sm truncate" x-text="timer.item"></h3>
-                                <p class="text-xs text-emerald-400 font-bold mt-0.5" x-text="formatMoney(timer.price)"></p>
-                            </div>
-                            <div class="text-right shrink-0">
-                                <div class="text-[10px] uppercase tracking-wider font-bold" :class="isTimerDue(timer) ? 'text-emerald-400' : 'text-rose-300'" x-text="timerCountdown(timer)"></div>
-                            </div>
-                        </div>
-
-                        <div class="mt-3 h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                            <div class="h-full rounded-full transition-all duration-500" :class="isTimerDue(timer) ? 'bg-emerald-400' : 'bg-rose-400'" :style="`width:${timerProgress(timer)}%`"></div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2 mt-3">
-                            <button @click="resolveTimer(timer, true)" class="bg-emerald-500/20 text-emerald-400 py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                                <i data-lucide="check" class="w-4 h-4"></i> Nicht gekauft
-                            </button>
-                            <button @click="resolveTimer(timer, false)" class="bg-slate-700 text-slate-300 py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all">
-                                <i data-lucide="shopping-bag" class="w-4 h-4"></i> Doch gekauft
-                            </button>
-                        </div>
-                    </div>
-                </template>
-            </div>
-        </div>
-
-        <div x-show="currentView === 'graveyard'" x-cloak class="flex-1 flex flex-col h-full overflow-y-auto">
-            <div class="flex justify-between items-center mb-4 gap-3">
-                <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="ghost" class="w-5 h-5 text-slate-400"></i> Purchase Graveyard
-                </h2>
-                <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-emerald-400 font-bold whitespace-nowrap" x-text="formatMoney(graveyardTotal) + ' behalten'"></span>
-            </div>
-
-            <template x-if="graveyard.length === 0">
-                <div class="flex-1 flex flex-col items-center justify-center text-center p-6 text-slate-500">
-                    <i data-lucide="ghost" class="w-12 h-12 mb-3 opacity-30"></i>
-                    <p class="text-sm font-medium">Dein Graveyard ist leer.</p>
-                    <p class="text-xs mt-1">Hier landen Dinge, die du bewusst nicht gekauft hast.</p>
-                </div>
-            </template>
-
-            <div class="space-y-3">
-                <template x-for="item in graveyard" :key="item.id">
-                    <div class="bg-slate-800/80 p-4 rounded-2xl border border-slate-700/50 flex justify-between items-center gap-4">
-                        <div class="min-w-0">
-                            <h3 class="font-bold text-white text-sm line-through decoration-slate-500 truncate" x-text="item.item"></h3>
-                            <p class="text-[10px] text-slate-400 mt-0.5" x-text="formatDate(item.savedAt)"></p>
-                        </div>
-                        <div class="text-right shrink-0">
-                            <span class="text-emerald-400 font-black text-sm" x-text="'+' + formatMoney(item.price)"></span>
-                        </div>
-                    </div>
-                </template>
-            </div>
-        </div>
-
-        <div x-show="currentView === 'futureMe'" x-cloak class="flex-1 flex flex-col h-full overflow-y-auto">
-            <div class="bg-slate-800 rounded-[2.5rem] p-6 border border-slate-700/50 space-y-4 mb-4">
-                <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                    <i data-lucide="trending-up" class="w-5 h-5 text-emerald-400"></i> Future Me Simulator
-                </h2>
-                <p class="text-xs text-slate-400 leading-relaxed">Was könnte aus deinem im Graveyard behaltenen Geld werden, wenn es langfristig mit 7 % p.a. wächst?</p>
-
-                <div class="bg-slate-900 border border-slate-700 rounded-2xl p-4">
-                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Startkapital aus Graveyard</div>
-                    <div class="text-2xl font-black text-white mt-1" x-text="formatMoney(graveyardTotal)"></div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-slate-800 p-5 rounded-3xl border border-slate-700/50 text-center">
-                    <span class="text-[10px] uppercase font-bold text-slate-400">Nach 10 Jahren</span>
-                    <div class="text-xl font-black text-emerald-400 mt-2" x-text="formatMoney(calculateFuture(10))"></div>
-                </div>
-                <div class="bg-slate-800 p-5 rounded-3xl border border-slate-700/50 text-center">
-                    <span class="text-[10px] uppercase font-bold text-slate-400">Nach 30 Jahren</span>
-                    <div class="text-xl font-black text-emerald-400 mt-2" x-text="formatMoney(calculateFuture(30))"></div>
-                </div>
-            </div>
-
-            <div class="mt-4 text-center text-[10px] leading-relaxed text-slate-500 px-4">
-                Modellrechnung mit konstanter Rendite von 7 % p.a. — keine Renditegarantie und keine Anlageberatung.
-            </div>
-        </div>
-
-    </main>
-
-    <script>
-        function morrowApp() {
-            return {
-                STORAGE_KEY: 'morrow_money_data_v2',
-                LEGACY_KEY: 'morrow_money_data',
-                currentView: 'dashboard',
-                now: Date.now(),
-                ticker: null,
-                calc: {
-                    item: '',
-                    price: 180,
-                    hourlyWage: 20
-                },
-                hourlyWage: 20,
-                timers: [],
-                graveyard: [],
-
-                init() {
-                    this.loadData();
-                    this.ticker = setInterval(() => { this.now = Date.now(); }, 1000);
-                    this.$watch('currentView', () => this.refreshIcons());
-                    this.refreshIcons();
-                },
-
-                loadData() {
-                    let saved = localStorage.getItem(this.STORAGE_KEY);
-                    if (!saved) saved = localStorage.getItem(this.LEGACY_KEY);
-                    if (!saved) return;
-
-                    try {
-                        const data = JSON.parse(saved);
-                        this.hourlyWage = Number(data.hourlyWage || data?.settings?.hourlyWage) || 20;
-                        this.calc.hourlyWage = this.hourlyWage;
-
-                        const rawTimers = Array.isArray(data.timers) ? data.timers : (Array.isArray(data.impulses) ? data.impulses : []);
-                        this.timers = rawTimers.map((t, index) => {
-                            const createdAt = Number(t.createdAt || t.id) || (Date.now() - index);
-                            return {
-                                id: t.id || `timer-${createdAt}-${index}`,
-                                item: String(t.item || t.product || 'Unbenannter Kauf'),
-                                price: Number(t.price) || 0,
-                                createdAt,
-                                expiresAt: Number(t.expiresAt) || (createdAt + 72 * 60 * 60 * 1000)
-                            };
-                        }).filter(t => t.price > 0);
-
-                        const rawGraveyard = Array.isArray(data.graveyard) ? data.graveyard : [];
-                        this.graveyard = rawGraveyard.map((g, index) => ({
-                            id: g.id || `grave-${Date.now()}-${index}`,
-                            item: String(g.item || g.product || 'Unbenannter Kauf'),
-                            price: Number(g.price) || 0,
-                            savedAt: Number(g.savedAt) || this.parseLegacyDate(g.date) || Date.now()
-                        })).filter(g => g.price > 0);
-
-                        this.saveData();
-                    } catch (e) {
-                        console.warn('[Morrow Money] Daten konnten nicht geladen werden.');
-                    }
-                },
-
-                parseLegacyDate(value) {
-                    if (!value) return null;
-                    const parsed = Date.parse(value);
-                    return Number.isNaN(parsed) ? null : parsed;
-                },
-
-                saveData() {
-                    localStorage.setItem(this.STORAGE_KEY, JSON.stringify({
-                        version: 2,
-                        timers: this.timers,
-                        graveyard: this.graveyard,
-                        hourlyWage: this.hourlyWage
-                    }));
-                },
-
-                saveSettings() {
-                    this.hourlyWage = Number(this.calc.hourlyWage) || 0;
-                    this.saveData();
-                },
-
-                openView(view) {
-                    this.currentView = view;
-                    this.refreshIcons();
-                },
-
-                goHome() {
-                    this.currentView = 'dashboard';
-                    this.refreshIcons();
-                },
-
-                refreshIcons() {
-                    setTimeout(() => {
-                        if (window.lucide) lucide.createIcons();
-                    }, 30);
-                },
-
-                get canSaveCurrent() {
-                    return String(this.calc.item || '').trim().length > 0 && Number(this.calc.price) > 0;
-                },
-
-                get workHours() {
-                    const price = Number(this.calc.price);
-                    const wage = Number(this.calc.hourlyWage);
-                    if (!price || !wage || wage <= 0) return 0;
-                    return price / wage;
-                },
-
-                get formattedWorkTime() {
-                    const hours = Number(this.workHours);
-                    if (!Number.isFinite(hours) || hours <= 0) return '0 Std';
-                    const totalMinutes = Math.round(hours * 60);
-                    const h = Math.floor(totalMinutes / 60);
-                    const m = totalMinutes % 60;
-                    return h > 0 ? `${h} Std ${m} Min` : `${m} Min`;
-                },
-
-                get verdict() {
-                    const hours = Number(this.workHours);
-                    if (hours <= 0) return { text: 'Preis und Lohn eingeben', class: 'bg-slate-700/60 text-slate-300 border border-slate-600/40' };
-                    if (hours < 3) return { text: 'Leichtgewicht', class: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' };
-                    if (hours < 10) return { text: 'Spürbar — kurz Abstand nehmen', class: 'bg-amber-500/20 text-amber-400 border border-amber-500/30' };
-                    return { text: 'Große Entscheidung — 72h Pause', class: 'bg-rose-500/20 text-rose-400 border border-rose-500/30' };
-                },
-
-                get graveyardTotal() {
-                    return this.graveyard.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-                },
-
-                get monthlySaved() {
-                    const d = new Date(this.now);
-                    const year = d.getFullYear();
-                    const month = d.getMonth();
-                    return this.graveyard.reduce((sum, item) => {
-                        const saved = new Date(Number(item.savedAt));
-                        if (!Number.isNaN(saved.getTime()) && saved.getFullYear() === year && saved.getMonth() === month) {
-                            return sum + (Number(item.price) || 0);
-                        }
-                        return sum;
-                    }, 0);
-                },
-
-                get activeTimersCount() {
-                    return this.timers.length;
-                },
-
-                sendToImpulse() {
-                    if (!this.canSaveCurrent) return;
-                    const createdAt = Date.now();
-                    this.timers.unshift({
-                        id: `timer-${createdAt}-${Math.random().toString(36).slice(2, 7)}`,
-                        item: String(this.calc.item).trim(),
-                        price: Number(this.calc.price),
-                        createdAt,
-                        expiresAt: createdAt + 72 * 60 * 60 * 1000
-                    });
-                    this.saveData();
-                    this.currentView = 'impulseTimer';
-                    this.refreshIcons();
-                },
-
-                sendToGraveyardDirect() {
-                    if (!this.canSaveCurrent) return;
-                    this.graveyard.unshift({
-                        id: `grave-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-                        item: String(this.calc.item).trim(),
-                        price: Number(this.calc.price),
-                        savedAt: Date.now()
-                    });
-                    this.saveData();
-                    this.currentView = 'graveyard';
-                    this.refreshIcons();
-                },
-
-                resolveTimer(timer, success) {
-                    this.timers = this.timers.filter(t => t.id !== timer.id);
-                    if (success) {
-                        this.graveyard.unshift({
-                            id: `grave-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-                            item: timer.item,
-                            price: Number(timer.price) || 0,
-                            savedAt: Date.now()
-                        });
-                    }
-                    this.saveData();
-                    this.refreshIcons();
-                },
-
-                isTimerDue(timer) {
-                    return this.now >= Number(timer.expiresAt);
-                },
-
-                timerProgress(timer) {
-                    const start = Number(timer.createdAt);
-                    const end = Number(timer.expiresAt);
-                    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) return 100;
-                    return Math.max(0, Math.min(100, ((this.now - start) / (end - start)) * 100));
-                },
-
-                timerCountdown(timer) {
-                    const remaining = Number(timer.expiresAt) - this.now;
-                    if (remaining <= 0) return '72h geschafft';
-                    const mins = Math.ceil(remaining / 60000);
-                    const days = Math.floor(mins / 1440);
-                    const hours = Math.floor((mins % 1440) / 60);
-                    const minutes = mins % 60;
-                    if (days > 0) return `${days}T ${hours}Std`;
-                    if (hours > 0) return `${hours}Std ${minutes}Min`;
-                    return `${Math.max(1, minutes)}Min`;
-                },
-
-                calculateFuture(years) {
-                    const principal = Number(this.graveyardTotal) || 0;
-                    return principal * Math.pow(1.07, years);
-                },
-
-                formatMoney(value) {
-                    return new Intl.NumberFormat('de-DE', {
-                        style: 'currency',
-                        currency: 'EUR',
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 2
-                    }).format(Number(value) || 0);
-                },
-
-                formatDate(timestamp) {
-                    const date = new Date(Number(timestamp));
-                    if (Number.isNaN(date.getTime())) return '';
-                    return new Intl.DateTimeFormat('de-DE', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: '2-digit'
-                    }).format(date);
-                },
-
-                exportData() {
-                    const data = localStorage.getItem(this.STORAGE_KEY) || '{}';
-                    const blob = new Blob([data], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'morrow-money-backup.json';
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    setTimeout(() => URL.revokeObjectURL(url), 500);
-                }
-            }
-        }
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(() => {});
-            });
-        }
-    </script>
+  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+  $('homeBtn').addEventListener('click',()=>setView('dashboard'));$('exportBtn').addEventListener('click',exportData);$('priceInput').addEventListener('input',calc);$('wageInput').addEventListener('input',calc);$('impulseBtn').addEventListener('click',addImpulse);$('graveBtn').addEventListener('click',addGrave);
+  load();$('wageInput').value=state.hourlyWage;calc();render();setInterval(()=>{if($('impulse').classList.contains('active'))render()},1000);
+  if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+})();
+</script>
 </body>
 </html>
