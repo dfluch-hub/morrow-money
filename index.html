@@ -284,9 +284,16 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
       <div id="decision-result-title" class="font-serif font-bold text-[1.15rem] mt-1">Gemischtes Bild</div>
       <div id="decision-result-text" class="text-[10px] leading-[1.45] text-charcoal/60 mt-1.5"></div>
     </div>
-    <div class="grid grid-cols-2 gap-2 mt-3">
-      <button onclick="decisionPark()" class="h-10 rounded-[12px] border border-charcoal bg-white text-[10px] font-semibold flex items-center justify-center gap-1.5"><i data-lucide="timer" class="w-4 h-4 text-editorial"></i>72h parken</button>
-      <button onclick="closeSheet('decision-sheet')" class="h-10 rounded-[12px] bg-charcoal text-white text-[10px] font-semibold">Zurück zum Rechner</button>
+    <div class="grid grid-cols-3 gap-2 mt-3">
+      <button onclick="decisionBuy()" class="h-11 rounded-[12px] bg-charcoal text-white border border-charcoal text-[9px] font-semibold flex flex-col items-center justify-center leading-tight">
+        <i data-lucide="check" class="w-4 h-4 mb-0.5"></i><span>Bewusst kaufen</span>
+      </button>
+      <button onclick="decisionPark()" class="h-11 rounded-[12px] border border-charcoal bg-white text-[9px] font-semibold flex flex-col items-center justify-center leading-tight">
+        <i data-lucide="timer" class="w-4 h-4 text-editorial mb-0.5"></i><span>72h parken</span>
+      </button>
+      <button onclick="decisionDecline()" class="h-11 rounded-[12px] bg-editorial text-white border border-charcoal text-[9px] font-semibold flex flex-col items-center justify-center leading-tight">
+        <i data-lucide="ghost" class="w-4 h-4 mb-0.5"></i><span>Nicht kaufen</span>
+      </button>
     </div>
     <div class="text-[8px] leading-[1.4] text-charcoal/40 mt-2 text-center">Morrow Money entscheidet nicht für dich. Die Zusammenfassung zeigt nur, welche Signale du selbst angegeben hast.</div>
   </div>
@@ -345,13 +352,13 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 const STORE='morrow_money_v20';
 const LEGACY=['morrow_money_v19','morrow_money_v18','morrow_money_v17','morrow_money_v16','morrow_money_v15','morrow_money_v14','morrow_money_v13','morrow_money_v12','morrow_money_v11','morrow_money_v10','morrow_money_v9','morrow_money_v8','morrow_money_v7','morrow_money_v6','morrow_money_v5','morrow_money_v4','morrow_money_data_v5','morrow_money_data_v4','morrow_money_data_v3','morrow_money_v3','morrow_money_v2','morrow_money_v1','morrow_money_data'];
 function defaults(){return{onboarded:false,lang:'de',timers:[],graveyard:[],decisions:[],hourlyWage:20,milestones:[{id:1,title:'Wochenend-Trip',target:250},{id:2,title:'Tech-Gadget Wunsch',target:600}]}}
-let appData=defaults(),reflection=null,selectedReason='',decisionState={step:1,answers:{},recorded:false},nextStepAction='check',toastTimer=null,timerRefresh=null,storageAvailable=true,hasReloadedForSW=false;
+let appData=defaults(),reflection=null,selectedReason='',decisionState={step:1,answers:{},recorded:false,decisionId:null},nextStepAction='check',toastTimer=null,timerRefresh=null,storageAvailable=true,hasReloadedForSW=false;
 function storageGet(key){try{return localStorage.getItem(key)}catch(e){storageAvailable=false;return null}}
 function storageSet(key,value){try{localStorage.setItem(key,value);return true}catch(e){storageAvailable=false;return false}}
 function storageRemove(key){try{localStorage.removeItem(key);return true}catch(e){storageAvailable=false;return false}}
 function finitePositive(v,fallback=0){const n=Number(v);return Number.isFinite(n)&&n>0?n:fallback}
 function esc(v){return String(v??'').replace(/[&<>'"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
-function norm(d){d=d&&typeof d==='object'?d:{};return{onboarded:Boolean(d.onboarded),lang:d.lang==='en'?'en':'de',timers:Array.isArray(d.timers)?d.timers.map(function(t){return{id:t.id||Date.now()+Math.random(),item:String(t.item||'Unbenannter Wunsch'),price:finitePositive(t.price),projection:finitePositive(t.projection,finitePositive(t.price)),frequency:[1,12,52].includes(Number(t.frequency))?Number(t.frequency):1,createdAt:Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now(),expiresAt:Number.isFinite(Number(t.expiresAt))?Number(t.expiresAt):((Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now())+72*3600000)}}):[],graveyard:Array.isArray(d.graveyard)?d.graveyard.map(function(g){return{id:g.id||Date.now()+Math.random(),item:String(g.item||'Unbenannter Wunsch'),price:finitePositive(g.price),projection:finitePositive(g.projection,finitePositive(g.price)),frequency:[1,12,52].includes(Number(g.frequency))?Number(g.frequency):1,reason:String(g.reason||'Keine Notiz').slice(0,500),savedAt:Number.isNaN(Date.parse(g.savedAt))?new Date().toISOString():new Date(g.savedAt).toISOString()}}):[],decisions:Array.isArray(d.decisions)?d.decisions.map(function(x){return{id:x.id||Date.now()+Math.random(),item:String(x.item||'').slice(0,120),score:Number.isFinite(Number(x.score))?Number(x.score):0,answers:x.answers&&typeof x.answers==='object'?x.answers:{},createdAt:Number.isFinite(Number(x.createdAt))?Number(x.createdAt):Date.now()}}).slice(0,500):[],hourlyWage:finitePositive(d.hourlyWage,20),milestones:Array.isArray(d.milestones)?d.milestones.map(function(m){return{id:m.id||Date.now()+Math.random(),title:String(m.title||'Sparziel').slice(0,120),target:finitePositive(m.target)}}).filter(function(m){return m.target>0}):defaults().milestones}}
+function norm(d){d=d&&typeof d==='object'?d:{};return{onboarded:Boolean(d.onboarded),lang:d.lang==='en'?'en':'de',timers:Array.isArray(d.timers)?d.timers.map(function(t){return{id:t.id||Date.now()+Math.random(),item:String(t.item||'Unbenannter Wunsch'),price:finitePositive(t.price),projection:finitePositive(t.projection,finitePositive(t.price)),frequency:[1,12,52].includes(Number(t.frequency))?Number(t.frequency):1,createdAt:Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now(),expiresAt:Number.isFinite(Number(t.expiresAt))?Number(t.expiresAt):((Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now())+72*3600000)}}):[],graveyard:Array.isArray(d.graveyard)?d.graveyard.map(function(g){return{id:g.id||Date.now()+Math.random(),item:String(g.item||'Unbenannter Wunsch'),price:finitePositive(g.price),projection:finitePositive(g.projection,finitePositive(g.price)),frequency:[1,12,52].includes(Number(g.frequency))?Number(g.frequency):1,reason:String(g.reason||'Keine Notiz').slice(0,500),savedAt:Number.isNaN(Date.parse(g.savedAt))?new Date().toISOString():new Date(g.savedAt).toISOString()}}):[],decisions:Array.isArray(d.decisions)?d.decisions.map(function(x){return{id:x.id||Date.now()+Math.random(),item:String(x.item||'').slice(0,120),score:Number.isFinite(Number(x.score))?Number(x.score):0,answers:x.answers&&typeof x.answers==='object'?x.answers:{},outcome:['bought','parked','declined','open'].includes(x.outcome)?x.outcome:'open',createdAt:Number.isFinite(Number(x.createdAt))?Number(x.createdAt):Date.now()}}).slice(0,500):[],hourlyWage:finitePositive(d.hourlyWage,20),milestones:Array.isArray(d.milestones)?d.milestones.map(function(m){return{id:m.id||Date.now()+Math.random(),title:String(m.title||'Sparziel').slice(0,120),target:finitePositive(m.target)}}).filter(function(m){return m.target>0}):defaults().milestones}}
 function load(){const cur=storageGet(STORE);if(cur){try{return norm(JSON.parse(cur))}catch(e){}}for(const k of LEGACY){const s=storageGet(k);if(!s)continue;try{const m=norm(JSON.parse(s));storageSet(STORE,JSON.stringify(m));return m}catch(e){}}return defaults()}
 function persist(){
   const ok=storageSet(STORE,JSON.stringify(appData));
@@ -424,6 +431,7 @@ const STATIC_I18N={
   'App zurücksetzen':'Reset app','Alle lokalen Daten löschen':'Delete all local data','Wirklich alles löschen?':'Really delete everything?','Timer, Graveyard, Ziele, Stundenlohn und Onboarding werden entfernt.':'Timers, Graveyard, goals, hourly wage and onboarding will be deleted.','Abbrechen':'Cancel','Alles löschen':'Delete everything',
   'Der Geist ist klar.':'Nothing waiting.','Keine aktiven Impulse.':'No active impulses.','Noch keine Siege.':'No wins yet.','Dein erster bewusster Nicht-Kauf erscheint hier.':'Your first conscious non-purchase will appear here.','Noch kein Sparziel definiert.':'No savings goal defined yet.','Erreicht ✓':'Reached ✓',
   'nichts zu tun':'nothing to do','72h abgeschlossen':'72h complete','Keine Notiz':'No note',
+  'Bewusst kaufen':'Buy consciously',
   '€/Std':'€/hr','z. B. Neue Kopfhörer':'e.g. New headphones',
   'Speichern auf diesem Gerät nicht verfügbar':'Saving on this device is unavailable',
   'Lokales Speichern ist in diesem Browser eingeschränkt':'Local storage is restricted in this browser',
@@ -520,7 +528,11 @@ function renderInsights(){
   const recent=appData.decisions.slice(-8),pt=document.getElementById('insight-pattern-title'),px=document.getElementById('insight-pattern-text');
   if(recent.length<3){pt.textContent=tr('noDataTitle');px.textContent=tr('noDataText')}else{
     const low=recent.filter(function(x){return x.score<=0}).length,high=recent.filter(function(x){return x.score>=3}).length;
-    if(low/recent.length>=.5){pt.textContent=tr('unsureTitle');px.textContent=tr('unsureText')}
+    const bought=recent.filter(function(x){return x.outcome==='bought'}).length,parked=recent.filter(function(x){return x.outcome==='parked'}).length,declined=recent.filter(function(x){return x.outcome==='declined'}).length;
+    if(parked>=3){pt.textContent=appData.lang==='en'?'You often choose distance first':'Du wählst häufig zuerst Abstand';px.textContent=appData.lang==='en'?'Several recent checks ended in a 72-hour pause. That suggests you use distance as an active decision tool — exactly what this flow is for.':'Mehrere deiner letzten Checks endeten in einer 72h-Pause. Du nutzt Abstand also aktiv als Entscheidungshilfe – genau dafür ist dieser Flow da.'}
+    else if(declined>=3){pt.textContent=appData.lang==='en'?'Many impulses fade after reflection':'Viele Impulse lösen sich nach Reflexion';px.textContent=appData.lang==='en'?'Several recent checks ended with a conscious non-purchase. Your reflection step is filtering out purchases before they happen.':'Mehrere deiner letzten Checks endeten mit einem bewussten Nicht-Kauf. Die Reflexion filtert also Käufe heraus, bevor sie passieren.'}
+    else if(bought>=3){pt.textContent=appData.lang==='en'?'You also make conscious yes-decisions':'Du triffst auch bewusste Ja-Entscheidungen';px.textContent=appData.lang==='en'?'Several recent checks ended in a conscious purchase. Morrow Money is helping you decide, not simply avoid spending.':'Mehrere deiner letzten Checks endeten mit einem bewussten Kauf. Morrow Money hilft dir also beim Entscheiden – nicht bloß beim Verzichten.'}
+    else if(low/recent.length>=.5){pt.textContent=tr('unsureTitle');px.textContent=tr('unsureText')}
     else if(high/recent.length>=.5){pt.textContent=tr('clearTitle');px.textContent=tr('clearText')}
     else{pt.textContent=tr('mixedTitle');px.textContent=tr('mixedText')}
   }
@@ -560,7 +572,7 @@ function calculateTime(doSave=true){const c=calc();appData.hourlyWage=c.wage;if(
 function openDecisionCheck(){
   const c=calc();
   if(!c.price){toast(tr('enterPrice'));return}
-  decisionState={step:1,answers:{},recorded:false};
+  decisionState={step:1,answers:{},recorded:false,decisionId:null};
   document.querySelectorAll('.decision-option').forEach(function(x){x.classList.remove('selected')});
   document.querySelectorAll('.decision-step').forEach(function(x){x.classList.remove('active')});
   document.getElementById('decision-step-1').classList.add('active');
@@ -620,17 +632,40 @@ function showDecisionResult(){
   }
   textEl.textContent=signals.join(' ');
   if(!decisionState.recorded){
-    appData.decisions.push({id:Date.now(),item:document.getElementById('calc-item').value.trim().slice(0,120),score:score,answers:Object.assign({},a),createdAt:Date.now()});
+    const decisionId=Date.now();
+    appData.decisions.push({id:decisionId,item:document.getElementById('calc-item').value.trim().slice(0,120),score:score,answers:Object.assign({},a),outcome:'open',createdAt:decisionId});
     appData.decisions=appData.decisions.slice(-500);
     decisionState.recorded=true;
+    decisionState.decisionId=decisionId;
     persist()
   }
   document.getElementById('decision-result').classList.remove('hidden');
   lucide.createIcons()
 }
+function setDecisionOutcome(outcome){
+  if(!decisionState.decisionId)return;
+  const d=appData.decisions.find(function(x){return String(x.id)===String(decisionState.decisionId)});
+  if(d)d.outcome=outcome;
+  persist()
+}
+function decisionBuy(){
+  setDecisionOutcome('bought');
+  closeSheet('decision-sheet');
+  document.getElementById('calc-item').value='';
+  switchView('dashboard');
+  renderAll();
+  haptic(10);
+  toast(appData.lang==='en'?'Conscious purchase recorded':'Bewusster Kauf festgehalten')
+}
 function decisionPark(){
+  setDecisionOutcome('parked');
   closeSheet('decision-sheet');
   sendToImpulse()
+}
+function decisionDecline(){
+  setDecisionOutcome('declined');
+  closeSheet('decision-sheet');
+  startReflection('direct')
 }
 function sendToImpulse(){const item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch',c=calc();if(!c.price)return;const now=Date.now();appData.timers.push({id:now,item:item,price:c.price,projection:c.projection,frequency:c.freq,createdAt:now,expiresAt:now+72*3600000});save();document.getElementById('calc-item').value='';switchView('impulseTimer');haptic(10);toast(tr('parked'))}
 function startReflection(mode,id){if(mode==='direct'){const c=calc(),item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch';if(!c.price)return;reflection={mode:'direct',item:item,price:c.price,projection:c.projection,frequency:c.freq}}else{const t=appData.timers.find(function(x){return String(x.id)===String(id)});if(!t||Date.now()<t.expiresAt)return;reflection={mode:'timer',timerId:t.id,item:t.item,price:t.price,projection:t.projection||t.price,frequency:t.frequency||1}}selectedReason='';document.getElementById('reason-text').value='';document.querySelectorAll('.reason').forEach(function(x){x.classList.remove('selected')});openSheet('reflection-sheet')}
