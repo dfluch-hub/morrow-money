@@ -289,7 +289,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     <div class="rounded-[14px] border border-charcoal/15 bg-white p-3">
       <div class="text-[8px] uppercase tracking-[.14em] font-mono text-charcoal/45" data-i18n="thisMonth">Dieser Monat</div>
       <div id="insight-month" class="font-serif font-bold text-[1.25rem] mt-1">0 €</div>
-      <div id="insight-month-sub" class="text-[9px] text-charcoal/50 mt-1">0 Checks</div>
+      <div id="insight-month-sub" class="text-[9px] text-charcoal/50 mt-1">0 Momente</div>
     </div>
   </div>
   <div class="rounded-[14px] border border-charcoal bg-white p-3 mt-2">
@@ -601,9 +601,9 @@ function behaviorStats(){
   const declines=final.filter(function(d){return d.outcome==='declined'||d.outcome==='declined_after_pause'});
   const pausedFinal=final.filter(function(d){return d.outcome==='bought_after_pause'||d.outcome==='declined_after_pause'});
   const pausedDeclines=pausedFinal.filter(function(d){return d.outcome==='declined_after_pause'});
-  const uncertain=final.filter(function(d){return d.answers&&d.answers.after72==='unsure'});
+  const uncertain=final.filter(function(d){return d.source==='check'&&d.answers&&d.answers.after72==='unsure'});
   const uncertainDeclines=uncertain.filter(function(d){return d.outcome==='declined'||d.outcome==='declined_after_pause'});
-  const regular=final.filter(function(d){return d.answers&&(d.answers.usage==='weekly'||d.answers.usage==='daily')});
+  const regular=final.filter(function(d){return d.source==='check'&&d.answers&&(d.answers.usage==='weekly'||d.answers.usage==='daily')});
   const regularBuys=regular.filter(function(d){return d.outcome==='bought'||d.outcome==='bought_after_pause'});
   const withPrice=final.filter(function(d){return Number(d.price)>0});
   const highThreshold=150;
@@ -658,10 +658,16 @@ function behaviorInsight(){
     title:en?'One reason keeps coming back':'Ein Grund taucht bei dir immer wieder auf',
     text:en?('Your most common non-purchase reason is: “'+s.topReason[0]+'”.'):('Dein häufigster Grund für einen Nicht-Kauf ist: „'+s.topReason[0]+'“.')
   };
+  const first=s.final.reduce(function(min,d){return Math.min(min,Number(d.createdAt)||Date.now())},Date.now()),daysActive=Math.floor((Date.now()-first)/86400000);
+  if(daysActive>=7)return{
+    level:'review',
+    title:en?'Your weekly pattern is ready':'Dein Wochenmuster ist bereit',
+    text:en?('You consciously bought '+s.buyRate+'% of completed moments. Open this card for your weekly review.'):('Bei '+s.buyRate+' % deiner abgeschlossenen Momente hast du bewusst gekauft. Öffne die Karte für deinen Wochenrückblick.')
+  };
   return{
     level:'summary',
     title:en?'Your decisions are becoming clearer':'Deine Entscheidungen werden klarer',
-    text:en?('You consciously bought '+s.buyRate+'% of your completed checks. Keep capturing moments so the pattern becomes more specific.'):('Bei '+s.buyRate+' % deiner abgeschlossenen Checks hast du bewusst gekauft. Mit weiteren Momenten wird dein Muster genauer.')
+    text:en?('You consciously bought '+s.buyRate+'% of completed moments. Keep capturing moments so the pattern becomes more specific.'):('Bei '+s.buyRate+' % deiner abgeschlossenen Momente hast du bewusst gekauft. Mit weiteren Momenten wird dein Muster genauer.')
   }
 }
 function renderCoach(){
@@ -675,9 +681,9 @@ function renderInsights(){
   const weekSum=weekWins.reduce(function(s,x){return s+(Number(x.price)||0)},0);
   const monthWins=appData.graveyard.filter(function(x){const dt=new Date(x.savedAt);return dt.getMonth()===cm&&dt.getFullYear()===cy});
   const monthSum=monthWins.reduce(function(s,x){return s+(Number(x.price)||0)},0);
-  const monthChecks=appData.decisions.filter(function(x){const dt=new Date(x.createdAt);return dt.getMonth()===cm&&dt.getFullYear()===cy});
+  const monthMoments=appData.decisions.filter(function(x){const dt=new Date(x.createdAt);return dt.getMonth()===cm&&dt.getFullYear()===cy});
   const iw=document.getElementById('insight-week'),iws=document.getElementById('insight-week-sub'),im=document.getElementById('insight-month'),ims=document.getElementById('insight-month-sub');
-  if(iw)iw.textContent=fmtMoney(weekSum);if(iws)iws.textContent=weekWins.length+' '+tr('wins');if(im)im.textContent=fmtMoney(monthSum);if(ims)ims.textContent=monthChecks.length+' Checks';
+  if(iw)iw.textContent=fmtMoney(weekSum);if(iws)iws.textContent=weekWins.length+' '+tr('wins');if(im)im.textContent=fmtMoney(monthSum);if(ims)ims.textContent=monthMoments.length+' '+(appData.lang==='en'?'moments':'Momente');
   const b=behaviorInsight(),pt=document.getElementById('insight-pattern-title'),px=document.getElementById('insight-pattern-text');
   if(pt)pt.textContent=b.title;if(px)px.textContent=b.text;
   const total=appData.graveyard.reduce(function(s,x){return s+(Number(x.price)||0)},0),nextGoal=appData.milestones.filter(function(m){return total<m.target}).sort(function(a,b){return a.target-b.target})[0],ig=document.getElementById('insight-goal');
