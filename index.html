@@ -54,6 +54,26 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
   #view-welcome .welcome-steps>div>div:last-child{margin-top:.35rem!important}
   #view-welcome .welcome-cta{padding-top:.55rem!important}
 }
+@media(max-height:800px){
+  #view-dashboard{gap:.45rem!important}
+  #view-dashboard .dash-hero{padding:.65rem!important}
+  #view-dashboard .dash-hero .money{font-size:2.35rem!important}
+  #view-dashboard #coach-card{min-height:50px!important;padding:.45rem .65rem!important}
+  #view-dashboard .module-primary{min-height:60px!important}
+  #view-dashboard .module-mini{min-height:88px!important;padding:.55rem!important}
+  #view-dashboard .module-mini .w-9{width:1.8rem!important;height:1.8rem!important;margin-bottom:.3rem!important}
+  #view-dashboard .goal-row{min-height:54px!important}
+}
+@media(max-height:700px){
+  #view-welcome .welcome-hero{padding-top:.45rem!important}
+  #view-welcome .welcome-hero h2{font-size:1.55rem!important}
+  #view-welcome .welcome-hero p{font-size:.68rem!important;margin-top:.35rem!important}
+  #view-welcome .welcome-wage{margin-top:.55rem!important;padding:.55rem!important}
+  #view-welcome .welcome-wage input{font-size:1.9rem!important}
+  #view-welcome .welcome-steps{margin-top:.55rem!important}
+  #view-welcome .welcome-steps>div{min-height:52px!important}
+  #view-welcome .welcome-cta{padding-top:.4rem!important}
+}
 @media(max-height:760px){
   #view-welcome .welcome-hero h2{font-size:1.7rem!important}
   #view-welcome .welcome-wage{padding:.65rem!important}
@@ -156,7 +176,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     <div class="min-w-0 flex-1">
       <div class="text-[8px] uppercase tracking-[.16em] font-mono font-bold text-editorial">Morrow Insight</div>
       <div id="coach-title" class="text-[10px] font-semibold leading-tight mt-0.5">Noch ein paar Entscheidungen, dann erkenne ich erste Muster.</div>
-      <div id="coach-text" class="text-[8px] text-charcoal/45 leading-tight mt-0.5 truncate">Tippe für Details.</div>
+      <div id="coach-text" class="text-[8px] text-charcoal/45 leading-[1.25] mt-0.5">Tippe für Details.</div>
     </div>
     <i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/30 shrink-0"></i>
   </button>
