@@ -32,6 +32,9 @@ body{overscroll-behavior:none}
 header{padding-top:max(.625rem,env(safe-area-inset-top))}
 main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 @media(display-mode:standalone){.app{height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none}}html,body{margin:0;min-height:100dvh;background:#f0eee6;color:#1a1917;font-family:Inter,system-ui,sans-serif;overflow:hidden}body{display:flex;justify-content:center;align-items:center}.app{width:100vw;height:100dvh;max-width:430px;max-height:920px;background:#fcfbf9;background-image:linear-gradient(to right,#e8e4db 1px,transparent 1px),linear-gradient(to bottom,#e8e4db 1px,transparent 1px);background-size:26px 26px;display:flex;flex-direction:column;overflow:hidden;position:relative;border:1px solid #d4d0c5}.card{background:#fff;border:1px solid #1a1917;box-shadow:3px 3px 0 #1a1917}.tap{transition:.12s}.tap:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #1a1917}.view{animation:in .18s ease-out}.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}.scroll::-webkit-scrollbar{display:none}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}.sheetbg{position:absolute;inset:0;background:rgba(26,25,23,.3);backdrop-filter:blur(4px);display:none;align-items:flex-end;z-index:60}.sheetbg.open{display:flex}.sheet{width:100%;background:#fcfbf9;border:1px solid #1a1917;border-bottom:0;border-radius:24px 24px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -12px 34px rgba(0,0,0,.12)}.toast{position:absolute;left:50%;bottom:20px;transform:translateX(-50%) translateY(10px);background:#1a1917;color:#fff;border-radius:999px;padding:9px 13px;font-size:11px;font-weight:700;opacity:0;pointer-events:none;z-index:90;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%)}.reason.selected{background-color:#1a1917!important;color:#fff!important;border-color:#1a1917!important}
+.decision-option.selected{background:#1a1917!important;color:#fff!important;border-color:#1a1917!important}
+.decision-step{display:none}
+.decision-step.active{display:block}
 .subview-header #data-label{display:none}
 .subview-header #data-btn{width:2.5rem;padding-left:0;padding-right:0;justify-content:center}
 @media(max-width:370px){
@@ -127,14 +130,15 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     <div class="text-center pb-2.5 border-b border-charcoal/10"><div class="text-[8px] uppercase tracking-[.18em] text-editorial font-bold font-mono">Lebensarbeitszeit</div><div id="calc-result-time" class="font-serif font-bold text-[1.7rem] mt-1">9 Std 0 Min</div><div id="calc-verdict" class="inline-block mt-1.5 px-2.5 py-1 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-800 border border-amber-500/30 font-mono">Spürbarer Aufwand</div></div>
     <div class="pt-2 space-y-1 text-[11px]"><div class="flex justify-between"><span id="impact-label">Preis:</span><span id="calc-impact" class="font-mono font-bold text-editorial">180 €</span></div><div class="flex justify-between"><span>Arbeitszeit in 8h-Tagen:</span><span id="calc-workdays" class="font-mono font-bold">1,1 Tage</span></div><div id="projection-note" class="hidden text-[9px] text-charcoal/45">Jahreswirkung ist eine Projektion; im Graveyard zählt nur der aktuell vermiedene Betrag.</div></div>
   </div>
-  <div class="mt-auto">
-    <div class="mb-1.5 px-0.5">
-      <div class="text-[10px] font-semibold text-charcoal">Was möchtest du jetzt tun?</div>
-      <div class="text-[8px] text-charcoal/45 mt-0.5">Noch unsicher? 72h Pause gibt dir Abstand, ohne etwas endgültig zu entscheiden.</div>
-    </div>
+  <div class="mt-auto space-y-1.5">
+    <button onclick="openDecisionCheck()" class="w-full h-10 rounded-[13px] border border-charcoal bg-white shadow-edsm text-[11px] font-semibold flex items-center justify-center gap-2">
+      <i data-lucide="brain-circuit" class="w-4 h-4 text-editorial"></i>
+      Decision Check · 30 Sek.
+    </button>
+    <div class="px-0.5 text-[8px] text-charcoal/45 text-center">Vier kurze Fragen helfen dir, Impuls und echten Nutzen auseinanderzuhalten.</div>
     <div class="grid grid-cols-2 gap-2">
-    <button onclick="sendToImpulse()" class="h-11 card tap rounded-[13px] text-xs font-semibold flex items-center justify-center gap-1.5"><i data-lucide="timer" class="w-4 h-4 text-editorial"></i>72h Pause</button>
-    <button onclick="startReflection('direct')" class="h-11 rounded-[13px] bg-editorial text-white border border-charcoal shadow-edsm text-xs font-semibold flex items-center justify-center gap-1.5"><i data-lucide="ghost" class="w-4 h-4"></i>Nicht kaufen</button>
+      <button onclick="sendToImpulse()" class="h-10 card tap rounded-[13px] text-[11px] font-semibold flex items-center justify-center gap-1.5"><i data-lucide="timer" class="w-4 h-4 text-editorial"></i>72h Pause</button>
+      <button onclick="startReflection('direct')" class="h-10 rounded-[13px] bg-editorial text-white border border-charcoal shadow-edsm text-[11px] font-semibold flex items-center justify-center gap-1.5"><i data-lucide="ghost" class="w-4 h-4"></i>Nicht kaufen</button>
     </div>
   </div>
 </section>
@@ -178,6 +182,72 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 </section>
 </main>
 
+<div id="decision-sheet" class="sheetbg" onclick="sheetBgClose(event,'decision-sheet')"><div class="sheet" onclick="event.stopPropagation()">
+  <div class="w-10 h-1 bg-charcoal/15 rounded-full mx-auto mb-3"></div>
+  <div class="flex justify-between items-start gap-3 mb-3">
+    <div>
+      <div class="text-[8px] uppercase tracking-[.18em] text-editorial font-bold font-mono">Decision Check</div>
+      <h3 id="decision-title" class="font-serif font-bold text-[1.25rem]">Ist der Wunsch noch klar, wenn du kurz hinsiehst?</h3>
+    </div>
+    <button onclick="closeSheet('decision-sheet')" class="w-9 h-9 rounded-xl border border-charcoal flex items-center justify-center shrink-0"><i data-lucide="x" class="w-4 h-4"></i></button>
+  </div>
+
+  <div class="flex items-center gap-1.5 mb-3">
+    <div id="decision-dot-1" class="h-1.5 flex-1 rounded-full bg-editorial"></div>
+    <div id="decision-dot-2" class="h-1.5 flex-1 rounded-full bg-charcoal/10"></div>
+    <div id="decision-dot-3" class="h-1.5 flex-1 rounded-full bg-charcoal/10"></div>
+    <div id="decision-dot-4" class="h-1.5 flex-1 rounded-full bg-charcoal/10"></div>
+  </div>
+
+  <div id="decision-step-1" class="decision-step active">
+    <div class="text-[10px] font-semibold mb-2">1 · Hast du einen konkreten Nutzen dafür?</div>
+    <div class="grid grid-cols-2 gap-2">
+      <button onclick="decisionAnswer('use','clear',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Ja, ganz klar</button>
+      <button onclick="decisionAnswer('use','unclear',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Eher unklar</button>
+    </div>
+  </div>
+
+  <div id="decision-step-2" class="decision-step">
+    <div class="text-[10px] font-semibold mb-2">2 · Wie oft wirst du es realistisch nutzen?</div>
+    <div class="grid grid-cols-2 gap-2">
+      <button onclick="decisionAnswer('usage','rare',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Selten</button>
+      <button onclick="decisionAnswer('usage','monthly',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Monatlich</button>
+      <button onclick="decisionAnswer('usage','weekly',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Wöchentlich</button>
+      <button onclick="decisionAnswer('usage','daily',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Fast täglich</button>
+    </div>
+  </div>
+
+  <div id="decision-step-3" class="decision-step">
+    <div class="text-[10px] font-semibold mb-2">3 · Hast du schon etwas, das denselben Zweck erfüllt?</div>
+    <div class="grid grid-cols-2 gap-2">
+      <button onclick="decisionAnswer('replacement','yes',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Ja</button>
+      <button onclick="decisionAnswer('replacement','no',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Nein</button>
+    </div>
+  </div>
+
+  <div id="decision-step-4" class="decision-step">
+    <div class="text-[10px] font-semibold mb-2">4 · Glaubst du, dass du es in 72 Stunden noch genauso willst?</div>
+    <div class="grid grid-cols-3 gap-2">
+      <button onclick="decisionAnswer('after72','yes',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Ja</button>
+      <button onclick="decisionAnswer('after72','unsure',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Unsicher</button>
+      <button onclick="decisionAnswer('after72','no',this)" class="decision-option h-11 rounded-[12px] border border-charcoal/20 bg-white text-[10px] font-semibold">Eher nicht</button>
+    </div>
+  </div>
+
+  <div id="decision-result" class="hidden">
+    <div id="decision-result-card" class="rounded-[16px] border border-charcoal bg-white p-3">
+      <div id="decision-result-label" class="text-[8px] uppercase tracking-[.16em] font-mono font-bold text-editorial">Zusammenfassung</div>
+      <div id="decision-result-title" class="font-serif font-bold text-[1.15rem] mt-1">Gemischtes Bild</div>
+      <div id="decision-result-text" class="text-[10px] leading-[1.45] text-charcoal/60 mt-1.5"></div>
+    </div>
+    <div class="grid grid-cols-2 gap-2 mt-3">
+      <button onclick="decisionPark()" class="h-10 rounded-[12px] border border-charcoal bg-white text-[10px] font-semibold flex items-center justify-center gap-1.5"><i data-lucide="timer" class="w-4 h-4 text-editorial"></i>72h parken</button>
+      <button onclick="closeSheet('decision-sheet')" class="h-10 rounded-[12px] bg-charcoal text-white text-[10px] font-semibold">Zurück zum Rechner</button>
+    </div>
+    <div class="text-[8px] leading-[1.4] text-charcoal/40 mt-2 text-center">Morrow Money entscheidet nicht für dich. Die Zusammenfassung zeigt nur, welche Signale du selbst angegeben hast.</div>
+  </div>
+</div></div>
+
 <div id="reflection-sheet" class="sheetbg" onclick="sheetBgClose(event,'reflection-sheet')"><div class="sheet" onclick="event.stopPropagation()">
   <div class="w-10 h-1 bg-charcoal/15 rounded-full mx-auto mb-3"></div>
   <div class="flex justify-between items-start"><div><div class="text-[8px] uppercase tracking-[.18em] text-editorial font-bold font-mono">Kurze Reflexion</div><h3 class="font-serif font-bold text-[1.25rem]">Warum lässt du es?</h3></div><button onclick="closeSheet('reflection-sheet')" class="w-9 h-9 rounded-xl border border-charcoal flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
@@ -218,7 +288,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 const STORE='morrow_money_v20';
 const LEGACY=['morrow_money_v19','morrow_money_v18','morrow_money_v17','morrow_money_v16','morrow_money_v15','morrow_money_v14','morrow_money_v13','morrow_money_v12','morrow_money_v11','morrow_money_v10','morrow_money_v9','morrow_money_v8','morrow_money_v7','morrow_money_v6','morrow_money_v5','morrow_money_v4','morrow_money_data_v5','morrow_money_data_v4','morrow_money_data_v3','morrow_money_v3','morrow_money_v2','morrow_money_v1','morrow_money_data'];
 function defaults(){return{onboarded:false,timers:[],graveyard:[],hourlyWage:20,milestones:[{id:1,title:'Wochenend-Trip',target:250},{id:2,title:'Tech-Gadget Wunsch',target:600}]}}
-let appData=defaults(),reflection=null,selectedReason='',toastTimer=null,timerRefresh=null,storageAvailable=true,hasReloadedForSW=false;
+let appData=defaults(),reflection=null,selectedReason='',decisionState={step:1,answers:{}},toastTimer=null,timerRefresh=null,storageAvailable=true,hasReloadedForSW=false;
 function storageGet(key){try{return localStorage.getItem(key)}catch(e){storageAvailable=false;return null}}
 function storageSet(key,value){try{localStorage.setItem(key,value);return true}catch(e){storageAvailable=false;return false}}
 function storageRemove(key){try{localStorage.removeItem(key);return true}catch(e){storageAvailable=false;return false}}
@@ -261,6 +331,75 @@ function save(){persist();renderAll()}
 function completeOnboarding(){const w=parseFloat(document.getElementById('welcome-wage').value)||20;appData.hourlyWage=w;appData.onboarded=true;persist();document.getElementById('calc-wage').value=w;calculateTime(false);switchView('dashboard');toast('Bereit für deinen ersten Check')}
 function calc(){const rawPrice=parseFloat(document.getElementById('calc-price').value),rawWage=parseFloat(document.getElementById('calc-wage').value),rawFreq=parseInt(document.getElementById('calc-frequency').value);const price=Number.isFinite(rawPrice)&&rawPrice>0?rawPrice:0,wage=Number.isFinite(rawWage)&&rawWage>0?rawWage:20,freq=[1,12,52].includes(rawFreq)?rawFreq:1;return{price:price,wage:wage,freq:freq,projection:price*freq,hours:(price*freq)/wage}}
 function calculateTime(doSave=true){const c=calc();appData.hourlyWage=c.wage;if(doSave)persist();const result=document.getElementById('calc-result-time'),impact=document.getElementById('calc-impact'),days=document.getElementById('calc-workdays'),label=document.getElementById('impact-label'),note=document.getElementById('projection-note');if(c.wage<=0||c.price<=0){result.textContent='0 Std';impact.textContent='0 €';days.textContent='0 Tage';return}let h=Math.floor(c.hours),m=Math.round((c.hours-h)*60);if(m===60){h++;m=0}result.textContent=h+' Std '+m+' Min';impact.textContent=c.projection.toLocaleString('de-DE')+' €';days.textContent=(c.hours/8).toLocaleString('de-DE',{maximumFractionDigits:1})+' Tage';label.textContent=c.freq===1?'Preis:':'Jahreswirkung:';note.classList.toggle('hidden',c.freq===1);const v=document.getElementById('calc-verdict');if(c.hours<3){v.className='inline-block mt-1.5 px-2.5 py-1 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-800 border border-emerald-500/30 font-mono';v.textContent='Leichtgewicht'}else if(c.hours<10){v.className='inline-block mt-1.5 px-2.5 py-1 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-800 border border-amber-500/30 font-mono';v.textContent='Spürbarer Aufwand'}else{v.className='inline-block mt-1.5 px-2.5 py-1 rounded-full text-[9px] font-bold bg-editorial/10 text-editorial border border-editorial/30 font-mono';v.textContent='Große Entscheidung'}}
+function openDecisionCheck(){
+  const c=calc();
+  if(!c.price){toast('Bitte zuerst einen Preis eingeben');return}
+  decisionState={step:1,answers:{}};
+  document.querySelectorAll('.decision-option').forEach(function(x){x.classList.remove('selected')});
+  document.querySelectorAll('.decision-step').forEach(function(x){x.classList.remove('active')});
+  document.getElementById('decision-step-1').classList.add('active');
+  document.getElementById('decision-result').classList.add('hidden');
+  document.getElementById('decision-title').textContent='Ist der Wunsch noch klar, wenn du kurz hinsiehst?';
+  updateDecisionProgress();
+  openSheet('decision-sheet')
+}
+function updateDecisionProgress(){
+  for(let i=1;i<=4;i++){
+    const dot=document.getElementById('decision-dot-'+i);
+    if(dot)dot.className='h-1.5 flex-1 rounded-full '+(i<=decisionState.step?'bg-editorial':'bg-charcoal/10')
+  }
+}
+function decisionAnswer(key,value,el){
+  decisionState.answers[key]=value;
+  const parent=el.parentElement;
+  parent.querySelectorAll('.decision-option').forEach(function(x){x.classList.remove('selected')});
+  el.classList.add('selected');
+  if(decisionState.step<4){
+    const current=document.getElementById('decision-step-'+decisionState.step);
+    if(current)current.classList.remove('active');
+    decisionState.step++;
+    const next=document.getElementById('decision-step-'+decisionState.step);
+    if(next)next.classList.add('active');
+    updateDecisionProgress()
+  }else{
+    showDecisionResult()
+  }
+}
+function showDecisionResult(){
+  document.getElementById('decision-step-4').classList.remove('active');
+  decisionState.step=4;
+  updateDecisionProgress();
+  const a=decisionState.answers;
+  let score=0;
+  const signals=[];
+  if(a.use==='clear'){score+=1;signals.push('Du hast einen klaren Nutzen genannt.')}else{score-=1;signals.push('Der konkrete Nutzen ist noch nicht ganz klar.')}
+  if(a.usage==='daily'||a.usage==='weekly'){score+=1;signals.push('Du erwartest eine regelmäßige Nutzung.')}else if(a.usage==='rare'){score-=1;signals.push('Du erwartest eher seltene Nutzung.')}else{signals.push('Die erwartete Nutzung ist gelegentlich.')}
+  if(a.replacement==='no'){score+=1;signals.push('Du hast keinen direkten Ersatz dafür.')}else{score-=1;signals.push('Du besitzt bereits etwas mit ähnlichem Zweck.')}
+  if(a.after72==='yes'){score+=1;signals.push('Der Wunsch fühlt sich auch mit Abstand stabil an.')}else if(a.after72==='no'){score-=1;signals.push('Du vermutest selbst, dass der Wunsch schnell nachlassen könnte.')}else{signals.push('Du bist noch unsicher, wie stabil der Wunsch ist.')}
+  const title=document.getElementById('decision-result-title');
+  const textEl=document.getElementById('decision-result-text');
+  const label=document.getElementById('decision-result-label');
+  if(score>=3){
+    title.textContent='Wirkt eher durchdacht';
+    label.textContent='Mehrere klare Signale';
+    label.className='text-[8px] uppercase tracking-[.16em] font-mono font-bold text-emerald-700'
+  }else if(score<=0){
+    title.textContent='Noch mehrere offene Signale';
+    label.textContent='Abstand könnte helfen';
+    label.className='text-[8px] uppercase tracking-[.16em] font-mono font-bold text-editorial'
+  }else{
+    title.textContent='Gemischtes Bild';
+    label.textContent='Einige Punkte sind noch offen';
+    label.className='text-[8px] uppercase tracking-[.16em] font-mono font-bold text-amber-700'
+  }
+  textEl.textContent=signals.join(' ');
+  document.getElementById('decision-result').classList.remove('hidden');
+  lucide.createIcons()
+}
+function decisionPark(){
+  closeSheet('decision-sheet');
+  sendToImpulse()
+}
 function sendToImpulse(){const item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch',c=calc();if(!c.price)return;const now=Date.now();appData.timers.push({id:now,item:item,price:c.price,projection:c.projection,frequency:c.freq,createdAt:now,expiresAt:now+72*3600000});save();document.getElementById('calc-item').value='';switchView('impulseTimer');haptic(10);toast('Für 72 Stunden geparkt')}
 function startReflection(mode,id){if(mode==='direct'){const c=calc(),item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch';if(!c.price)return;reflection={mode:'direct',item:item,price:c.price,projection:c.projection,frequency:c.freq}}else{const t=appData.timers.find(function(x){return String(x.id)===String(id)});if(!t||Date.now()<t.expiresAt)return;reflection={mode:'timer',timerId:t.id,item:t.item,price:t.price,projection:t.projection||t.price,frequency:t.frequency||1}}selectedReason='';document.getElementById('reason-text').value='';document.querySelectorAll('.reason').forEach(function(x){x.classList.remove('selected')});openSheet('reflection-sheet')}
 function chooseReason(r,el){selectedReason=r;document.querySelectorAll('.reason').forEach(function(x){x.classList.remove('selected')});el.classList.add('selected')}
