@@ -27,7 +27,7 @@ tailwind.config={theme:{extend:{fontFamily:{serif:['Newsreader','Georgia','serif
     <div class="w-10 h-10 rounded-[13px] border border-charcoal bg-white shadow-edsm flex items-center justify-center shrink-0">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 16.5V7.5L8.2 12.6L12 7.5L15.8 12.6L20 7.5V16.5" stroke="#1a1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18.4" cy="18.2" r="2.1" fill="#d9381e" stroke="#1a1917" stroke-width="1"/></svg>
     </div>
-    <div class="min-w-0 flex flex-col justify-center"><span class="block text-[8px] uppercase tracking-[.22em] text-editorial font-bold font-mono leading-none mb-0.5">Morrow Tools</span><h1 class="brand-title text-[1.7rem] leading-none font-serif font-bold tracking-tight truncate">Morrow Money</h1></div>
+    <div class="min-w-0 flex flex-col justify-center"><span class="block text-[8px] uppercase tracking-[.22em] text-editorial font-bold font-mono leading-none mb-1">Morrow Tools</span><h1 class="brand-title text-[1.7rem] leading-none font-serif font-bold tracking-tight truncate">Morrow Money</h1></div>
   </div>
   <div class="flex gap-2 shrink-0 items-center">
     <button id="back-btn" onclick="switchView('dashboard')" class="hidden w-10 h-10 rounded-[13px] border border-charcoal bg-white shadow-edsm items-center justify-center" aria-label="Zurück"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
@@ -46,9 +46,9 @@ tailwind.config={theme:{extend:{fontFamily:{serif:['Newsreader','Georgia','serif
       <div class="flex items-center gap-2"><input id="welcome-wage" type="number" inputmode="decimal" min="1" step=".5" value="20" class="w-full h-12 rounded-[14px] border border-charcoal bg-paper px-4 text-[1.8rem] font-serif font-bold outline-none"><span class="font-serif font-bold text-[1.5rem]">€/Std</span></div>
     </div>
     <div class="grid grid-cols-3 gap-2">
-      <div class="card rounded-[15px] p-2 text-center flex flex-col items-center justify-center"><i data-lucide="calculator" class="w-4 h-4 mx-auto text-editorial"></i><div class="text-[10px] mt-1 font-medium">Zeit sehen</div></div>
-      <div class="card rounded-[15px] p-2 text-center flex flex-col items-center justify-center"><i data-lucide="timer" class="w-4 h-4 mx-auto text-editorial"></i><div class="text-[10px] mt-1 font-medium">72h parken</div></div>
-      <div class="card rounded-[15px] p-2 text-center flex flex-col items-center justify-center"><i data-lucide="ghost" class="w-4 h-4 mx-auto text-editorial"></i><div class="text-[10px] mt-1 font-medium">Siege sammeln</div></div>
+      <div class="card rounded-[15px] p-2 text-center flex flex-col items-center justify-center"><div class="w-6 h-6 rounded-md bg-editorial/10 text-editorial font-bold text-xs flex items-center justify-center leading-none">1</div><div class="text-[10px] mt-1.5 font-medium">Zeit sehen</div></div>
+      <div class="card rounded-[15px] p-2 text-center flex flex-col items-center justify-center"><div class="w-6 h-6 rounded-md bg-editorial/10 text-editorial font-bold text-xs flex items-center justify-center leading-none">2</div><div class="text-[10px] mt-1.5 font-medium">72h parken</div></div>
+      <div class="card rounded-[15px] p-2 text-center flex flex-col items-center justify-center"><div class="w-6 h-6 rounded-md bg-editorial/10 text-editorial font-bold text-xs flex items-center justify-center leading-none">3</div><div class="text-[10px] mt-1.5 font-medium">Siege sammeln</div></div>
     </div>
   </div>
   <button onclick="completeOnboarding()" class="w-full h-12 rounded-[16px] bg-charcoal text-white text-sm font-semibold shadow-[0_5px_0_#d9381e]">Morrow Money starten →</button>
