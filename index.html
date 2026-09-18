@@ -41,6 +41,25 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
   #data-btn{height:2.35rem}
   #back-btn{width:2.35rem;height:2.35rem}
 }
+#view-welcome{overflow:hidden}
+@media(max-height:860px){
+  #view-welcome .welcome-hero{padding-top:.75rem!important}
+  #view-welcome .welcome-hero h2{font-size:1.9rem!important;line-height:.98!important}
+  #view-welcome .welcome-hero p{margin-top:.5rem!important;line-height:1.35!important}
+  #view-welcome .welcome-wage{margin-top:.75rem!important;padding:.75rem!important}
+  #view-welcome .welcome-wage>div:last-child{margin-top:.5rem!important;padding-bottom:.35rem!important}
+  #view-welcome .welcome-wage input{font-size:2.15rem!important}
+  #view-welcome .welcome-steps{margin-top:.75rem!important}
+  #view-welcome .welcome-steps>div{min-height:66px!important;padding:.45rem!important}
+  #view-welcome .welcome-steps>div>div:last-child{margin-top:.35rem!important}
+  #view-welcome .welcome-cta{padding-top:.55rem!important}
+}
+@media(max-height:760px){
+  #view-welcome .welcome-hero h2{font-size:1.7rem!important}
+  #view-welcome .welcome-wage{padding:.65rem!important}
+  #view-welcome .welcome-steps>div{min-height:58px!important}
+  #view-welcome .welcome-steps .w-6{width:1.25rem!important;height:1.25rem!important}
+}
 @media(min-width:768px){.app{border-radius:34px;height:90dvh}}@media(max-height:740px){header{min-height:58px!important;padding-top:8px!important;padding-bottom:8px!important}.brand-title{font-size:1.45rem!important}.dash-hero{padding:11px!important}.dash-hero .money{font-size:2.5rem!important}.module-primary{min-height:72px!important}.module-mini{min-height:108px!important}.goal-row{min-height:66px!important}}
 </style>
 </head>
@@ -73,12 +92,12 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
       </div>
     </div>
 
-    <div class="pt-5">
+    <div class="welcome-hero pt-5">
       <h2 class="font-serif font-bold text-[2.15rem] leading-[.98] tracking-tight max-w-[350px]">Was kostet dich dein nächster Impulskauf wirklich?</h2>
       <p class="mt-3 text-[12px] leading-[1.5] text-charcoal/68 max-w-[360px]">Morrow Money übersetzt Preise in Lebensarbeitszeit und hilft dir, bewusster zu entscheiden.</p>
     </div>
 
-    <div class="mt-5 card rounded-[20px] p-4">
+    <div class="welcome-wage mt-5 card rounded-[20px] p-4">
       <div class="flex items-center justify-between gap-3">
         <div>
           <label for="welcome-wage" class="block text-[8px] uppercase tracking-[.18em] font-bold font-mono text-charcoal/55">Dein Netto-Stundenlohn</label>
@@ -92,7 +111,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
       </div>
     </div>
 
-    <div class="mt-5 grid grid-cols-3 gap-2">
+    <div class="welcome-steps mt-5 grid grid-cols-3 gap-2">
       <div class="card rounded-[16px] p-2.5 text-center flex flex-col items-center justify-center min-h-[82px]">
         <div class="w-6 h-6 rounded-md bg-editorial/10 text-editorial font-bold text-xs flex items-center justify-center leading-none">1</div>
         <div class="text-[10px] leading-tight mt-2 font-medium">Kosten verstehen</div>
@@ -108,7 +127,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     </div>
   </div>
 
-  <div class="pt-3 shrink-0">
+  <div class="welcome-cta pt-3 shrink-0">
     <button onclick="completeOnboarding()" class="w-full h-12 rounded-[16px] bg-charcoal text-white text-sm font-semibold shadow-[0_5px_0_#d9381e]">Morrow Money starten →</button>
   </div>
 </section>
@@ -126,24 +145,34 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
       <button id="hero-next-step" onclick="runNextStep()" class="flex-1 rounded-[10px] bg-charcoal/[.035] border border-charcoal/10 px-2.5 py-2 text-left text-[10px] leading-[1.35] text-charcoal/60">
         Starte mit einem Kauf, über den du gerade nachdenkst.
       </button>
-      <button onclick="openInsights()" class="w-10 rounded-[10px] border border-charcoal/10 bg-white flex items-center justify-center" aria-label="Insights" title="Insights">
-        <i data-lucide="sparkles" class="w-4 h-4 text-editorial"></i>
-      </button>
+
     </div>
   </div>
 
-  <button onclick="switchView('shouldIBuyIt')" class="module-primary card tap rounded-[20px] px-4 min-h-[76px] bg-editorial text-white flex items-center justify-between text-left shrink-0">
+  <button id="coach-card" onclick="openInsights()" class="card tap rounded-[16px] px-3 py-2.5 min-h-[58px] shrink-0 text-left flex items-center gap-2.5">
+    <div class="w-8 h-8 rounded-[10px] bg-editorial/10 text-editorial flex items-center justify-center shrink-0">
+      <i data-lucide="sparkles" class="w-4 h-4"></i>
+    </div>
+    <div class="min-w-0 flex-1">
+      <div class="text-[8px] uppercase tracking-[.16em] font-mono font-bold text-editorial">Morrow Insight</div>
+      <div id="coach-title" class="text-[10px] font-semibold leading-tight mt-0.5">Noch ein paar Entscheidungen, dann erkenne ich erste Muster.</div>
+      <div id="coach-text" class="text-[8px] text-charcoal/45 leading-tight mt-0.5 truncate">Tippe für Details.</div>
+    </div>
+    <i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/30 shrink-0"></i>
+  </button>
+
+  <button onclick="switchView('shouldIBuyIt')" class="module-primary card tap rounded-[20px] px-4 min-h-[68px] bg-editorial text-white flex items-center justify-between text-left shrink-0">
     <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-2xl bg-white/90 text-editorial flex items-center justify-center"><i data-lucide="calculator" class="w-5 h-5"></i></div><div><div class="font-serif font-bold text-[1.15rem] leading-none">Should I Buy It?</div><div class="text-[11px] text-white/80 mt-1">Preis in Lebensarbeitszeit übersetzen</div></div></div><i data-lucide="chevron-right" class="w-5 h-5"></i>
   </button>
 
   <div class="grid grid-cols-2 gap-2.5 shrink-0">
-    <button onclick="switchView('impulseTimer')" class="module-mini card tap rounded-[20px] p-3 text-left min-h-[116px] flex flex-col">
+    <button onclick="switchView('impulseTimer')" class="module-mini card tap rounded-[20px] p-3 text-left min-h-[102px] flex flex-col">
       <div class="w-9 h-9 rounded-xl bg-charcoal/5 border border-charcoal/15 flex items-center justify-center mb-2"><i data-lucide="timer" class="w-4 h-4"></i></div>
       <div class="font-serif font-bold text-[1rem] leading-tight">Geparkte Impulse</div>
       <div class="text-[10px] text-charcoal/55 mt-1">72 Stunden Abstand</div>
       <div class="mt-auto pt-2"><span id="impulse-badge" class="inline-flex bg-editorial/10 text-editorial border border-editorial/20 px-2 py-1 rounded-full text-[9px] font-bold font-mono">0 aktiv</span></div>
     </button>
-    <button onclick="switchView('graveyard')" class="module-mini card tap rounded-[20px] p-3 text-left min-h-[116px] flex flex-col">
+    <button onclick="switchView('graveyard')" class="module-mini card tap rounded-[20px] p-3 text-left min-h-[102px] flex flex-col">
       <div class="w-9 h-9 rounded-xl bg-charcoal/5 border border-charcoal/15 flex items-center justify-center mb-2"><i data-lucide="ghost" class="w-4 h-4"></i></div>
       <div class="font-serif font-bold text-[1rem] leading-tight">Purchase Graveyard</div>
       <div class="text-[10px] text-charcoal/55 mt-1">Bewusste Nicht-Käufe</div>
@@ -151,7 +180,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     </button>
   </div>
 
-  <button onclick="switchView('milestones')" class="goal-row card tap rounded-[20px] px-3 min-h-[70px] flex items-center justify-between text-left shrink-0">
+  <button onclick="switchView('milestones')" class="goal-row card tap rounded-[20px] px-3 min-h-[62px] flex items-center justify-between text-left shrink-0">
     <div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-700"><i data-lucide="award" class="w-4 h-4"></i></div><div><div class="font-serif font-bold text-[1.05rem]">Spar-Ziele</div><div class="text-[10px] text-charcoal/55">Eigene Meilensteine definieren</div></div></div><div class="flex items-center gap-2"><span id="goal-summary" class="text-[10px] font-mono text-charcoal/50">0/2</span><i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/35"></i></div>
   </button>
 </section>
@@ -387,7 +416,7 @@ function storageSet(key,value){try{localStorage.setItem(key,value);return true}c
 function storageRemove(key){try{localStorage.removeItem(key);return true}catch(e){storageAvailable=false;return false}}
 function finitePositive(v,fallback=0){const n=Number(v);return Number.isFinite(n)&&n>0?n:fallback}
 function esc(v){return String(v??'').replace(/[&<>'"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
-function norm(d){d=d&&typeof d==='object'?d:{};return{onboarded:Boolean(d.onboarded),lang:d.lang==='en'?'en':'de',timers:Array.isArray(d.timers)?d.timers.map(function(t){return{id:t.id||Date.now()+Math.random(),item:String(t.item||'Unbenannter Wunsch'),price:finitePositive(t.price),projection:finitePositive(t.projection,finitePositive(t.price)),frequency:[1,12,52].includes(Number(t.frequency))?Number(t.frequency):1,createdAt:Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now(),expiresAt:Number.isFinite(Number(t.expiresAt))?Number(t.expiresAt):((Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now())+72*3600000)}}):[],graveyard:Array.isArray(d.graveyard)?d.graveyard.map(function(g){return{id:g.id||Date.now()+Math.random(),item:String(g.item||'Unbenannter Wunsch'),price:finitePositive(g.price),projection:finitePositive(g.projection,finitePositive(g.price)),frequency:[1,12,52].includes(Number(g.frequency))?Number(g.frequency):1,reason:String(g.reason||'Keine Notiz').slice(0,500),savedAt:Number.isNaN(Date.parse(g.savedAt))?new Date().toISOString():new Date(g.savedAt).toISOString()}}):[],decisions:Array.isArray(d.decisions)?d.decisions.map(function(x){return{id:x.id||Date.now()+Math.random(),item:String(x.item||'').slice(0,120),score:Number.isFinite(Number(x.score))?Number(x.score):0,answers:x.answers&&typeof x.answers==='object'?x.answers:{},outcome:['bought','parked','declined','open'].includes(x.outcome)?x.outcome:'open',createdAt:Number.isFinite(Number(x.createdAt))?Number(x.createdAt):Date.now()}}).slice(0,500):[],hourlyWage:finitePositive(d.hourlyWage,20),milestones:Array.isArray(d.milestones)?d.milestones.map(function(m){return{id:m.id||Date.now()+Math.random(),title:String(m.title||'Sparziel').slice(0,120),target:finitePositive(m.target)}}).filter(function(m){return m.target>0}):defaults().milestones}}
+function norm(d){d=d&&typeof d==='object'?d:{};return{onboarded:Boolean(d.onboarded),lang:d.lang==='en'?'en':'de',timers:Array.isArray(d.timers)?d.timers.map(function(t){return{id:t.id||Date.now()+Math.random(),item:String(t.item||'Unbenannter Wunsch'),price:finitePositive(t.price),projection:finitePositive(t.projection,finitePositive(t.price)),frequency:[1,12,52].includes(Number(t.frequency))?Number(t.frequency):1,decisionId:t.decisionId||null,createdAt:Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now(),expiresAt:Number.isFinite(Number(t.expiresAt))?Number(t.expiresAt):((Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now())+72*3600000)}}):[],graveyard:Array.isArray(d.graveyard)?d.graveyard.map(function(g){return{id:g.id||Date.now()+Math.random(),item:String(g.item||'Unbenannter Wunsch'),price:finitePositive(g.price),projection:finitePositive(g.projection,finitePositive(g.price)),frequency:[1,12,52].includes(Number(g.frequency))?Number(g.frequency):1,reason:String(g.reason||'Keine Notiz').slice(0,500),savedAt:Number.isNaN(Date.parse(g.savedAt))?new Date().toISOString():new Date(g.savedAt).toISOString()}}):[],decisions:Array.isArray(d.decisions)?d.decisions.map(function(x){return{id:x.id||Date.now()+Math.random(),item:String(x.item||'').slice(0,120),price:finitePositive(x.price),frequency:[1,12,52].includes(Number(x.frequency))?Number(x.frequency):1,score:Number.isFinite(Number(x.score))?Number(x.score):0,answers:x.answers&&typeof x.answers==='object'?x.answers:{},outcome:['bought','parked','declined','open','bought_after_pause','declined_after_pause'].includes(x.outcome)?x.outcome:'open',createdAt:Number.isFinite(Number(x.createdAt))?Number(x.createdAt):Date.now()}}).slice(0,500):[],hourlyWage:finitePositive(d.hourlyWage,20),milestones:Array.isArray(d.milestones)?d.milestones.map(function(m){return{id:m.id||Date.now()+Math.random(),title:String(m.title||'Sparziel').slice(0,120),target:finitePositive(m.target)}}).filter(function(m){return m.target>0}):defaults().milestones}}
 function load(){const cur=storageGet(STORE);if(cur){try{return norm(JSON.parse(cur))}catch(e){}}for(const k of LEGACY){const s=storageGet(k);if(!s)continue;try{const m=norm(JSON.parse(s));storageSet(STORE,JSON.stringify(m));return m}catch(e){}}return defaults()}
 function persist(){
   const ok=storageSet(STORE,JSON.stringify(appData));
@@ -545,6 +574,81 @@ function applyLanguage(){
 function fmtMoney(n){return Number(n||0).toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' €'}
 function runNextStep(){if(nextStepAction==='timer')switchView('impulseTimer');else switchView('shouldIBuyIt')}
 function openInsights(){renderInsights();openSheet('insights-sheet')}
+function behaviorStats(){
+  const decisions=appData.decisions.filter(function(d){return d&&d.outcome!=='open'});
+  const final=decisions.filter(function(d){return ['bought','declined','bought_after_pause','declined_after_pause'].includes(d.outcome)});
+  const buys=final.filter(function(d){return d.outcome==='bought'||d.outcome==='bought_after_pause'});
+  const declines=final.filter(function(d){return d.outcome==='declined'||d.outcome==='declined_after_pause'});
+  const pausedFinal=final.filter(function(d){return d.outcome==='bought_after_pause'||d.outcome==='declined_after_pause'});
+  const pausedDeclines=pausedFinal.filter(function(d){return d.outcome==='declined_after_pause'});
+  const uncertain=final.filter(function(d){return d.answers&&d.answers.after72==='unsure'});
+  const uncertainDeclines=uncertain.filter(function(d){return d.outcome==='declined'||d.outcome==='declined_after_pause'});
+  const regular=final.filter(function(d){return d.answers&&(d.answers.usage==='weekly'||d.answers.usage==='daily')});
+  const regularBuys=regular.filter(function(d){return d.outcome==='bought'||d.outcome==='bought_after_pause'});
+  const withPrice=final.filter(function(d){return Number(d.price)>0});
+  const highThreshold=150;
+  const high=withPrice.filter(function(d){return Number(d.price)>=highThreshold});
+  const highDeclines=high.filter(function(d){return d.outcome==='declined'||d.outcome==='declined_after_pause'});
+  const reasons={};
+  appData.graveyard.forEach(function(g){const r=String(g.reason||'').trim();if(r&&r!=='Keine Notiz'&&r!=='No note')reasons[r]=(reasons[r]||0)+1});
+  const topReason=Object.entries(reasons).sort(function(a,b){return b[1]-a[1]})[0]||null;
+  return{
+    decisions:decisions,final:final,buys:buys,declines:declines,pausedFinal:pausedFinal,pausedDeclines:pausedDeclines,
+    uncertain:uncertain,uncertainDeclines:uncertainDeclines,regular:regular,regularBuys:regularBuys,high:high,highDeclines:highDeclines,
+    topReason:topReason,
+    buyRate:final.length?Math.round(buys.length/final.length*100):0,
+    pauseDeclineRate:pausedFinal.length?Math.round(pausedDeclines.length/pausedFinal.length*100):0,
+    uncertainDeclineRate:uncertain.length?Math.round(uncertainDeclines.length/uncertain.length*100):0,
+    regularBuyRate:regular.length?Math.round(regularBuys.length/regular.length*100):0,
+    highDeclineRate:high.length?Math.round(highDeclines.length/high.length*100):0
+  }
+}
+function behaviorInsight(){
+  const s=behaviorStats(),en=appData.lang==='en';
+  if(s.final.length<5){
+    const left=5-s.final.length;
+    return{
+      level:'learning',
+      title:en?'I’m learning your decision style':'Ich lerne gerade deinen Entscheidungsstil',
+      text:en?(left+' more completed '+(left===1?'decision':'decisions')+' until your first personal pattern.'):(left+' abgeschlossene '+(left===1?'Entscheidung':'Entscheidungen')+' bis zu deinem ersten persönlichen Muster.')
+    }
+  }
+  if(s.pausedFinal.length>=3&&s.pauseDeclineRate>=60)return{
+    level:'pattern',
+    title:en?'Distance changes your decisions':'Abstand verändert deine Entscheidungen',
+    text:en?('After a 72h pause, you decided against the purchase '+s.pauseDeclineRate+'% of the time.'):('Nach einer 72h-Pause hast du dich in '+s.pauseDeclineRate+' % der Fälle gegen den Kauf entschieden.')
+  };
+  if(s.uncertain.length>=3&&s.uncertainDeclineRate>=60)return{
+    level:'pattern',
+    title:en?'“Unsure” is a useful signal for you':'„Unsicher“ ist bei dir ein wichtiges Signal',
+    text:en?('When you were unsure, you later skipped the purchase '+s.uncertainDeclineRate+'% of the time.'):('Wenn du unsicher warst, hast du später in '+s.uncertainDeclineRate+' % der Fälle nicht gekauft.')
+  };
+  if(s.high.length>=3&&s.highDeclineRate>=60)return{
+    level:'pattern',
+    title:en?'Higher-priced wishes deserve extra distance':'Teurere Wünsche brauchen bei dir öfter Abstand',
+    text:en?('For purchases from €150, you decided against '+s.highDeclineRate+'% after reflection.'):('Bei Wünschen ab 150 € hast du dich nach Reflexion in '+s.highDeclineRate+' % der Fälle dagegen entschieden.')
+  };
+  if(s.regular.length>=3&&s.regularBuyRate>=70)return{
+    level:'pattern',
+    title:en?'Regular use is a strong yes-signal for you':'Regelmäßige Nutzung ist bei dir ein starkes Ja-Signal',
+    text:en?('Items you expect to use weekly or daily ended in a conscious purchase '+s.regularBuyRate+'% of the time.'):('Dinge, die du wöchentlich oder täglich nutzen willst, wurden in '+s.regularBuyRate+' % der Fälle bewusst gekauft.')
+  };
+  if(s.topReason&&s.topReason[1]>=2)return{
+    level:'pattern',
+    title:en?'One reason keeps coming back':'Ein Grund taucht bei dir immer wieder auf',
+    text:en?('Your most common non-purchase reason is: “'+s.topReason[0]+'”.'):('Dein häufigster Grund für einen Nicht-Kauf ist: „'+s.topReason[0]+'“.')
+  };
+  return{
+    level:'summary',
+    title:en?'Your decisions are becoming clearer':'Deine Entscheidungen werden klarer',
+    text:en?('You consciously bought '+s.buyRate+'% of your completed checks. Keep capturing moments so the pattern becomes more specific.'):('Bei '+s.buyRate+' % deiner abgeschlossenen Checks hast du bewusst gekauft. Mit weiteren Momenten wird dein Muster genauer.')
+  }
+}
+function renderCoach(){
+  const i=behaviorInsight(),title=document.getElementById('coach-title'),text=document.getElementById('coach-text');
+  if(title)title.textContent=i.title;
+  if(text)text.textContent=i.text
+}
 function renderInsights(){
   const now=Date.now(),weekAgo=now-7*86400000,d=new Date(),cm=d.getMonth(),cy=d.getFullYear();
   const weekWins=appData.graveyard.filter(function(x){return Date.parse(x.savedAt)>=weekAgo});
@@ -554,17 +658,8 @@ function renderInsights(){
   const monthChecks=appData.decisions.filter(function(x){const dt=new Date(x.createdAt);return dt.getMonth()===cm&&dt.getFullYear()===cy});
   const iw=document.getElementById('insight-week'),iws=document.getElementById('insight-week-sub'),im=document.getElementById('insight-month'),ims=document.getElementById('insight-month-sub');
   if(iw)iw.textContent=fmtMoney(weekSum);if(iws)iws.textContent=weekWins.length+' '+tr('wins');if(im)im.textContent=fmtMoney(monthSum);if(ims)ims.textContent=monthChecks.length+' Checks';
-  const recent=appData.decisions.slice(-8),pt=document.getElementById('insight-pattern-title'),px=document.getElementById('insight-pattern-text');
-  if(recent.length<3){pt.textContent=tr('noDataTitle');px.textContent=tr('noDataText')}else{
-    const low=recent.filter(function(x){return x.score<=0}).length,high=recent.filter(function(x){return x.score>=3}).length;
-    const bought=recent.filter(function(x){return x.outcome==='bought'}).length,parked=recent.filter(function(x){return x.outcome==='parked'}).length,declined=recent.filter(function(x){return x.outcome==='declined'}).length;
-    if(parked>=3){pt.textContent=appData.lang==='en'?'You often choose distance first':'Du wählst häufig zuerst Abstand';px.textContent=appData.lang==='en'?'Several recent checks ended in a 72-hour pause. That suggests you use distance as an active decision tool — exactly what this flow is for.':'Mehrere deiner letzten Checks endeten in einer 72h-Pause. Du nutzt Abstand also aktiv als Entscheidungshilfe – genau dafür ist dieser Flow da.'}
-    else if(declined>=3){pt.textContent=appData.lang==='en'?'Many impulses fade after reflection':'Viele Impulse lösen sich nach Reflexion';px.textContent=appData.lang==='en'?'Several recent checks ended with a conscious non-purchase. Your reflection step is filtering out purchases before they happen.':'Mehrere deiner letzten Checks endeten mit einem bewussten Nicht-Kauf. Die Reflexion filtert also Käufe heraus, bevor sie passieren.'}
-    else if(bought>=3){pt.textContent=appData.lang==='en'?'You also make conscious yes-decisions':'Du triffst auch bewusste Ja-Entscheidungen';px.textContent=appData.lang==='en'?'Several recent checks ended in a conscious purchase. Morrow Money is helping you decide, not simply avoid spending.':'Mehrere deiner letzten Checks endeten mit einem bewussten Kauf. Morrow Money hilft dir also beim Entscheiden – nicht bloß beim Verzichten.'}
-    else if(low/recent.length>=.5){pt.textContent=tr('unsureTitle');px.textContent=tr('unsureText')}
-    else if(high/recent.length>=.5){pt.textContent=tr('clearTitle');px.textContent=tr('clearText')}
-    else{pt.textContent=tr('mixedTitle');px.textContent=tr('mixedText')}
-  }
+  const b=behaviorInsight(),pt=document.getElementById('insight-pattern-title'),px=document.getElementById('insight-pattern-text');
+  if(pt)pt.textContent=b.title;if(px)px.textContent=b.text;
   const total=appData.graveyard.reduce(function(s,x){return s+(Number(x.price)||0)},0),nextGoal=appData.milestones.filter(function(m){return total<m.target}).sort(function(a,b){return a.target-b.target})[0],ig=document.getElementById('insight-goal');
   if(ig){if(!nextGoal)ig.textContent=tr('noGoal');else{const p=Math.min(100,Math.round(total/nextGoal.target*100));ig.textContent=tr('goalFunding').replace('{p}',p).replace('{name}',localizedGoalTitle(nextGoal.title))}}
 }
@@ -662,7 +757,7 @@ function showDecisionResult(){
   textEl.textContent=signals.join(' ');
   if(!decisionState.recorded){
     const decisionId=Date.now();
-    appData.decisions.push({id:decisionId,item:document.getElementById('calc-item').value.trim().slice(0,120),score:score,answers:Object.assign({},a),outcome:'open',createdAt:decisionId});
+    const dc=calc();appData.decisions.push({id:decisionId,item:document.getElementById('calc-item').value.trim().slice(0,120),price:dc.price,frequency:dc.freq,score:score,answers:Object.assign({},a),outcome:'open',createdAt:decisionId});
     appData.decisions=appData.decisions.slice(-500);
     decisionState.recorded=true;
     decisionState.decisionId=decisionId;
@@ -688,24 +783,25 @@ function decisionBuy(){
 }
 function decisionPark(){
   setDecisionOutcome('parked');
+  const id=decisionState.decisionId;
   closeSheet('decision-sheet');
-  sendToImpulse()
+  sendToImpulse(id)
 }
 function decisionDecline(){
   setDecisionOutcome('declined');
   closeSheet('decision-sheet');
   startReflection('direct')
 }
-function sendToImpulse(){const item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch',c=calc();if(!c.price)return;const now=Date.now();appData.timers.push({id:now,item:item,price:c.price,projection:c.projection,frequency:c.freq,createdAt:now,expiresAt:now+72*3600000});save();document.getElementById('calc-item').value='';switchView('impulseTimer');haptic(10);toast(tr('parked'))}
-function startReflection(mode,id){if(mode==='direct'){const c=calc(),item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch';if(!c.price)return;reflection={mode:'direct',item:item,price:c.price,projection:c.projection,frequency:c.freq}}else{const t=appData.timers.find(function(x){return String(x.id)===String(id)});if(!t||Date.now()<t.expiresAt)return;reflection={mode:'timer',timerId:t.id,item:t.item,price:t.price,projection:t.projection||t.price,frequency:t.frequency||1}}selectedReason='';document.getElementById('reason-text').value='';document.querySelectorAll('.reason').forEach(function(x){x.classList.remove('selected')});openSheet('reflection-sheet')}
+function sendToImpulse(decisionId=null){const item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch',c=calc();if(!c.price)return;const now=Date.now();appData.timers.push({id:now,item:item,price:c.price,projection:c.projection,frequency:c.freq,decisionId:decisionId||null,createdAt:now,expiresAt:now+72*3600000});save();document.getElementById('calc-item').value='';switchView('impulseTimer');haptic(10);toast(tr('parked'))}
+function startReflection(mode,id){if(mode==='direct'){const c=calc(),item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch';if(!c.price)return;reflection={mode:'direct',item:item,price:c.price,projection:c.projection,frequency:c.freq}}else{const t=appData.timers.find(function(x){return String(x.id)===String(id)});if(!t||Date.now()<t.expiresAt)return;reflection={mode:'timer',timerId:t.id,decisionId:t.decisionId||null,item:t.item,price:t.price,projection:t.projection||t.price,frequency:t.frequency||1}}selectedReason='';document.getElementById('reason-text').value='';document.querySelectorAll('.reason').forEach(function(x){x.classList.remove('selected')});openSheet('reflection-sheet')}
 function chooseReason(r,el){selectedReason=r;document.querySelectorAll('.reason').forEach(function(x){x.classList.remove('selected')});el.classList.add('selected')}
-function confirmReflection(withNote){if(!reflection)return;const custom=document.getElementById('reason-text').value.trim(),reason=withNote?(custom||selectedReason||'Bewusste Entscheidung gegen den Impuls'):'Keine Notiz';if(reflection.mode==='timer')appData.timers=appData.timers.filter(function(t){return String(t.id)!==String(reflection.timerId)});appData.graveyard.unshift({id:Date.now(),item:reflection.item,price:reflection.price,projection:reflection.projection,frequency:reflection.frequency,reason:reason,savedAt:new Date().toISOString()});if(reflection.mode==='direct')document.getElementById('calc-item').value='';reflection=null;closeSheet('reflection-sheet');save();switchView('graveyard');haptic(12);toast(tr('nonPurchaseSaved'))}
-function dismissTimer(id){const t=appData.timers.find(function(x){return String(x.id)===String(id)});if(!t||Date.now()<t.expiresAt)return;appData.timers=appData.timers.filter(function(x){return String(x.id)!==String(id)});save();toast(tr('timerRemoved'))}
+function confirmReflection(withNote){if(!reflection)return;const custom=document.getElementById('reason-text').value.trim(),reason=withNote?(custom||selectedReason||'Bewusste Entscheidung gegen den Impuls'):'Keine Notiz';if(reflection.mode==='timer'){appData.timers=appData.timers.filter(function(t){return String(t.id)!==String(reflection.timerId)});if(reflection.decisionId){const d=appData.decisions.find(function(x){return String(x.id)===String(reflection.decisionId)});if(d)d.outcome='declined_after_pause'}}appData.graveyard.unshift({id:Date.now(),item:reflection.item,price:reflection.price,projection:reflection.projection,frequency:reflection.frequency,reason:reason,savedAt:new Date().toISOString()});if(reflection.mode==='direct')document.getElementById('calc-item').value='';reflection=null;closeSheet('reflection-sheet');save();switchView('graveyard');haptic(12);toast(tr('nonPurchaseSaved'))}
+function completeTimerBuy(id){const t=appData.timers.find(function(x){return String(x.id)===String(id)});if(!t||Date.now()<t.expiresAt)return;if(t.decisionId){const d=appData.decisions.find(function(x){return String(x.id)===String(t.decisionId)});if(d)d.outcome='bought_after_pause'}appData.timers=appData.timers.filter(function(x){return String(x.id)!==String(id)});save();haptic(10);toast(appData.lang==='en'?'Conscious purchase recorded':'Bewusster Kauf festgehalten')}
 function addMilestone(){const a=document.getElementById('new-goal-title'),b=document.getElementById('new-goal-amount'),title=a.value.trim(),target=parseFloat(b.value);if(!title||!target||target<=0)return;appData.milestones.push({id:Date.now(),title:title,target:target});a.value='';b.value='';save();toast(tr('goalAdded'))}
 function deleteMilestone(id){appData.milestones=appData.milestones.filter(function(m){return String(m.id)!==String(id)});save()}
-function renderAll(){const now=new Date(),cm=now.getMonth(),cy=now.getFullYear(),monthly=appData.graveyard.filter(function(i){const d=new Date(i.savedAt);return d.getMonth()===cm&&d.getFullYear()===cy}).reduce(function(s,i){return s+(Number(i.price)||0)},0),total=appData.graveyard.reduce(function(s,i){return s+(Number(i.price)||0)},0);document.getElementById('hero-saved').textContent=monthly.toLocaleString('de-DE')+' €';document.getElementById('hero-count').textContent=appData.graveyard.length+' Käufe vermieden';document.getElementById('hero-alltime').textContent=total.toLocaleString('de-DE')+' € insgesamt';let next=150,badge='START';if(total>=1000){next=2500;badge='1.000 €+'}else if(total>=500){next=1000;badge='500 €+'}else if(total>=150){next=500;badge='150 €+'}else if(appData.graveyard.length){badge='ERSTER SIEG'}const base=next===150?0:next===500?150:next===1000?500:1000,pct=Math.max(0,Math.min(100,Math.round((total-base)/(next-base)*100)));document.getElementById('milestone-badge').textContent=badge;document.getElementById('hero-level-text').textContent='Noch '+Math.max(0,next-total).toLocaleString('de-DE')+' € bis '+next.toLocaleString('de-DE')+' €';document.getElementById('hero-level-percent').textContent=pct+'%';document.getElementById('hero-progress-bar').style.width=pct+'%';const ib=document.getElementById('impulse-badge');ib.textContent=appData.timers.length+' '+tr('active');document.getElementById('graveyard-badge').textContent=appData.graveyard.length+' '+tr('wins');const reachedGoals=appData.milestones.filter(function(m){return total>=m.target}).length;document.getElementById('goal-summary').textContent=reachedGoals>0?reachedGoals+' '+tr('reached'):appData.milestones.length+' '+tr('goals');const nextStep=document.getElementById('hero-next-step');if(nextStep){const expiredTimer=appData.timers.find(function(t){return Date.now()>=t.expiresAt});const activeTimers=appData.timers.filter(function(t){return Date.now()<t.expiresAt}).sort(function(a,b){return a.expiresAt-b.expiresAt});if(expiredTimer){nextStepAction='timer';nextStep.textContent=tr('decisionReady')+' „'+expiredTimer.item+'“ '+tr('readyNow')}else if(activeTimers.length){nextStepAction='timer';const t=activeTimers[0],hours=Math.max(1,Math.ceil((t.expiresAt-Date.now())/3600000));nextStep.textContent='„'+t.item+'“ '+tr('waits')+' '+hours+' '+tr('hours')}else if(appData.graveyard.length){nextStepAction='check';nextStep.textContent=tr('keptAlready')+' '+total.toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' '+tr('checkNext')}else{nextStepAction='check';nextStep.textContent=tr('firstCheck')}}document.getElementById('timers-count-label').textContent=appData.timers.length+' '+tr('active');document.getElementById('graveyard-total').textContent=total.toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' € '+tr('retained');const gyCount=document.getElementById('graveyard-count-summary');if(gyCount)gyCount.textContent=appData.graveyard.length;const gyBest=document.getElementById('graveyard-best-summary');if(gyBest)gyBest.textContent=(appData.graveyard.length?Math.max.apply(null,appData.graveyard.map(function(i){return Number(i.price)||0})):0).toLocaleString('de-DE')+' €';
+function renderAll(){renderCoach();const now=new Date(),cm=now.getMonth(),cy=now.getFullYear(),monthly=appData.graveyard.filter(function(i){const d=new Date(i.savedAt);return d.getMonth()===cm&&d.getFullYear()===cy}).reduce(function(s,i){return s+(Number(i.price)||0)},0),total=appData.graveyard.reduce(function(s,i){return s+(Number(i.price)||0)},0);document.getElementById('hero-saved').textContent=monthly.toLocaleString('de-DE')+' €';document.getElementById('hero-count').textContent=appData.graveyard.length+' Käufe vermieden';document.getElementById('hero-alltime').textContent=total.toLocaleString('de-DE')+' € insgesamt';let next=150,badge='START';if(total>=1000){next=2500;badge='1.000 €+'}else if(total>=500){next=1000;badge='500 €+'}else if(total>=150){next=500;badge='150 €+'}else if(appData.graveyard.length){badge='ERSTER SIEG'}const base=next===150?0:next===500?150:next===1000?500:1000,pct=Math.max(0,Math.min(100,Math.round((total-base)/(next-base)*100)));document.getElementById('milestone-badge').textContent=badge;document.getElementById('hero-level-text').textContent='Noch '+Math.max(0,next-total).toLocaleString('de-DE')+' € bis '+next.toLocaleString('de-DE')+' €';document.getElementById('hero-level-percent').textContent=pct+'%';document.getElementById('hero-progress-bar').style.width=pct+'%';const ib=document.getElementById('impulse-badge');ib.textContent=appData.timers.length+' '+tr('active');document.getElementById('graveyard-badge').textContent=appData.graveyard.length+' '+tr('wins');const reachedGoals=appData.milestones.filter(function(m){return total>=m.target}).length;document.getElementById('goal-summary').textContent=reachedGoals>0?reachedGoals+' '+tr('reached'):appData.milestones.length+' '+tr('goals');const nextStep=document.getElementById('hero-next-step');if(nextStep){const expiredTimer=appData.timers.find(function(t){return Date.now()>=t.expiresAt});const activeTimers=appData.timers.filter(function(t){return Date.now()<t.expiresAt}).sort(function(a,b){return a.expiresAt-b.expiresAt});if(expiredTimer){nextStepAction='timer';nextStep.textContent=tr('decisionReady')+' „'+expiredTimer.item+'“ '+tr('readyNow')}else if(activeTimers.length){nextStepAction='timer';const t=activeTimers[0],hours=Math.max(1,Math.ceil((t.expiresAt-Date.now())/3600000));nextStep.textContent='„'+t.item+'“ '+tr('waits')+' '+hours+' '+tr('hours')}else if(appData.graveyard.length){nextStepAction='check';nextStep.textContent=tr('keptAlready')+' '+total.toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' '+tr('checkNext')}else{nextStepAction='check';nextStep.textContent=tr('firstCheck')}}document.getElementById('timers-count-label').textContent=appData.timers.length+' '+tr('active');document.getElementById('graveyard-total').textContent=total.toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' € '+tr('retained');const gyCount=document.getElementById('graveyard-count-summary');if(gyCount)gyCount.textContent=appData.graveyard.length;const gyBest=document.getElementById('graveyard-best-summary');if(gyBest)gyBest.textContent=(appData.graveyard.length?Math.max.apply(null,appData.graveyard.map(function(i){return Number(i.price)||0})):0).toLocaleString('de-DE')+' €';
 
-const tc=document.getElementById('timers-container');tc.innerHTML=!appData.timers.length?(appData.lang==='en'?'<div class="card rounded-[16px] p-4 text-center"><i data-lucide="shield-check" class="w-6 h-6 mx-auto text-emerald-600 mb-1"></i><div class="font-serif font-bold text-sm">Nothing waiting.</div><div class="text-[10px] text-charcoal/50 mt-1">No active impulses.</div></div>':'<div class="card rounded-[16px] p-4 text-center"><i data-lucide="shield-check" class="w-6 h-6 mx-auto text-emerald-600 mb-1"></i><div class="font-serif font-bold text-sm">Der Geist ist klar.</div><div class="text-[10px] text-charcoal/50 mt-1">Keine aktiven Impulse.</div></div>'):appData.timers.map(function(t){const ms=Math.max(0,t.expiresAt-Date.now()),expired=ms<=0,hours=Math.ceil(ms/3600000),proj=t.frequency>1;return '<div class="card rounded-[16px] p-3"><div class="flex justify-between gap-2"><div class="min-w-0"><div class="font-serif font-bold text-sm break-words">'+esc(t.item)+'</div><div class="text-[10px] mt-1"><span class="font-mono font-bold text-editorial">'+Number(t.price).toLocaleString('de-DE')+' €</span>'+(proj?'<span class="text-charcoal/45"> · '+Number(t.projection||t.price).toLocaleString('de-DE')+' €/Jahr</span>':'')+'</div><div class="text-[9px] text-charcoal/45 mt-1">'+(expired?'72h abgeschlossen':'Noch '+hours+' Std')+'</div></div>'+(expired?'<div class="flex gap-1 shrink-0"><button onclick="startReflection(\'timer\',\''+String(t.id)+'\')" class="h-9 px-2.5 rounded-[11px] bg-charcoal text-white text-[10px] font-semibold">'+(appData.lang==='en'?'Do not buy':'Nicht kaufen')+'</button><button onclick="dismissTimer(\''+String(t.id)+'\')" class="w-9 h-9 rounded-[11px] border border-charcoal bg-white flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>':'<div class="text-[9px] text-charcoal/35 flex items-center gap-1 shrink-0"><i data-lucide="lock" class="w-3 h-3"></i>'+(appData.lang==='en'?'nothing to do':'nichts zu tun')+'</div>')+'</div></div>'}).join('');
+const tc=document.getElementById('timers-container');tc.innerHTML=!appData.timers.length?(appData.lang==='en'?'<div class="card rounded-[16px] p-4 text-center"><i data-lucide="shield-check" class="w-6 h-6 mx-auto text-emerald-600 mb-1"></i><div class="font-serif font-bold text-sm">Nothing waiting.</div><div class="text-[10px] text-charcoal/50 mt-1">No active impulses.</div></div>':'<div class="card rounded-[16px] p-4 text-center"><i data-lucide="shield-check" class="w-6 h-6 mx-auto text-emerald-600 mb-1"></i><div class="font-serif font-bold text-sm">Der Geist ist klar.</div><div class="text-[10px] text-charcoal/50 mt-1">Keine aktiven Impulse.</div></div>'):appData.timers.map(function(t){const ms=Math.max(0,t.expiresAt-Date.now()),expired=ms<=0,hours=Math.ceil(ms/3600000),proj=t.frequency>1;return '<div class="card rounded-[16px] p-3"><div class="flex justify-between gap-2"><div class="min-w-0"><div class="font-serif font-bold text-sm break-words">'+esc(t.item)+'</div><div class="text-[10px] mt-1"><span class="font-mono font-bold text-editorial">'+Number(t.price).toLocaleString('de-DE')+' €</span>'+(proj?'<span class="text-charcoal/45"> · '+Number(t.projection||t.price).toLocaleString('de-DE')+' €/Jahr</span>':'')+'</div><div class="text-[9px] text-charcoal/45 mt-1">'+(expired?'72h abgeschlossen':'Noch '+hours+' Std')+'</div></div>'+(expired?'<div class="flex gap-1 shrink-0"><button onclick="startReflection(\'timer\',\''+String(t.id)+'\')" class="h-9 px-2.5 rounded-[11px] bg-charcoal text-white text-[10px] font-semibold">'+(appData.lang==='en'?'Do not buy':'Nicht kaufen')+'</button><button onclick="completeTimerBuy(\''+String(t.id)+'\')" class="h-9 px-2 rounded-[11px] border border-charcoal bg-white text-[9px] font-semibold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i>'+(appData.lang==='en'?'Buy':'Kaufen')+'</button></div>':'<div class="text-[9px] text-charcoal/35 flex items-center gap-1 shrink-0"><i data-lucide="lock" class="w-3 h-3"></i>'+(appData.lang==='en'?'nothing to do':'nichts zu tun')+'</div>')+'</div></div>'}).join('');
 
 const gc=document.getElementById('graveyard-container');gc.innerHTML=!appData.graveyard.length?(appData.lang==='en'?'<div class="card rounded-[16px] p-4 text-center"><i data-lucide="feather" class="w-6 h-6 mx-auto text-editorial mb-1"></i><div class="font-serif font-bold text-sm">No wins yet.</div><div class="text-[10px] text-charcoal/50 mt-1">Your first conscious non-purchase will appear here.</div></div>':'<div class="card rounded-[16px] p-4 text-center"><i data-lucide="feather" class="w-6 h-6 mx-auto text-editorial mb-1"></i><div class="font-serif font-bold text-sm">Noch keine Siege.</div><div class="text-[10px] text-charcoal/50 mt-1">Dein erster bewusster Nicht-Kauf erscheint hier.</div></div>'):appData.graveyard.map(function(i){const proj=i.frequency>1&&(i.projection||0)>i.price;return '<div class="card rounded-[16px] p-3"><div class="flex justify-between gap-2"><div class="min-w-0"><div class="font-serif font-bold text-sm line-through decoration-editorial break-words">'+esc(i.item)+'</div><div class="text-[9px] text-charcoal/45 mt-1 break-words">'+new Date(i.savedAt).toLocaleDateString('de-DE')+' · '+esc(i.reason)+'</div>'+(proj?'<div class="text-[9px] text-charcoal/40 mt-1">'+(appData.lang==='en'?'Projection: ':'Projektion: ')+Number(i.projection).toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' €/year</div>':'')+'</div><span class="shrink-0 h-fit bg-editorial/10 text-editorial border border-editorial/20 rounded-lg px-2 py-1 text-[10px] font-mono font-bold">+'+Number(i.price).toLocaleString('de-DE')+' €</span></div></div>'}).join('');
 
