@@ -379,10 +379,20 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     </div>
   </div>
   <div class="rounded-[14px] border border-charcoal bg-white p-3 mt-2">
-    <div class="text-[8px] uppercase tracking-[.14em] font-mono text-editorial font-bold" data-i18n="pattern">Muster</div>
+    <div class="flex items-center justify-between gap-2">
+      <div class="text-[8px] uppercase tracking-[.14em] font-mono text-editorial font-bold" data-i18n="pattern">Muster</div>
+      <div id="insight-basis" class="text-[7px] font-mono text-charcoal/35">Basis: 0 Entscheidungen</div>
+    </div>
     <div id="insight-pattern-title" class="font-serif font-bold text-[1rem] mt-1">Noch zu wenig Daten</div>
     <div id="insight-pattern-text" class="text-[10px] leading-[1.45] text-charcoal/60 mt-1">Nach einigen Decision Checks kann Morrow Money dir erste Muster zurückspiegeln.</div>
   </div>
+  <button id="insight-action" onclick="runInsightAction()" class="w-full mt-2 rounded-[13px] bg-charcoal text-white px-3 py-2.5 text-left flex items-center justify-between gap-3">
+    <div>
+      <div class="text-[7px] uppercase tracking-[.14em] font-mono text-white/50">Was jetzt?</div>
+      <div id="insight-action-text" class="text-[10px] font-semibold mt-0.5">Nächsten Moment prüfen</div>
+    </div>
+    <i data-lucide="arrow-right" class="w-4 h-4 shrink-0"></i>
+  </button>
   <div class="rounded-[14px] border border-charcoal/15 bg-white p-3 mt-2">
     <div class="text-[8px] uppercase tracking-[.14em] font-mono text-charcoal/45" data-i18n="nextGoal">Nächstes Ziel</div>
     <div id="insight-goal" class="text-[10px] leading-[1.45] text-charcoal/65 mt-1">Noch kein Ziel.</div>
@@ -594,7 +604,7 @@ const STATIC_I18N={
   'Data Vault':'Data Vault','Backup exportieren':'Export backup','Alle lokalen Daten als JSON':'All local data as JSON','Backup importieren':'Import backup','Gespeicherte JSON wiederherstellen':'Restore saved JSON','Startscreen anzeigen':'Show welcome screen','Ohne Daten zu löschen':'Without deleting data',
   'App zurücksetzen':'Reset app','Alle lokalen Daten löschen':'Delete all local data','Wirklich alles löschen?':'Really delete everything?','Timer, Graveyard, Ziele, Stundenlohn und Onboarding werden entfernt.':'Timers, Graveyard, goals, hourly wage and onboarding will be deleted.','Abbrechen':'Cancel','Alles löschen':'Delete everything',
   'Der Geist ist klar.':'Nothing waiting.','Keine aktiven Impulse.':'No active impulses.','Noch keine Siege.':'No wins yet.','Dein erster bewusster Nicht-Kauf erscheint hier.':'Your first conscious non-purchase will appear here.','Noch kein Sparziel definiert.':'No savings goal defined yet.','Erreicht ✓':'Reached ✓',
-  'nichts zu tun':'nothing to do','72h abgeschlossen':'72h complete','Keine Notiz':'No note','Momente':'Moments','Offen':'Open','Nächster sinnvoller Schritt':'Next best action','Kaufquote':'Purchase rate','72h-Effekt':'72h effect','Top-Grund':'Top reason',
+  'nichts zu tun':'nothing to do','72h abgeschlossen':'72h complete','Keine Notiz':'No note','Momente':'Moments','Offen':'Open','Nächster sinnvoller Schritt':'Next best action','Diesen Monat behalten':'Retained this month','Kaufquote':'Purchase rate','72h-Effekt':'72h effect','Top-Grund':'Top reason','Basis:':'Based on:','Entscheidungen':'decisions','Was jetzt?':'What now?','Nächsten Moment prüfen':'Check the next moment',
   'Bewusst kaufen':'Buy consciously',
   '€/Std':'€/hr','€ / Std.':'€ / hr','z. B. Neue Kopfhörer':'e.g. New headphones',
   'Speichern auf diesem Gerät nicht verfügbar':'Saving on this device is unavailable',
@@ -678,7 +688,8 @@ function applyLanguage(){
   const dl=document.getElementById('data-label');if(dl)dl.textContent=tr('data');translateStaticDOM()
 }
 function fmtMoney(n){return Number(n||0).toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' €'}
-function runNextStep(){if(nextStepAction==='timer')switchView('impulseTimer');else if(nextStepAction==='insights')openInsights();else switchView('shouldIBuyIt')}
+function runNextStep(){if(nextStepAction==='timer')switchView('impulseTimer');else if(nextStepAction==='insights')openInsights();else if(nextStepAction==='goals')switchView('milestones');else switchView('shouldIBuyIt')}
+function runInsightAction(){closeSheet('insights-sheet');runNextStep()}
 function openInsights(){renderInsights();openSheet('insights-sheet')}
 function behaviorStats(){
   const decisions=appData.decisions.filter(function(d){return d&&d.outcome!=='open'});
@@ -778,10 +789,17 @@ function renderInsights(){
   if(iw)iw.textContent=fmtMoney(weekSum);if(iws)iws.textContent=weekWins.length+' '+tr('wins');if(im)im.textContent=fmtMoney(monthSum);if(ims)ims.textContent=monthMoments.length+' '+(appData.lang==='en'?'moments':'Momente');
   const b=behaviorInsight(),pt=document.getElementById('insight-pattern-title'),px=document.getElementById('insight-pattern-text');
   if(pt)pt.textContent=b.title;if(px)px.textContent=b.text;
-  const stats=behaviorStats(),buyRateEl=document.getElementById('insight-buy-rate'),pauseRateEl=document.getElementById('insight-pause-rate'),reasonEl=document.getElementById('insight-top-reason');
+  const stats=behaviorStats(),buyRateEl=document.getElementById('insight-buy-rate'),pauseRateEl=document.getElementById('insight-pause-rate'),reasonEl=document.getElementById('insight-top-reason'),basisEl=document.getElementById('insight-basis'),actionEl=document.getElementById('insight-action-text');
   if(buyRateEl)buyRateEl.textContent=stats.final.length?stats.buyRate+'%':'–';
   if(pauseRateEl)pauseRateEl.textContent=stats.pausedFinal.length>=2?stats.pauseDeclineRate+'%':'–';
   if(reasonEl)reasonEl.textContent=stats.topReason?stats.topReason[0]:'–';
+  if(basisEl)basisEl.textContent=(appData.lang==='en'?'Based on: ':'Basis: ')+stats.final.length+' '+(appData.lang==='en'?'decisions':'Entscheidungen');
+  if(actionEl){
+    if(nextStepAction==='timer')actionEl.textContent=appData.lang==='en'?'Review your parked decision':'Geparkte Entscheidung prüfen';
+    else if(nextStepAction==='goals')actionEl.textContent=appData.lang==='en'?'Connect your wins to a goal':'Siege mit einem Ziel verbinden';
+    else if(nextStepAction==='insights')actionEl.textContent=appData.lang==='en'?'Use this pattern on your next check':'Dieses Muster beim nächsten Check nutzen';
+    else actionEl.textContent=appData.lang==='en'?'Check the next moment':'Nächsten Moment prüfen'
+  }
   const total=appData.graveyard.reduce(function(s,x){return s+(Number(x.price)||0)},0),nextGoal=appData.milestones.filter(function(m){return total<m.target}).sort(function(a,b){return a.target-b.target})[0],ig=document.getElementById('insight-goal');
   if(ig){if(!nextGoal)ig.textContent=tr('noGoal');else{const p=Math.min(100,Math.round(total/nextGoal.target*100));ig.textContent=tr('goalFunding').replace('{p}',p).replace('{name}',localizedGoalTitle(nextGoal.title))}}
 }
@@ -954,6 +972,9 @@ if(nextStep){
   const expiredTimer=appData.timers.find(function(t){return Date.now()>=t.expiresAt});
   const activeTimers=appData.timers.filter(function(t){return Date.now()<t.expiresAt}).sort(function(a,b){return a.expiresAt-b.expiresAt});
   const insight=behaviorInsight();
+  const stats=behaviorStats();
+  const nextGoal=appData.milestones.filter(function(m){return total<m.target}).sort(function(a,b){return a.target-b.target})[0];
+  const goalProgress=nextGoal?Math.round(total/nextGoal.target*100):0;
   if(expiredTimer){
     nextStepAction='timer';
     nextStep.textContent=tr('decisionReady')+' „'+expiredTimer.item+'“ '+tr('readyNow')
@@ -961,15 +982,22 @@ if(nextStep){
     nextStepAction='timer';
     const t=activeTimers[0],hours=Math.max(1,Math.ceil((t.expiresAt-Date.now())/3600000));
     nextStep.textContent='„'+t.item+'“ '+tr('waits')+' '+hours+' '+tr('hours')
-  }else if((insight.level==='pattern'||insight.level==='review')&&behaviorStats().final.length>=5){
+  }else if((insight.level==='pattern'||insight.level==='review')&&stats.final.length>=5){
     nextStepAction='insights';
     nextStep.textContent=insight.title
+  }else if(appData.graveyard.length>=3&&(!nextGoal||goalProgress<10)){
+    nextStepAction='goals';
+    nextStep.textContent=appData.lang==='en'?'Turn your retained money into a concrete goal.':'Mach aus deinem behaltenen Geld ein konkretes Ziel.'
   }else if(monthMoments.length===0){
     nextStepAction='check';
     nextStep.textContent=appData.lang==='en'?'Capture your first decision moment this month.':'Erfasse deinen ersten Entscheidungsmoment in diesem Monat.'
+  }else if(stats.final.length<5){
+    nextStepAction='check';
+    const left=Math.max(0,5-stats.final.length);
+    nextStep.textContent=appData.lang==='en'?(left+' more completed '+(left===1?'decision':'decisions')+' until your first personal pattern.'):(left+' abgeschlossene '+(left===1?'Entscheidung':'Entscheidungen')+' bis zu deinem ersten persönlichen Muster.')
   }else{
     nextStepAction='check';
-    nextStep.textContent=tr('firstCheck')
+    nextStep.textContent=appData.lang==='en'?'Use your current pattern on the next purchase you are considering.':'Nutze dein aktuelles Muster beim nächsten Kauf, über den du nachdenkst.'
   }
 }
 
