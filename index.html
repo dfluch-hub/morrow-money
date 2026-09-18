@@ -87,8 +87,13 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
       <div class="h-1.5 rounded-full bg-charcoal/10 overflow-hidden"><div id="hero-progress-bar" class="h-full bg-editorial" style="width:0%"></div></div>
     </div>
     <div class="flex justify-between mt-2.5 text-[11px] text-charcoal/65"><span id="hero-count">0 Käufe vermieden</span><span id="hero-alltime" class="font-mono font-bold text-editorial">0 € insgesamt</span></div>
-    <div id="hero-next-step" class="mt-2 rounded-[10px] bg-charcoal/[.035] border border-charcoal/10 px-2.5 py-2 text-[10px] leading-[1.35] text-charcoal/60">
-      Starte mit einem Kauf, über den du gerade nachdenkst.
+    <div class="mt-2 flex gap-2">
+      <button id="hero-next-step" onclick="runNextStep()" class="flex-1 rounded-[10px] bg-charcoal/[.035] border border-charcoal/10 px-2.5 py-2 text-left text-[10px] leading-[1.35] text-charcoal/60">
+        Starte mit einem Kauf, über den du gerade nachdenkst.
+      </button>
+      <button onclick="openInsights()" class="w-10 rounded-[10px] border border-charcoal/10 bg-white flex items-center justify-center" aria-label="Insights" title="Insights">
+        <i data-lucide="sparkles" class="w-4 h-4 text-editorial"></i>
+      </button>
     </div>
   </div>
 
@@ -182,6 +187,39 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 </section>
 </main>
 
+<div id="insights-sheet" class="sheetbg" onclick="sheetBgClose(event,'insights-sheet')"><div class="sheet" onclick="event.stopPropagation()">
+  <div class="w-10 h-1 bg-charcoal/15 rounded-full mx-auto mb-3"></div>
+  <div class="flex justify-between items-start mb-3">
+    <div>
+      <div class="text-[8px] uppercase tracking-[.18em] text-editorial font-bold font-mono" data-i18n="insightsEyebrow">Deine Muster</div>
+      <h3 class="font-serif font-bold text-[1.25rem]" data-i18n="insightsTitle">Was deine Entscheidungen zeigen</h3>
+    </div>
+    <button onclick="closeSheet('insights-sheet')" class="w-9 h-9 rounded-xl border border-charcoal flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
+  </div>
+  <div class="grid grid-cols-2 gap-2">
+    <div class="rounded-[14px] border border-charcoal/15 bg-white p-3">
+      <div class="text-[8px] uppercase tracking-[.14em] font-mono text-charcoal/45" data-i18n="last7">Letzte 7 Tage</div>
+      <div id="insight-week" class="font-serif font-bold text-[1.25rem] mt-1">0 €</div>
+      <div id="insight-week-sub" class="text-[9px] text-charcoal/50 mt-1">0 Siege</div>
+    </div>
+    <div class="rounded-[14px] border border-charcoal/15 bg-white p-3">
+      <div class="text-[8px] uppercase tracking-[.14em] font-mono text-charcoal/45" data-i18n="thisMonth">Dieser Monat</div>
+      <div id="insight-month" class="font-serif font-bold text-[1.25rem] mt-1">0 €</div>
+      <div id="insight-month-sub" class="text-[9px] text-charcoal/50 mt-1">0 Checks</div>
+    </div>
+  </div>
+  <div class="rounded-[14px] border border-charcoal bg-white p-3 mt-2">
+    <div class="text-[8px] uppercase tracking-[.14em] font-mono text-editorial font-bold" data-i18n="pattern">Muster</div>
+    <div id="insight-pattern-title" class="font-serif font-bold text-[1rem] mt-1">Noch zu wenig Daten</div>
+    <div id="insight-pattern-text" class="text-[10px] leading-[1.45] text-charcoal/60 mt-1">Nach einigen Decision Checks kann Morrow Money dir erste Muster zurückspiegeln.</div>
+  </div>
+  <div class="rounded-[14px] border border-charcoal/15 bg-white p-3 mt-2">
+    <div class="text-[8px] uppercase tracking-[.14em] font-mono text-charcoal/45" data-i18n="nextGoal">Nächstes Ziel</div>
+    <div id="insight-goal" class="text-[10px] leading-[1.45] text-charcoal/65 mt-1">Noch kein Ziel.</div>
+  </div>
+  <div class="text-[8px] leading-[1.4] text-charcoal/35 mt-2 text-center" data-i18n="insightsDisclaimer">Insights basieren nur auf deinen lokal gespeicherten Angaben.</div>
+</div></div>
+
 <div id="decision-sheet" class="sheetbg" onclick="sheetBgClose(event,'decision-sheet')"><div class="sheet" onclick="event.stopPropagation()">
   <div class="w-10 h-1 bg-charcoal/15 rounded-full mx-auto mb-3"></div>
   <div class="flex justify-between items-start gap-3 mb-3">
@@ -263,7 +301,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 
 <div id="data-sheet" class="sheetbg" onclick="sheetBgClose(event,'data-sheet')"><div class="sheet" onclick="event.stopPropagation()">
   <div class="w-10 h-1 bg-charcoal/15 rounded-full mx-auto mb-3"></div>
-  <div class="flex justify-between items-start mb-3"><div><div class="text-[8px] uppercase tracking-[.18em] text-editorial font-bold font-mono">Data Vault</div><h3 class="font-serif font-bold text-[1.25rem]">Daten & System</h3></div><button onclick="closeSheet('data-sheet')" class="w-9 h-9 rounded-xl border border-charcoal flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+  <div class="flex justify-between items-start mb-3"><div><div class="text-[8px] uppercase tracking-[.18em] text-editorial font-bold font-mono">Data Vault</div><h3 class="font-serif font-bold text-[1.25rem]" data-i18n="dataSystem">Daten & System</h3></div><button onclick="closeSheet('data-sheet')" class="w-9 h-9 rounded-xl border border-charcoal flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>
   <div class="space-y-2">
     <button onclick="exportData()" class="w-full card tap rounded-[14px] p-3 text-left flex justify-between items-center"><div><div class="text-[12px] font-semibold">Backup exportieren</div><div class="text-[9px] text-charcoal/50 mt-0.5">Alle lokalen Daten als JSON</div></div><i data-lucide="download" class="w-4 h-4 text-editorial"></i></button>
     <button onclick="document.getElementById('import-file').click()" class="w-full card tap rounded-[14px] p-3 text-left flex justify-between items-center"><div><div class="text-[12px] font-semibold">Backup importieren</div><div class="text-[9px] text-charcoal/50 mt-0.5">Gespeicherte JSON wiederherstellen</div></div><i data-lucide="upload" class="w-4 h-4 text-editorial"></i></button>
@@ -272,9 +310,22 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     <div id="reset-confirm" class="hidden rounded-[14px] border border-red-300 bg-red-50 p-3"><div class="text-[11px] font-semibold text-red-800">Wirklich alles löschen?</div><div class="text-[9px] text-red-700/65 mt-1">Timer, Graveyard, Ziele, Stundenlohn und Onboarding werden entfernt.</div><div class="grid grid-cols-2 gap-2 mt-2"><button onclick="cancelReset()" class="h-9 rounded-[11px] border border-charcoal bg-white text-[10px] font-semibold">Abbrechen</button><button onclick="resetApp()" class="h-9 rounded-[11px] bg-red-600 text-white text-[10px] font-semibold">Alles löschen</button></div></div>
 
     <div class="rounded-[14px] border border-charcoal/15 bg-white/70 p-3">
-      <div class="text-[8px] uppercase tracking-[.16em] text-charcoal/45 font-mono font-bold">Über Morrow Money</div>
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <div class="text-[8px] uppercase tracking-[.16em] text-charcoal/45 font-mono font-bold" data-i18n="language">Sprache</div>
+          <div class="text-[9px] text-charcoal/50 mt-0.5" data-i18n="languageHint">Wird auf diesem Gerät gespeichert</div>
+        </div>
+        <div class="flex border border-charcoal rounded-[10px] overflow-hidden">
+          <button id="lang-de" onclick="setLanguage('de')" class="h-8 px-3 text-[10px] font-bold bg-charcoal text-white">DE</button>
+          <button id="lang-en" onclick="setLanguage('en')" class="h-8 px-3 text-[10px] font-bold bg-white text-charcoal">EN</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-[14px] border border-charcoal/15 bg-white/70 p-3">
+      <div class="text-[8px] uppercase tracking-[.16em] text-charcoal/45 font-mono font-bold" data-i18n="about">Über Morrow Money</div>
       <div class="text-[11px] font-semibold mt-1">Version 1.0.0 · Release Candidate 1</div>
-      <div class="text-[9px] text-charcoal/55 mt-1 leading-relaxed">
+      <div class="text-[9px] text-charcoal/55 mt-1 leading-relaxed" data-i18n="privacyLine">
         Daten bleiben lokal auf diesem Gerät · keine Kontoverknüpfung · kein Login erforderlich
       </div>
     </div>
@@ -287,21 +338,77 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 <script>
 const STORE='morrow_money_v20';
 const LEGACY=['morrow_money_v19','morrow_money_v18','morrow_money_v17','morrow_money_v16','morrow_money_v15','morrow_money_v14','morrow_money_v13','morrow_money_v12','morrow_money_v11','morrow_money_v10','morrow_money_v9','morrow_money_v8','morrow_money_v7','morrow_money_v6','morrow_money_v5','morrow_money_v4','morrow_money_data_v5','morrow_money_data_v4','morrow_money_data_v3','morrow_money_v3','morrow_money_v2','morrow_money_v1','morrow_money_data'];
-function defaults(){return{onboarded:false,timers:[],graveyard:[],hourlyWage:20,milestones:[{id:1,title:'Wochenend-Trip',target:250},{id:2,title:'Tech-Gadget Wunsch',target:600}]}}
-let appData=defaults(),reflection=null,selectedReason='',decisionState={step:1,answers:{}},toastTimer=null,timerRefresh=null,storageAvailable=true,hasReloadedForSW=false;
+function defaults(){return{onboarded:false,lang:'de',timers:[],graveyard:[],decisions:[],hourlyWage:20,milestones:[{id:1,title:'Wochenend-Trip',target:250},{id:2,title:'Tech-Gadget Wunsch',target:600}]}}
+let appData=defaults(),reflection=null,selectedReason='',decisionState={step:1,answers:{},recorded:false},nextStepAction='check',toastTimer=null,timerRefresh=null,storageAvailable=true,hasReloadedForSW=false;
 function storageGet(key){try{return localStorage.getItem(key)}catch(e){storageAvailable=false;return null}}
 function storageSet(key,value){try{localStorage.setItem(key,value);return true}catch(e){storageAvailable=false;return false}}
 function storageRemove(key){try{localStorage.removeItem(key);return true}catch(e){storageAvailable=false;return false}}
 function finitePositive(v,fallback=0){const n=Number(v);return Number.isFinite(n)&&n>0?n:fallback}
 function esc(v){return String(v??'').replace(/[&<>'"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
-function norm(d){d=d&&typeof d==='object'?d:{};return{onboarded:Boolean(d.onboarded),timers:Array.isArray(d.timers)?d.timers.map(function(t){return{id:t.id||Date.now()+Math.random(),item:String(t.item||'Unbenannter Wunsch'),price:finitePositive(t.price),projection:finitePositive(t.projection,finitePositive(t.price)),frequency:[1,12,52].includes(Number(t.frequency))?Number(t.frequency):1,createdAt:Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now(),expiresAt:Number.isFinite(Number(t.expiresAt))?Number(t.expiresAt):((Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now())+72*3600000)}}):[],graveyard:Array.isArray(d.graveyard)?d.graveyard.map(function(g){return{id:g.id||Date.now()+Math.random(),item:String(g.item||'Unbenannter Wunsch'),price:finitePositive(g.price),projection:finitePositive(g.projection,finitePositive(g.price)),frequency:[1,12,52].includes(Number(g.frequency))?Number(g.frequency):1,reason:String(g.reason||'Keine Notiz').slice(0,500),savedAt:Number.isNaN(Date.parse(g.savedAt))?new Date().toISOString():new Date(g.savedAt).toISOString()}}):[],hourlyWage:finitePositive(d.hourlyWage,20),milestones:Array.isArray(d.milestones)?d.milestones.map(function(m){return{id:m.id||Date.now()+Math.random(),title:String(m.title||'Sparziel').slice(0,120),target:finitePositive(m.target)}}).filter(function(m){return m.target>0}):defaults().milestones}}
+function norm(d){d=d&&typeof d==='object'?d:{};return{onboarded:Boolean(d.onboarded),lang:d.lang==='en'?'en':'de',timers:Array.isArray(d.timers)?d.timers.map(function(t){return{id:t.id||Date.now()+Math.random(),item:String(t.item||'Unbenannter Wunsch'),price:finitePositive(t.price),projection:finitePositive(t.projection,finitePositive(t.price)),frequency:[1,12,52].includes(Number(t.frequency))?Number(t.frequency):1,createdAt:Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now(),expiresAt:Number.isFinite(Number(t.expiresAt))?Number(t.expiresAt):((Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now())+72*3600000)}}):[],graveyard:Array.isArray(d.graveyard)?d.graveyard.map(function(g){return{id:g.id||Date.now()+Math.random(),item:String(g.item||'Unbenannter Wunsch'),price:finitePositive(g.price),projection:finitePositive(g.projection,finitePositive(g.price)),frequency:[1,12,52].includes(Number(g.frequency))?Number(g.frequency):1,reason:String(g.reason||'Keine Notiz').slice(0,500),savedAt:Number.isNaN(Date.parse(g.savedAt))?new Date().toISOString():new Date(g.savedAt).toISOString()}}):[],decisions:Array.isArray(d.decisions)?d.decisions.map(function(x){return{id:x.id||Date.now()+Math.random(),item:String(x.item||'').slice(0,120),score:Number.isFinite(Number(x.score))?Number(x.score):0,answers:x.answers&&typeof x.answers==='object'?x.answers:{},createdAt:Number.isFinite(Number(x.createdAt))?Number(x.createdAt):Date.now()}}).slice(0,500):[],hourlyWage:finitePositive(d.hourlyWage,20),milestones:Array.isArray(d.milestones)?d.milestones.map(function(m){return{id:m.id||Date.now()+Math.random(),title:String(m.title||'Sparziel').slice(0,120),target:finitePositive(m.target)}}).filter(function(m){return m.target>0}):defaults().milestones}}
 function load(){const cur=storageGet(STORE);if(cur){try{return norm(JSON.parse(cur))}catch(e){}}for(const k of LEGACY){const s=storageGet(k);if(!s)continue;try{const m=norm(JSON.parse(s));storageSet(STORE,JSON.stringify(m));return m}catch(e){}}return defaults()}
 function persist(){
   const ok=storageSet(STORE,JSON.stringify(appData));
   if(!ok&&document.getElementById('toast'))toast('Speichern auf diesem Gerät nicht verfügbar');
   return ok
 }
-function initApp(){appData=load();document.getElementById('calc-wage').value=appData.hourlyWage;document.getElementById('welcome-wage').value=appData.hourlyWage;calculateTime(false);switchView(appData.onboarded?'dashboard':'welcome');renderAll();timerRefresh=setInterval(function(){if(!document.getElementById('view-impulseTimer').classList.contains('hidden'))renderAll()},60000);if(!storageAvailable)setTimeout(function(){toast('Lokales Speichern ist in diesem Browser eingeschränkt')},250);
+
+const I18N={
+  de:{
+    language:'Sprache',languageHint:'Wird auf diesem Gerät gespeichert',about:'Über Morrow Money',privacyLine:'Daten bleiben lokal auf diesem Gerät · keine Kontoverknüpfung · kein Login erforderlich',
+    insightsEyebrow:'Deine Muster',insightsTitle:'Was deine Entscheidungen zeigen',last7:'Letzte 7 Tage',thisMonth:'Dieser Monat',pattern:'Muster',nextGoal:'Nächstes Ziel',insightsDisclaimer:'Insights basieren nur auf deinen lokal gespeicherten Angaben.',
+    data:'Daten',start:'START',firstWin:'ERSTER SIEG',goals:'Ziele',reached:'erreicht',active:'aktiv',wins:'Siege',retained:'behalten',total:'insgesamt',
+    firstCheck:'Starte mit einem Kauf, über den du gerade nachdenkst.',decisionReady:'Zeit für deine Entscheidung:',readyNow:'ist jetzt bereit.',waits:'wartet noch',hours:'Std. Du musst jetzt nichts tun.',keptAlready:'Du hast bereits',checkNext:'€ behalten. Prüfe den nächsten Wunsch, bevor du kaufst.',
+    noDataTitle:'Noch zu wenig Daten',noDataText:'Nach einigen Decision Checks kann Morrow Money dir erste Muster zurückspiegeln.',
+    unsureTitle:'Unsicherheit taucht öfter auf',unsureText:'Mehrere Checks zeigen offene Signale. Die 72h-Pause kann genau hier helfen, Abstand zu gewinnen.',
+    clearTitle:'Viele Wünsche sind bereits gut durchdacht',clearText:'Deine letzten Checks zeigen häufig klare Nutzen- und Nutzungssignale. Nutze die Pause weiter dort, wo du unsicher bist.',
+    mixedTitle:'Deine Entscheidungen sind gemischt',mixedText:'Manche Wünsche wirken klar, andere noch impulsnah. Genau dafür ist der Decision Check gedacht.',
+    noGoal:'Noch kein Ziel.',goalFunding:'Deine Nicht-Käufe finanzieren {p}% von „{name}“.'
+  },
+  en:{
+    language:'Language',languageHint:'Saved on this device',about:'About Morrow Money',privacyLine:'Data stays on this device · no bank connection · no login required',
+    insightsEyebrow:'Your patterns',insightsTitle:'What your decisions are showing',last7:'Last 7 days',thisMonth:'This month',pattern:'Pattern',nextGoal:'Next goal',insightsDisclaimer:'Insights are based only on the information stored locally on your device.',
+    data:'Data',start:'START',firstWin:'FIRST WIN',goals:'goals',reached:'reached',active:'active',wins:'wins',retained:'retained',total:'total',
+    firstCheck:'Start with a purchase you are currently considering.',decisionReady:'Time to decide:',readyNow:'is ready now.',waits:'has',hours:'h left. You do not need to do anything yet.',keptAlready:'You have already retained',checkNext:'€. Check the next wish before you buy.',
+    noDataTitle:'Not enough data yet',noDataText:'After a few Decision Checks, Morrow Money can start reflecting patterns back to you.',
+    unsureTitle:'Uncertainty shows up repeatedly',unsureText:'Several checks contain open signals. The 72-hour pause can help create distance exactly here.',
+    clearTitle:'Many wishes are already well considered',clearText:'Your recent checks often show clear use and utility signals. Keep using the pause when you feel uncertain.',
+    mixedTitle:'Your decisions are mixed',mixedText:'Some wishes look clear while others are still closer to impulse. That is exactly what the Decision Check is for.',
+    noGoal:'No goal yet.',goalFunding:'Your non-purchases fund {p}% of “{name}”.'
+  }
+};
+function tr(key){const lang=appData&&appData.lang==='en'?'en':'de';return(I18N[lang]&&I18N[lang][key])||I18N.de[key]||key}
+function setLanguage(lang){appData.lang=lang==='en'?'en':'de';persist();applyLanguage();renderAll();toast(appData.lang==='en'?'Language: English':'Sprache: Deutsch')}
+function applyLanguage(){
+  document.documentElement.lang=appData.lang==='en'?'en':'de';
+  document.querySelectorAll('[data-i18n]').forEach(function(el){const k=el.getAttribute('data-i18n');el.textContent=tr(k)});
+  const de=document.getElementById('lang-de'),en=document.getElementById('lang-en');
+  if(de&&en){const isDE=appData.lang!=='en';de.className='h-8 px-3 text-[10px] font-bold '+(isDE?'bg-charcoal text-white':'bg-white text-charcoal');en.className='h-8 px-3 text-[10px] font-bold '+(!isDE?'bg-charcoal text-white':'bg-white text-charcoal')}
+  const dl=document.getElementById('data-label');if(dl)dl.textContent=tr('data')
+}
+function fmtMoney(n){return Number(n||0).toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' €'}
+function runNextStep(){if(nextStepAction==='timer')switchView('impulseTimer');else switchView('shouldIBuyIt')}
+function openInsights(){renderInsights();openSheet('insights-sheet')}
+function renderInsights(){
+  const now=Date.now(),weekAgo=now-7*86400000,d=new Date(),cm=d.getMonth(),cy=d.getFullYear();
+  const weekWins=appData.graveyard.filter(function(x){return Date.parse(x.savedAt)>=weekAgo});
+  const weekSum=weekWins.reduce(function(s,x){return s+(Number(x.price)||0)},0);
+  const monthWins=appData.graveyard.filter(function(x){const dt=new Date(x.savedAt);return dt.getMonth()===cm&&dt.getFullYear()===cy});
+  const monthSum=monthWins.reduce(function(s,x){return s+(Number(x.price)||0)},0);
+  const monthChecks=appData.decisions.filter(function(x){const dt=new Date(x.createdAt);return dt.getMonth()===cm&&dt.getFullYear()===cy});
+  const iw=document.getElementById('insight-week'),iws=document.getElementById('insight-week-sub'),im=document.getElementById('insight-month'),ims=document.getElementById('insight-month-sub');
+  if(iw)iw.textContent=fmtMoney(weekSum);if(iws)iws.textContent=weekWins.length+' '+tr('wins');if(im)im.textContent=fmtMoney(monthSum);if(ims)ims.textContent=monthChecks.length+' Checks';
+  const recent=appData.decisions.slice(-8),pt=document.getElementById('insight-pattern-title'),px=document.getElementById('insight-pattern-text');
+  if(recent.length<3){pt.textContent=tr('noDataTitle');px.textContent=tr('noDataText')}else{
+    const low=recent.filter(function(x){return x.score<=0}).length,high=recent.filter(function(x){return x.score>=3}).length;
+    if(low/recent.length>=.5){pt.textContent=tr('unsureTitle');px.textContent=tr('unsureText')}
+    else if(high/recent.length>=.5){pt.textContent=tr('clearTitle');px.textContent=tr('clearText')}
+    else{pt.textContent=tr('mixedTitle');px.textContent=tr('mixedText')}
+  }
+  const total=appData.graveyard.reduce(function(s,x){return s+(Number(x.price)||0)},0),nextGoal=appData.milestones.filter(function(m){return total<m.target}).sort(function(a,b){return a.target-b.target})[0],ig=document.getElementById('insight-goal');
+  if(ig){if(!nextGoal)ig.textContent=tr('noGoal');else{const p=Math.min(100,Math.round(total/nextGoal.target*100));ig.textContent=tr('goalFunding').replace('{p}',p).replace('{name}',nextGoal.title)}}
+}
+function initApp(){appData=load();applyLanguage();document.getElementById('calc-wage').value=appData.hourlyWage;document.getElementById('welcome-wage').value=appData.hourlyWage;calculateTime(false);switchView(appData.onboarded?'dashboard':'welcome');renderAll();timerRefresh=setInterval(function(){if(!document.getElementById('view-impulseTimer').classList.contains('hidden'))renderAll()},60000);if(!storageAvailable)setTimeout(function(){toast('Lokales Speichern ist in diesem Browser eingeschränkt')},250);
 document.documentElement.classList.toggle('standalone',window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true);
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')renderAll()});
 window.addEventListener('pageshow',function(){renderAll()});
@@ -334,7 +441,7 @@ function calculateTime(doSave=true){const c=calc();appData.hourlyWage=c.wage;if(
 function openDecisionCheck(){
   const c=calc();
   if(!c.price){toast('Bitte zuerst einen Preis eingeben');return}
-  decisionState={step:1,answers:{}};
+  decisionState={step:1,answers:{},recorded:false};
   document.querySelectorAll('.decision-option').forEach(function(x){x.classList.remove('selected')});
   document.querySelectorAll('.decision-step').forEach(function(x){x.classList.remove('active')});
   document.getElementById('decision-step-1').classList.add('active');
@@ -393,6 +500,12 @@ function showDecisionResult(){
     label.className='text-[8px] uppercase tracking-[.16em] font-mono font-bold text-amber-700'
   }
   textEl.textContent=signals.join(' ');
+  if(!decisionState.recorded){
+    appData.decisions.push({id:Date.now(),item:document.getElementById('calc-item').value.trim().slice(0,120),score:score,answers:Object.assign({},a),createdAt:Date.now()});
+    appData.decisions=appData.decisions.slice(-500);
+    decisionState.recorded=true;
+    persist()
+  }
   document.getElementById('decision-result').classList.remove('hidden');
   lucide.createIcons()
 }
@@ -407,7 +520,7 @@ function confirmReflection(withNote){if(!reflection)return;const custom=document
 function dismissTimer(id){const t=appData.timers.find(function(x){return String(x.id)===String(id)});if(!t||Date.now()<t.expiresAt)return;appData.timers=appData.timers.filter(function(x){return String(x.id)!==String(id)});save();toast('Aus Timer entfernt')}
 function addMilestone(){const a=document.getElementById('new-goal-title'),b=document.getElementById('new-goal-amount'),title=a.value.trim(),target=parseFloat(b.value);if(!title||!target||target<=0)return;appData.milestones.push({id:Date.now(),title:title,target:target});a.value='';b.value='';save();toast('Sparziel hinzugefügt')}
 function deleteMilestone(id){appData.milestones=appData.milestones.filter(function(m){return String(m.id)!==String(id)});save()}
-function renderAll(){const now=new Date(),cm=now.getMonth(),cy=now.getFullYear(),monthly=appData.graveyard.filter(function(i){const d=new Date(i.savedAt);return d.getMonth()===cm&&d.getFullYear()===cy}).reduce(function(s,i){return s+(Number(i.price)||0)},0),total=appData.graveyard.reduce(function(s,i){return s+(Number(i.price)||0)},0);document.getElementById('hero-saved').textContent=monthly.toLocaleString('de-DE')+' €';document.getElementById('hero-count').textContent=appData.graveyard.length+' Käufe vermieden';document.getElementById('hero-alltime').textContent=total.toLocaleString('de-DE')+' € insgesamt';let next=150,badge='START';if(total>=1000){next=2500;badge='1.000 €+'}else if(total>=500){next=1000;badge='500 €+'}else if(total>=150){next=500;badge='150 €+'}else if(appData.graveyard.length){badge='ERSTER SIEG'}const base=next===150?0:next===500?150:next===1000?500:1000,pct=Math.max(0,Math.min(100,Math.round((total-base)/(next-base)*100)));document.getElementById('milestone-badge').textContent=badge;document.getElementById('hero-level-text').textContent='Noch '+Math.max(0,next-total).toLocaleString('de-DE')+' € bis '+next.toLocaleString('de-DE')+' €';document.getElementById('hero-level-percent').textContent=pct+'%';document.getElementById('hero-progress-bar').style.width=pct+'%';const ib=document.getElementById('impulse-badge');ib.textContent=appData.timers.length+' aktiv';document.getElementById('graveyard-badge').textContent=appData.graveyard.length+' Siege';const reachedGoals=appData.milestones.filter(function(m){return total>=m.target}).length;document.getElementById('goal-summary').textContent=reachedGoals>0?reachedGoals+' erreicht':appData.milestones.length+' Ziele';const nextStep=document.getElementById('hero-next-step');if(nextStep){const expiredTimer=appData.timers.find(function(t){return Date.now()>=t.expiresAt});const activeTimers=appData.timers.filter(function(t){return Date.now()<t.expiresAt}).sort(function(a,b){return a.expiresAt-b.expiresAt});if(expiredTimer){nextStep.textContent='Zeit für deine Entscheidung: „'+expiredTimer.item+'“ ist jetzt bereit.'}else if(activeTimers.length){const t=activeTimers[0],hours=Math.max(1,Math.ceil((t.expiresAt-Date.now())/3600000));nextStep.textContent='„'+t.item+'“ wartet noch '+hours+' Std. Du musst jetzt nichts tun.'}else if(appData.graveyard.length){nextStep.textContent='Du hast bereits '+total.toLocaleString('de-DE')+' € behalten. Prüfe den nächsten Wunsch, bevor du kaufst.'}else{nextStep.textContent='Starte mit einem Kauf, über den du gerade nachdenkst.'}}document.getElementById('timers-count-label').textContent=appData.timers.length+' aktiv';document.getElementById('graveyard-total').textContent=total.toLocaleString('de-DE')+' € behalten';const gyCount=document.getElementById('graveyard-count-summary');if(gyCount)gyCount.textContent=appData.graveyard.length;const gyBest=document.getElementById('graveyard-best-summary');if(gyBest)gyBest.textContent=(appData.graveyard.length?Math.max.apply(null,appData.graveyard.map(function(i){return Number(i.price)||0})):0).toLocaleString('de-DE')+' €';
+function renderAll(){const now=new Date(),cm=now.getMonth(),cy=now.getFullYear(),monthly=appData.graveyard.filter(function(i){const d=new Date(i.savedAt);return d.getMonth()===cm&&d.getFullYear()===cy}).reduce(function(s,i){return s+(Number(i.price)||0)},0),total=appData.graveyard.reduce(function(s,i){return s+(Number(i.price)||0)},0);document.getElementById('hero-saved').textContent=monthly.toLocaleString('de-DE')+' €';document.getElementById('hero-count').textContent=appData.graveyard.length+' Käufe vermieden';document.getElementById('hero-alltime').textContent=total.toLocaleString('de-DE')+' € insgesamt';let next=150,badge='START';if(total>=1000){next=2500;badge='1.000 €+'}else if(total>=500){next=1000;badge='500 €+'}else if(total>=150){next=500;badge='150 €+'}else if(appData.graveyard.length){badge='ERSTER SIEG'}const base=next===150?0:next===500?150:next===1000?500:1000,pct=Math.max(0,Math.min(100,Math.round((total-base)/(next-base)*100)));document.getElementById('milestone-badge').textContent=badge;document.getElementById('hero-level-text').textContent='Noch '+Math.max(0,next-total).toLocaleString('de-DE')+' € bis '+next.toLocaleString('de-DE')+' €';document.getElementById('hero-level-percent').textContent=pct+'%';document.getElementById('hero-progress-bar').style.width=pct+'%';const ib=document.getElementById('impulse-badge');ib.textContent=appData.timers.length+' '+tr('active');document.getElementById('graveyard-badge').textContent=appData.graveyard.length+' '+tr('wins');const reachedGoals=appData.milestones.filter(function(m){return total>=m.target}).length;document.getElementById('goal-summary').textContent=reachedGoals>0?reachedGoals+' '+tr('reached'):appData.milestones.length+' '+tr('goals');const nextStep=document.getElementById('hero-next-step');if(nextStep){const expiredTimer=appData.timers.find(function(t){return Date.now()>=t.expiresAt});const activeTimers=appData.timers.filter(function(t){return Date.now()<t.expiresAt}).sort(function(a,b){return a.expiresAt-b.expiresAt});if(expiredTimer){nextStepAction='timer';nextStep.textContent=tr('decisionReady')+' „'+expiredTimer.item+'“ '+tr('readyNow')}else if(activeTimers.length){nextStepAction='timer';const t=activeTimers[0],hours=Math.max(1,Math.ceil((t.expiresAt-Date.now())/3600000));nextStep.textContent='„'+t.item+'“ '+tr('waits')+' '+hours+' '+tr('hours')}else if(appData.graveyard.length){nextStepAction='check';nextStep.textContent=tr('keptAlready')+' '+total.toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' '+tr('checkNext')}else{nextStepAction='check';nextStep.textContent=tr('firstCheck')}}document.getElementById('timers-count-label').textContent=appData.timers.length+' '+tr('active');document.getElementById('graveyard-total').textContent=total.toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' € '+tr('retained');const gyCount=document.getElementById('graveyard-count-summary');if(gyCount)gyCount.textContent=appData.graveyard.length;const gyBest=document.getElementById('graveyard-best-summary');if(gyBest)gyBest.textContent=(appData.graveyard.length?Math.max.apply(null,appData.graveyard.map(function(i){return Number(i.price)||0})):0).toLocaleString('de-DE')+' €';
 
 const tc=document.getElementById('timers-container');tc.innerHTML=!appData.timers.length?'<div class="card rounded-[16px] p-4 text-center"><i data-lucide="shield-check" class="w-6 h-6 mx-auto text-emerald-600 mb-1"></i><div class="font-serif font-bold text-sm">Der Geist ist klar.</div><div class="text-[10px] text-charcoal/50 mt-1">Keine aktiven Impulse.</div></div>':appData.timers.map(function(t){const ms=Math.max(0,t.expiresAt-Date.now()),expired=ms<=0,hours=Math.ceil(ms/3600000),proj=t.frequency>1;return '<div class="card rounded-[16px] p-3"><div class="flex justify-between gap-2"><div class="min-w-0"><div class="font-serif font-bold text-sm break-words">'+esc(t.item)+'</div><div class="text-[10px] mt-1"><span class="font-mono font-bold text-editorial">'+Number(t.price).toLocaleString('de-DE')+' €</span>'+(proj?'<span class="text-charcoal/45"> · '+Number(t.projection||t.price).toLocaleString('de-DE')+' €/Jahr</span>':'')+'</div><div class="text-[9px] text-charcoal/45 mt-1">'+(expired?'72h abgeschlossen':'Noch '+hours+' Std')+'</div></div>'+(expired?'<div class="flex gap-1 shrink-0"><button onclick="startReflection(\'timer\',\''+String(t.id)+'\')" class="h-9 px-2.5 rounded-[11px] bg-charcoal text-white text-[10px] font-semibold">Nicht kaufen</button><button onclick="dismissTimer(\''+String(t.id)+'\')" class="w-9 h-9 rounded-[11px] border border-charcoal bg-white flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button></div>':'<div class="text-[9px] text-charcoal/35 flex items-center gap-1 shrink-0"><i data-lucide="lock" class="w-3 h-3"></i>nichts zu tun</div>')+'</div></div>'}).join('');
 
@@ -419,7 +532,7 @@ function openSheet(id){document.getElementById(id).classList.add('open');lucide.
 function showStartscreen(){closeSheet('data-sheet');document.getElementById('welcome-wage').value=appData.hourlyWage;switchView('welcome')}function armReset(){document.getElementById('reset-confirm').classList.remove('hidden')}function cancelReset(){document.getElementById('reset-confirm').classList.add('hidden')}
 function resetApp(){[STORE].concat(LEGACY).forEach(function(k){storageRemove(k)});appData=defaults();persist();document.getElementById('calc-item').value='';document.getElementById('calc-price').value='180';document.getElementById('calc-wage').value='20';document.getElementById('welcome-wage').value='20';document.getElementById('calc-frequency').value='1';calculateTime(false);closeSheet('data-sheet');renderAll();switchView('welcome');toast('Morrow Money zurückgesetzt')}
 function exportData(){const blob=new Blob([JSON.stringify(appData,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='morrow-money-backup.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},0);toast('Backup exportiert')}
-function importData(e){const f=e.target.files&&e.target.files[0];if(!f)return;if(f.size>1024*1024){toast('Backup ist zu groß');e.target.value='';return}const r=new FileReader();r.onload=function(){try{const raw=JSON.parse(r.result);if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new Error('invalid');appData=norm(raw);appData.timers=appData.timers.slice(0,500);appData.graveyard=appData.graveyard.slice(0,2000);appData.milestones=appData.milestones.slice(0,100);appData.onboarded=true;persist();document.getElementById('calc-wage').value=appData.hourlyWage;document.getElementById('welcome-wage').value=appData.hourlyWage;calculateTime(false);closeSheet('data-sheet');switchView('dashboard');renderAll();toast('Backup wiederhergestellt')}catch(err){toast('Ungültige Backup-Datei')}e.target.value=''};r.readAsText(f)}
+function importData(e){const f=e.target.files&&e.target.files[0];if(!f)return;if(f.size>1024*1024){toast('Backup ist zu groß');e.target.value='';return}const r=new FileReader();r.onload=function(){try{const raw=JSON.parse(r.result);if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new Error('invalid');appData=norm(raw);appData.timers=appData.timers.slice(0,500);appData.graveyard=appData.graveyard.slice(0,2000);appData.decisions=appData.decisions.slice(0,500);appData.milestones=appData.milestones.slice(0,100);appData.onboarded=true;persist();document.getElementById('calc-wage').value=appData.hourlyWage;document.getElementById('welcome-wage').value=appData.hourlyWage;calculateTime(false);closeSheet('data-sheet');switchView('dashboard');renderAll();toast('Backup wiederhergestellt')}catch(err){toast('Ungültige Backup-Datei')}e.target.value=''};r.readAsText(f)}
 function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show')},1700)}
 </script>
 </body>
