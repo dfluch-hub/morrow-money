@@ -63,7 +63,13 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 
 <section id="view-welcome" class="view hidden h-full flex flex-col justify-between overflow-hidden">
   <div class="space-y-3">
-    <div class="inline-flex bg-editorial/10 text-editorial border border-editorial/20 rounded-lg px-2.5 py-1 text-[8px] uppercase tracking-[.18em] font-bold font-mono">Financial Mindset OS</div>
+    <div class="flex items-center justify-between gap-3">
+      <div class="inline-flex bg-editorial/10 text-editorial border border-editorial/20 rounded-lg px-2.5 py-1 text-[8px] uppercase tracking-[.18em] font-bold font-mono">Financial Mindset OS</div>
+      <div class="flex border border-charcoal rounded-[10px] overflow-hidden bg-white shadow-edsm" aria-label="Language">
+        <button data-lang-choice="de" onclick="setLanguage('de')" class="h-8 px-3 text-[10px] font-bold bg-charcoal text-white">DE</button>
+        <button data-lang-choice="en" onclick="setLanguage('en')" class="h-8 px-3 text-[10px] font-bold bg-white text-charcoal">EN</button>
+      </div>
+    </div>
     <div><h2 class="font-serif font-bold text-[2.05rem] leading-[.98] tracking-tight">Was kostet dich dein nächster Impulskauf wirklich?</h2><p class="mt-2 text-[12px] leading-[1.45] text-charcoal/70">Einmal Netto-Stundenlohn festlegen. Danach übersetzt Morrow Money Preise sofort in Lebensarbeitszeit.</p></div>
     <div class="card rounded-[18px] p-3">
       <label class="block text-[8px] uppercase tracking-[.18em] font-bold font-mono text-charcoal/65 mb-1.5">Dein Netto-Stundenlohn</label>
@@ -225,7 +231,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
   <div class="flex justify-between items-start gap-3 mb-3">
     <div>
       <div class="text-[8px] uppercase tracking-[.18em] text-editorial font-bold font-mono">Decision Check</div>
-      <h3 id="decision-title" class="font-serif font-bold text-[1.25rem]">Ist der Wunsch noch klar, wenn du kurz hinsiehst?</h3>
+      <h3 id="decision-title" class="font-serif font-bold text-[1.25rem]">Ist das ein guter Kauf für dich – oder gerade nur ein Impuls?</h3>
     </div>
     <button onclick="closeSheet('decision-sheet')" class="w-9 h-9 rounded-xl border border-charcoal flex items-center justify-center shrink-0"><i data-lucide="x" class="w-4 h-4"></i></button>
   </div>
@@ -316,8 +322,8 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
           <div class="text-[9px] text-charcoal/50 mt-0.5" data-i18n="languageHint">Wird auf diesem Gerät gespeichert</div>
         </div>
         <div class="flex border border-charcoal rounded-[10px] overflow-hidden">
-          <button id="lang-de" onclick="setLanguage('de')" class="h-8 px-3 text-[10px] font-bold bg-charcoal text-white">DE</button>
-          <button id="lang-en" onclick="setLanguage('en')" class="h-8 px-3 text-[10px] font-bold bg-white text-charcoal">EN</button>
+          <button id="lang-de" data-lang-choice="de" onclick="setLanguage('de')" class="h-8 px-3 text-[10px] font-bold bg-charcoal text-white">DE</button>
+          <button id="lang-en" data-lang-choice="en" onclick="setLanguage('en')" class="h-8 px-3 text-[10px] font-bold bg-white text-charcoal">EN</button>
         </div>
       </div>
     </div>
@@ -409,7 +415,7 @@ const STATIC_I18N={
   'Deine Nicht-Käufe wirken.':'Your non-purchases add up.','Siege':'Wins','Größter Sieg':'Biggest win',
   'Ziel-Name':'Goal name','Betrag (€)':'Amount (€)','Hinzufügen':'Add',
   'Kurze Reflexion':'Quick reflection','Warum lässt du es?':'Why are you letting it go?','Impuls verflogen':'Impulse faded','Preis zu hoch':'Price too high','Brauche ich nicht wirklich':'I do not really need it','Priorität geändert':'Priority changed','Eigene Notiz …':'Your note …','Ohne Notiz':'Without note','Als Sieg speichern':'Save as a win',
-  'Ist der Wunsch noch klar, wenn du kurz hinsiehst?':'Does the wish still feel clear when you look at it for a moment?','1 · Hast du einen konkreten Nutzen dafür?':'1 · Do you have a concrete use for it?','Ja, ganz klar':'Yes, clearly','Eher unklar':'Rather unclear',
+  'Ist das ein guter Kauf für dich – oder gerade nur ein Impuls?':'Is this a good purchase for you — or just an impulse right now?','1 · Hast du einen konkreten Nutzen dafür?':'1 · Do you have a concrete use for it?','Ja, ganz klar':'Yes, clearly','Eher unklar':'Rather unclear',
   '2 · Wie oft wirst du es realistisch nutzen?':'2 · How often will you realistically use it?','Selten':'Rarely','Monatlich':'Monthly','Wöchentlich':'Weekly','Fast täglich':'Almost daily',
   '3 · Hast du schon etwas, das denselben Zweck erfüllt?':'3 · Do you already own something that serves the same purpose?','Ja':'Yes','Nein':'No',
   '4 · Glaubst du, dass du es in 72 Stunden noch genauso willst?':'4 · Do you think you will want it just as much in 72 hours?','Unsicher':'Unsure','Eher nicht':'Probably not','Zusammenfassung':'Summary','72h parken':'Park for 72h','Zurück zum Rechner':'Back to calculator',
@@ -433,8 +439,11 @@ function setLanguage(lang){appData.lang=lang==='en'?'en':'de';persist();applyLan
 function applyLanguage(){
   document.documentElement.lang=appData.lang==='en'?'en':'de';
   document.querySelectorAll('[data-i18n]').forEach(function(el){const k=el.getAttribute('data-i18n');el.textContent=tr(k)});
-  const de=document.getElementById('lang-de'),en=document.getElementById('lang-en');
-  if(de&&en){const isDE=appData.lang!=='en';de.className='h-8 px-3 text-[10px] font-bold '+(isDE?'bg-charcoal text-white':'bg-white text-charcoal');en.className='h-8 px-3 text-[10px] font-bold '+(!isDE?'bg-charcoal text-white':'bg-white text-charcoal')}
+  const isDE=appData.lang!=='en';
+  document.querySelectorAll('[data-lang-choice]').forEach(function(btn){
+    const active=btn.getAttribute('data-lang-choice')===(isDE?'de':'en');
+    btn.className='h-8 px-3 text-[10px] font-bold '+(active?'bg-charcoal text-white':'bg-white text-charcoal')
+  })
   const dl=document.getElementById('data-label');if(dl)dl.textContent=tr('data');translateStaticDOM()
 }
 function fmtMoney(n){return Number(n||0).toLocaleString(appData.lang==='en'?'en-US':'de-DE')+' €'}
@@ -497,7 +506,7 @@ function openDecisionCheck(){
   document.querySelectorAll('.decision-step').forEach(function(x){x.classList.remove('active')});
   document.getElementById('decision-step-1').classList.add('active');
   document.getElementById('decision-result').classList.add('hidden');
-  document.getElementById('decision-title').textContent=appData.lang==='en'?'Does the wish still feel clear when you look at it for a moment?':'Ist der Wunsch noch klar, wenn du kurz hinsiehst?';
+  document.getElementById('decision-title').textContent=appData.lang==='en'?'Is this a good purchase for you — or just an impulse right now?':'Ist das ein guter Kauf für dich – oder gerade nur ein Impuls?';
   updateDecisionProgress();
   openSheet('decision-sheet')
 }
