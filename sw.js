@@ -1,5 +1,5 @@
-const CACHE_NAME = 'morrow-money-core-v40';
-const RUNTIME_CACHE = 'morrow-money-runtime-v40';
+const CACHE_NAME = 'morrow-money-core-v41';
+const RUNTIME_CACHE = 'morrow-money-runtime-v41';
 const APP_SHELL = [
   './',
   './index.html',
