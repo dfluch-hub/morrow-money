@@ -1,5 +1,5 @@
-const CACHE_NAME = 'morrow-money-core-v32';
-const DYNAMIC_CACHE = 'morrow-money-dynamic-v32';
+const CACHE_NAME = 'morrow-money-core-v33';
+const DYNAMIC_CACHE = 'morrow-money-dynamic-v33';
 const LOCAL_ASSETS = ['./','./index.html','./manifest.webmanifest','./icon-192x192.png','./icon-512x512.png'];
 
 self.addEventListener('install', event => {
