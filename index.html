@@ -32,17 +32,24 @@ body{overscroll-behavior:none}
 header{padding-top:max(.625rem,env(safe-area-inset-top))}
 main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 @media(display-mode:standalone){.app{height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none}}html,body{margin:0;min-height:100dvh;background:#f0eee6;color:#1a1917;font-family:Inter,system-ui,sans-serif;overflow:hidden}body{display:flex;justify-content:center;align-items:center}.app{width:100vw;height:100dvh;max-width:430px;max-height:920px;background:#fcfbf9;background-image:linear-gradient(to right,#e8e4db 1px,transparent 1px),linear-gradient(to bottom,#e8e4db 1px,transparent 1px);background-size:26px 26px;display:flex;flex-direction:column;overflow:hidden;position:relative;border:1px solid #d4d0c5}.card{background:#fff;border:1px solid #1a1917;box-shadow:3px 3px 0 #1a1917}.tap{transition:.12s}.tap:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #1a1917}.view{animation:in .18s ease-out}.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}.scroll::-webkit-scrollbar{display:none}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}.sheetbg{position:absolute;inset:0;background:rgba(26,25,23,.3);backdrop-filter:blur(4px);display:none;align-items:flex-end;z-index:60}.sheetbg.open{display:flex}.sheet{width:100%;background:#fcfbf9;border:1px solid #1a1917;border-bottom:0;border-radius:24px 24px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -12px 34px rgba(0,0,0,.12)}.toast{position:absolute;left:50%;bottom:20px;transform:translateX(-50%) translateY(10px);background:#1a1917;color:#fff;border-radius:999px;padding:9px 13px;font-size:11px;font-weight:700;opacity:0;pointer-events:none;z-index:90;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%)}.reason.selected{background-color:#1a1917!important;color:#fff!important;border-color:#1a1917!important}
+.subview-header #brand-eyebrow{display:none}
+.subview-header #brand-title{font-size:1.18rem!important;white-space:nowrap;overflow:visible;text-overflow:clip}
+.subview-header .brand-wrap{gap:.5rem}
+@media(max-width:370px){
+  .subview-header #brand-title{font-size:1.05rem!important}
+  .subview-header .brand-logo{width:2.2rem!important;height:2.2rem!important}
+}
 @media(min-width:768px){.app{border-radius:34px;height:90dvh}}@media(max-height:740px){header{min-height:58px!important;padding-top:8px!important;padding-bottom:8px!important}.brand-title{font-size:1.45rem!important}.dash-hero{padding:11px!important}.dash-hero .money{font-size:2.5rem!important}.module-primary{min-height:72px!important}.module-mini{min-height:108px!important}.goal-row{min-height:66px!important}}
 </style>
 </head>
 <body onload="initApp()">
 <div class="app">
-<header class="min-h-[66px] px-3.5 py-2.5 flex items-center justify-between bg-[#fcfbf9]/95 backdrop-blur-md border-b border-charcoal shrink-0 z-20">
-  <div class="flex items-center gap-2.5 min-w-0">
-    <div class="w-10 h-10 rounded-[13px] border border-charcoal bg-white shadow-edsm flex items-center justify-center shrink-0">
+<header id="app-header" class="min-h-[66px] px-3.5 py-2.5 flex items-center justify-between bg-[#fcfbf9]/95 backdrop-blur-md border-b border-charcoal shrink-0 z-20">
+  <div class="brand-wrap flex items-center gap-2.5 min-w-0">
+    <div class="brand-logo w-10 h-10 rounded-[13px] border border-charcoal bg-white shadow-edsm flex items-center justify-center shrink-0">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 16.5V7.5L8.2 12.6L12 7.5L15.8 12.6L20 7.5V16.5" stroke="#1a1917" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18.4" cy="18.2" r="2.1" fill="#d9381e" stroke="#1a1917" stroke-width="1"/></svg>
     </div>
-    <div class="min-w-0 flex flex-col justify-center"><span class="block text-[8px] uppercase tracking-[.22em] text-editorial font-bold font-mono leading-none mb-1">Morrow Tools</span><h1 class="brand-title text-[1.7rem] leading-none font-serif font-bold tracking-tight truncate">Morrow Money</h1></div>
+    <div class="min-w-0 flex flex-col justify-center"><span id="brand-eyebrow" class="block text-[8px] uppercase tracking-[.22em] text-editorial font-bold font-mono leading-none mb-1">Morrow Tools</span><h1 id="brand-title" class="brand-title text-[1.7rem] leading-none font-serif font-bold tracking-tight truncate">Morrow Money</h1></div>
   </div>
   <div class="flex gap-2 shrink-0 items-center">
     <button id="back-btn" onclick="switchView('dashboard')" class="hidden w-10 h-10 rounded-[13px] border border-charcoal bg-white shadow-edsm items-center justify-center" aria-label="Zurück"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
@@ -226,7 +233,7 @@ if('serviceWorker'in navigator){
   })
 }
 }
-function switchView(v){document.querySelectorAll('.view').forEach(function(x){x.classList.add('hidden')});document.getElementById('view-'+v).classList.remove('hidden');const b=document.getElementById('back-btn');const hide=v==='dashboard'||v==='welcome';b.classList.toggle('hidden',hide);b.classList.toggle('flex',!hide);lucide.createIcons()}
+function switchView(v){document.querySelectorAll('.view').forEach(function(x){x.classList.add('hidden')});document.getElementById('view-'+v).classList.remove('hidden');const b=document.getElementById('back-btn');const hide=v==='dashboard'||v==='welcome';b.classList.toggle('hidden',hide);b.classList.toggle('flex',!hide);const h=document.getElementById('app-header');if(h)h.classList.toggle('subview-header',!hide);lucide.createIcons()}
 function save(){persist();renderAll()}
 function completeOnboarding(){const w=parseFloat(document.getElementById('welcome-wage').value)||20;appData.hourlyWage=w;appData.onboarded=true;persist();document.getElementById('calc-wage').value=w;calculateTime(false);switchView('dashboard');toast('Bereit für deinen ersten Check')}
 function calc(){const rawPrice=parseFloat(document.getElementById('calc-price').value),rawWage=parseFloat(document.getElementById('calc-wage').value),rawFreq=parseInt(document.getElementById('calc-frequency').value);const price=Number.isFinite(rawPrice)&&rawPrice>0?rawPrice:0,wage=Number.isFinite(rawWage)&&rawWage>0?rawWage:20,freq=[1,12,52].includes(rawFreq)?rawFreq:1;return{price:price,wage:wage,freq:freq,projection:price*freq,hours:(price*freq)/wage}}
