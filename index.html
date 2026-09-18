@@ -32,12 +32,11 @@ body{overscroll-behavior:none}
 header{padding-top:max(.625rem,env(safe-area-inset-top))}
 main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 @media(display-mode:standalone){.app{height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none}}html,body{margin:0;min-height:100dvh;background:#f0eee6;color:#1a1917;font-family:Inter,system-ui,sans-serif;overflow:hidden}body{display:flex;justify-content:center;align-items:center}.app{width:100vw;height:100dvh;max-width:430px;max-height:920px;background:#fcfbf9;background-image:linear-gradient(to right,#e8e4db 1px,transparent 1px),linear-gradient(to bottom,#e8e4db 1px,transparent 1px);background-size:26px 26px;display:flex;flex-direction:column;overflow:hidden;position:relative;border:1px solid #d4d0c5}.card{background:#fff;border:1px solid #1a1917;box-shadow:3px 3px 0 #1a1917}.tap{transition:.12s}.tap:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #1a1917}.view{animation:in .18s ease-out}.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}.scroll::-webkit-scrollbar{display:none}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}.sheetbg{position:absolute;inset:0;background:rgba(26,25,23,.3);backdrop-filter:blur(4px);display:none;align-items:flex-end;z-index:60}.sheetbg.open{display:flex}.sheet{width:100%;background:#fcfbf9;border:1px solid #1a1917;border-bottom:0;border-radius:24px 24px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -12px 34px rgba(0,0,0,.12)}.toast{position:absolute;left:50%;bottom:20px;transform:translateX(-50%) translateY(10px);background:#1a1917;color:#fff;border-radius:999px;padding:9px 13px;font-size:11px;font-weight:700;opacity:0;pointer-events:none;z-index:90;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%)}.reason.selected{background-color:#1a1917!important;color:#fff!important;border-color:#1a1917!important}
-.subview-header #brand-eyebrow{display:none}
-.subview-header #brand-title{font-size:1.18rem!important;white-space:nowrap;overflow:visible;text-overflow:clip}
-.subview-header .brand-wrap{gap:.5rem}
+.subview-header #data-label{display:none}
+.subview-header #data-btn{width:2.5rem;padding-left:0;padding-right:0;justify-content:center}
 @media(max-width:370px){
-  .subview-header #brand-title{font-size:1.05rem!important}
-  .subview-header .brand-logo{width:2.2rem!important;height:2.2rem!important}
+  #data-btn{height:2.35rem}
+  #back-btn{width:2.35rem;height:2.35rem}
 }
 @media(min-width:768px){.app{border-radius:34px;height:90dvh}}@media(max-height:740px){header{min-height:58px!important;padding-top:8px!important;padding-bottom:8px!important}.brand-title{font-size:1.45rem!important}.dash-hero{padding:11px!important}.dash-hero .money{font-size:2.5rem!important}.module-primary{min-height:72px!important}.module-mini{min-height:108px!important}.goal-row{min-height:66px!important}}
 </style>
@@ -53,7 +52,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
   </div>
   <div class="flex gap-2 shrink-0 items-center">
     <button id="back-btn" onclick="switchView('dashboard')" class="hidden w-10 h-10 rounded-[13px] border border-charcoal bg-white shadow-edsm items-center justify-center" aria-label="Zurück"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
-    <button onclick="openSheet('data-sheet')" class="h-10 px-3 rounded-[13px] border border-charcoal bg-white shadow-ed text-xs font-semibold flex items-center gap-1.5"><i data-lucide="archive" class="w-4 h-4"></i>Daten</button>
+    <button id="data-btn" onclick="openSheet('data-sheet')" class="h-10 px-3 rounded-[13px] border border-charcoal bg-white shadow-ed text-xs font-semibold flex items-center gap-1.5" aria-label="Daten" title="Daten"><i data-lucide="archive" class="w-4 h-4"></i><span id="data-label">Daten</span></button>
   </div>
 </header>
 
