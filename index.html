@@ -85,7 +85,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
   #view-dashboard{gap:.42rem!important}
   #view-dashboard .dash-hero{padding:.55rem .65rem!important}
   #view-dashboard .dash-hero .money{font-size:2.1rem!important}
-  #view-dashboard #coach-card{min-height:44px!important;padding:.4rem .55rem!important}
+  #view-dashboard #coach-card{min-height:58px!important;padding:.6rem .75rem!important}
   #view-dashboard .module-primary{min-height:64px!important}
   #view-dashboard .module-mini{min-height:82px!important;padding:.5rem!important}
   #view-dashboard .goal-row{min-height:50px!important}
@@ -112,6 +112,8 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
 #view-dashboard .module-primary{box-shadow:3px 3px 0 #1a1917}
 #view-dashboard .dash-hero{box-shadow:2px 2px 0 #1a1917}
 #view-dashboard .module-mini .font-serif{letter-spacing:-.01em}
+
+#coach-card{background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 </style>
 </head>
 <body onload="initApp()">
@@ -230,19 +232,16 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     <i data-lucide="chevron-right" class="w-5 h-5 shrink-0"></i>
   </button>
 
-  <button id="coach-card" onclick="openInsights()" class="tap rounded-[14px] px-3 py-2.5 min-h-[52px] shrink-0 text-left flex items-center gap-2.5 border border-charcoal/20 bg-[#fbf8f4]/92">
-    <div class="w-7 h-7 rounded-[9px] bg-editorial/8 text-editorial flex items-center justify-center shrink-0">
-      <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+  <button id="coach-card" onclick="openInsights()" class="tap rounded-[16px] px-3.5 py-3 min-h-[64px] shrink-0 text-left flex items-center gap-3 border border-charcoal/30 bg-white">
+    <div class="w-8 h-8 rounded-[10px] bg-editorial/10 border border-editorial/15 text-editorial flex items-center justify-center shrink-0">
+      <i data-lucide="sparkles" class="w-4 h-4"></i>
     </div>
     <div class="min-w-0 flex-1">
-      <div class="flex items-center gap-1.5">
-        <span class="text-[7px] uppercase tracking-[.16em] font-mono font-bold text-editorial">Morrow Insight</span>
-        <span class="h-px flex-1 bg-charcoal/10"></span>
-      </div>
-      <div id="coach-title" class="text-[9.5px] font-semibold leading-tight mt-0.5 text-charcoal/90">Noch ein paar Entscheidungen, dann erkenne ich erste Muster.</div>
-      <div id="coach-text" class="text-[8px] text-charcoal/52 leading-[1.3] mt-0.5">Tippe für Details.</div>
+      <div class="text-[7px] uppercase tracking-[.16em] font-mono font-bold text-editorial">Morrow Insight</div>
+      <div id="coach-title" class="text-[10px] font-semibold leading-[1.25] mt-1 text-charcoal">Noch ein paar Entscheidungen, dann erkenne ich erste Muster.</div>
+      <div id="coach-text" class="text-[8.5px] text-charcoal/60 leading-[1.35] mt-1">Tippe für Details.</div>
     </div>
-    <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-charcoal/35 shrink-0"></i>
+    <i data-lucide="chevron-right" class="w-4 h-4 text-charcoal/55 shrink-0"></i>
   </button>
 
   <div class="grid grid-cols-2 gap-2.5 shrink-0 mt-0.5">
