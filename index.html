@@ -2,7 +2,13 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="application-name" content="Morrow Money">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="color-scheme" content="light">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="morrow-money-version" content="1.0.0-rc.1">
 <meta name="theme-color" content="#fcfbf9">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -17,7 +23,15 @@
 tailwind.config={theme:{extend:{fontFamily:{serif:['Newsreader','Georgia','serif'],sans:['Inter','system-ui','sans-serif'],mono:['Space Mono','monospace']},colors:{paper:'#fcfbf9',editorial:'#d9381e',charcoal:'#1a1917'},boxShadow:{ed:'3px 3px 0 #1a1917',edsm:'2px 2px 0 #1a1917'}}}}
 </script>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100dvh;background:#f0eee6;color:#1a1917;font-family:Inter,system-ui,sans-serif;overflow:hidden}body{display:flex;justify-content:center;align-items:center}.app{width:100vw;height:100dvh;max-width:430px;max-height:920px;background:#fcfbf9;background-image:linear-gradient(to right,#e8e4db 1px,transparent 1px),linear-gradient(to bottom,#e8e4db 1px,transparent 1px);background-size:26px 26px;display:flex;flex-direction:column;overflow:hidden;position:relative;border:1px solid #d4d0c5}.card{background:#fff;border:1px solid #1a1917;box-shadow:3px 3px 0 #1a1917}.tap{transition:.12s}.tap:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #1a1917}.view{animation:in .18s ease-out}.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}.scroll::-webkit-scrollbar{display:none}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}.sheetbg{position:absolute;inset:0;background:rgba(26,25,23,.3);backdrop-filter:blur(4px);display:none;align-items:flex-end;z-index:60}.sheetbg.open{display:flex}.sheet{width:100%;background:#fcfbf9;border:1px solid #1a1917;border-bottom:0;border-radius:24px 24px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -12px 34px rgba(0,0,0,.12)}.toast{position:absolute;left:50%;bottom:20px;transform:translateX(-50%) translateY(10px);background:#1a1917;color:#fff;border-radius:999px;padding:9px 13px;font-size:11px;font-weight:700;opacity:0;pointer-events:none;z-index:90;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%)}.reason.selected{background-color:#1a1917!important;color:#fff!important;border-color:#1a1917!important}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:#fcfbf9}
+button,input,select,textarea{font:inherit}
+button{touch-action:manipulation}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #d9381e;outline-offset:2px}
+body{overscroll-behavior:none}
+header{padding-top:max(.625rem,env(safe-area-inset-top))}
+main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
+@media(display-mode:standalone){.app{height:100dvh;max-height:none;border:0;border-radius:0;box-shadow:none}}html,body{margin:0;min-height:100dvh;background:#f0eee6;color:#1a1917;font-family:Inter,system-ui,sans-serif;overflow:hidden}body{display:flex;justify-content:center;align-items:center}.app{width:100vw;height:100dvh;max-width:430px;max-height:920px;background:#fcfbf9;background-image:linear-gradient(to right,#e8e4db 1px,transparent 1px),linear-gradient(to bottom,#e8e4db 1px,transparent 1px);background-size:26px 26px;display:flex;flex-direction:column;overflow:hidden;position:relative;border:1px solid #d4d0c5}.card{background:#fff;border:1px solid #1a1917;box-shadow:3px 3px 0 #1a1917}.tap{transition:.12s}.tap:active{transform:translate(1px,1px);box-shadow:1px 1px 0 #1a1917}.view{animation:in .18s ease-out}.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}.scroll::-webkit-scrollbar{display:none}@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}.sheetbg{position:absolute;inset:0;background:rgba(26,25,23,.3);backdrop-filter:blur(4px);display:none;align-items:flex-end;z-index:60}.sheetbg.open{display:flex}.sheet{width:100%;background:#fcfbf9;border:1px solid #1a1917;border-bottom:0;border-radius:24px 24px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -12px 34px rgba(0,0,0,.12)}.toast{position:absolute;left:50%;bottom:20px;transform:translateX(-50%) translateY(10px);background:#1a1917;color:#fff;border-radius:999px;padding:9px 13px;font-size:11px;font-weight:700;opacity:0;pointer-events:none;z-index:90;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%)}.reason.selected{background-color:#1a1917!important;color:#fff!important;border-color:#1a1917!important}
 @media(min-width:768px){.app{border-radius:34px;height:90dvh}}@media(max-height:740px){header{min-height:58px!important;padding-top:8px!important;padding-bottom:8px!important}.brand-title{font-size:1.45rem!important}.dash-hero{padding:11px!important}.dash-hero .money{font-size:2.5rem!important}.module-primary{min-height:72px!important}.module-mini{min-height:108px!important}.goal-row{min-height:66px!important}}
 </style>
 </head>
@@ -159,7 +173,7 @@ tailwind.config={theme:{extend:{fontFamily:{serif:['Newsreader','Georgia','serif
 
     <div class="rounded-[14px] border border-charcoal/15 bg-white/70 p-3">
       <div class="text-[8px] uppercase tracking-[.16em] text-charcoal/45 font-mono font-bold">Über Morrow Money</div>
-      <div class="text-[11px] font-semibold mt-1">Version 1.0</div>
+      <div class="text-[11px] font-semibold mt-1">Version 1.0.0 · Release Candidate 1</div>
       <div class="text-[9px] text-charcoal/55 mt-1 leading-relaxed">
         Daten bleiben lokal auf diesem Gerät · keine Kontoverknüpfung · kein Login erforderlich
       </div>
@@ -174,18 +188,50 @@ tailwind.config={theme:{extend:{fontFamily:{serif:['Newsreader','Georgia','serif
 const STORE='morrow_money_v20';
 const LEGACY=['morrow_money_v19','morrow_money_v18','morrow_money_v17','morrow_money_v16','morrow_money_v15','morrow_money_v14','morrow_money_v13','morrow_money_v12','morrow_money_v11','morrow_money_v10','morrow_money_v9','morrow_money_v8','morrow_money_v7','morrow_money_v6','morrow_money_v5','morrow_money_v4','morrow_money_data_v5','morrow_money_data_v4','morrow_money_data_v3','morrow_money_v3','morrow_money_v2','morrow_money_v1','morrow_money_data'];
 function defaults(){return{onboarded:false,timers:[],graveyard:[],hourlyWage:20,milestones:[{id:1,title:'Wochenend-Trip',target:250},{id:2,title:'Tech-Gadget Wunsch',target:600}]}}
-let appData=defaults(),reflection=null,selectedReason='',toastTimer=null,timerRefresh=null;
+let appData=defaults(),reflection=null,selectedReason='',toastTimer=null,timerRefresh=null,storageAvailable=true,hasReloadedForSW=false;
+function storageGet(key){try{return localStorage.getItem(key)}catch(e){storageAvailable=false;return null}}
+function storageSet(key,value){try{localStorage.setItem(key,value);return true}catch(e){storageAvailable=false;return false}}
+function storageRemove(key){try{localStorage.removeItem(key);return true}catch(e){storageAvailable=false;return false}}
+function finitePositive(v,fallback=0){const n=Number(v);return Number.isFinite(n)&&n>0?n:fallback}
 function esc(v){return String(v??'').replace(/[&<>'"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]})}
-function norm(d){d=d&&typeof d==='object'?d:{};return{onboarded:Boolean(d.onboarded),timers:Array.isArray(d.timers)?d.timers.map(function(t){return{id:t.id||Date.now()+Math.random(),item:String(t.item||'Unbenannter Wunsch'),price:Number(t.price)||0,projection:Number(t.projection)||Number(t.price)||0,frequency:Number(t.frequency)||1,createdAt:Number(t.createdAt)||Date.now(),expiresAt:Number(t.expiresAt)||((Number(t.createdAt)||Date.now())+72*3600000)}}):[],graveyard:Array.isArray(d.graveyard)?d.graveyard.map(function(g){return{id:g.id||Date.now()+Math.random(),item:String(g.item||'Unbenannter Wunsch'),price:Number(g.price)||0,projection:Number(g.projection)||Number(g.price)||0,frequency:Number(g.frequency)||1,reason:String(g.reason||'Keine Notiz'),savedAt:g.savedAt||new Date().toISOString()}}):[],hourlyWage:Number(d.hourlyWage)>0?Number(d.hourlyWage):20,milestones:Array.isArray(d.milestones)?d.milestones.map(function(m){return{id:m.id||Date.now()+Math.random(),title:String(m.title||'Sparziel'),target:Number(m.target)||0}}).filter(function(m){return m.target>0}):defaults().milestones}}
-function load(){const cur=localStorage.getItem(STORE);if(cur){try{return norm(JSON.parse(cur))}catch(e){}}for(const k of LEGACY){const s=localStorage.getItem(k);if(!s)continue;try{const m=norm(JSON.parse(s));localStorage.setItem(STORE,JSON.stringify(m));return m}catch(e){}}return defaults()}
-function persist(){localStorage.setItem(STORE,JSON.stringify(appData))}
-function initApp(){appData=load();document.getElementById('calc-wage').value=appData.hourlyWage;document.getElementById('welcome-wage').value=appData.hourlyWage;calculateTime(false);switchView(appData.onboarded?'dashboard':'welcome');renderAll();timerRefresh=setInterval(function(){if(!document.getElementById('view-impulseTimer').classList.contains('hidden'))renderAll()},60000);if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(function(){})}
+function norm(d){d=d&&typeof d==='object'?d:{};return{onboarded:Boolean(d.onboarded),timers:Array.isArray(d.timers)?d.timers.map(function(t){return{id:t.id||Date.now()+Math.random(),item:String(t.item||'Unbenannter Wunsch'),price:finitePositive(t.price),projection:finitePositive(t.projection,finitePositive(t.price)),frequency:[1,12,52].includes(Number(t.frequency))?Number(t.frequency):1,createdAt:Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now(),expiresAt:Number.isFinite(Number(t.expiresAt))?Number(t.expiresAt):((Number.isFinite(Number(t.createdAt))?Number(t.createdAt):Date.now())+72*3600000)}}):[],graveyard:Array.isArray(d.graveyard)?d.graveyard.map(function(g){return{id:g.id||Date.now()+Math.random(),item:String(g.item||'Unbenannter Wunsch'),price:finitePositive(g.price),projection:finitePositive(g.projection,finitePositive(g.price)),frequency:[1,12,52].includes(Number(g.frequency))?Number(g.frequency):1,reason:String(g.reason||'Keine Notiz').slice(0,500),savedAt:Number.isNaN(Date.parse(g.savedAt))?new Date().toISOString():new Date(g.savedAt).toISOString()}}):[],hourlyWage:finitePositive(d.hourlyWage,20),milestones:Array.isArray(d.milestones)?d.milestones.map(function(m){return{id:m.id||Date.now()+Math.random(),title:String(m.title||'Sparziel').slice(0,120),target:finitePositive(m.target)}}).filter(function(m){return m.target>0}):defaults().milestones}}
+function load(){const cur=storageGet(STORE);if(cur){try{return norm(JSON.parse(cur))}catch(e){}}for(const k of LEGACY){const s=storageGet(k);if(!s)continue;try{const m=norm(JSON.parse(s));storageSet(STORE,JSON.stringify(m));return m}catch(e){}}return defaults()}
+function persist(){
+  const ok=storageSet(STORE,JSON.stringify(appData));
+  if(!ok&&document.getElementById('toast'))toast('Speichern auf diesem Gerät nicht verfügbar');
+  return ok
+}
+function initApp(){appData=load();document.getElementById('calc-wage').value=appData.hourlyWage;document.getElementById('welcome-wage').value=appData.hourlyWage;calculateTime(false);switchView(appData.onboarded?'dashboard':'welcome');renderAll();timerRefresh=setInterval(function(){if(!document.getElementById('view-impulseTimer').classList.contains('hidden'))renderAll()},60000);if(!storageAvailable)setTimeout(function(){toast('Lokales Speichern ist in diesem Browser eingeschränkt')},250);
+document.documentElement.classList.toggle('standalone',window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')renderAll()});
+window.addEventListener('pageshow',function(){renderAll()});
+if('serviceWorker'in navigator){
+  navigator.serviceWorker.register('./sw.js',{scope:'./'}).then(function(reg){
+    reg.update().catch(function(){});
+    if(reg.waiting)reg.waiting.postMessage({type:'SKIP_WAITING'});
+    reg.addEventListener('updatefound',function(){
+      const nw=reg.installing;
+      if(!nw)return;
+      nw.addEventListener('statechange',function(){
+        if(nw.state==='installed'&&navigator.serviceWorker.controller&&reg.waiting){
+          reg.waiting.postMessage({type:'SKIP_WAITING'})
+        }
+      })
+    })
+  }).catch(function(){});
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(hasReloadedForSW)return;
+    hasReloadedForSW=true;
+    window.location.reload()
+  })
+}
+}
 function switchView(v){document.querySelectorAll('.view').forEach(function(x){x.classList.add('hidden')});document.getElementById('view-'+v).classList.remove('hidden');const b=document.getElementById('back-btn');const hide=v==='dashboard'||v==='welcome';b.classList.toggle('hidden',hide);b.classList.toggle('flex',!hide);lucide.createIcons()}
 function save(){persist();renderAll()}
 function completeOnboarding(){const w=parseFloat(document.getElementById('welcome-wage').value)||20;appData.hourlyWage=w;appData.onboarded=true;persist();document.getElementById('calc-wage').value=w;calculateTime(false);switchView('dashboard');toast('Bereit für deinen ersten Check')}
-function calc(){const price=parseFloat(document.getElementById('calc-price').value)||0,wage=parseFloat(document.getElementById('calc-wage').value)||20,freq=parseInt(document.getElementById('calc-frequency').value)||1;return{price:price,wage:wage,freq:freq,projection:price*freq,hours:(price*freq)/wage}}
+function calc(){const rawPrice=parseFloat(document.getElementById('calc-price').value),rawWage=parseFloat(document.getElementById('calc-wage').value),rawFreq=parseInt(document.getElementById('calc-frequency').value);const price=Number.isFinite(rawPrice)&&rawPrice>0?rawPrice:0,wage=Number.isFinite(rawWage)&&rawWage>0?rawWage:20,freq=[1,12,52].includes(rawFreq)?rawFreq:1;return{price:price,wage:wage,freq:freq,projection:price*freq,hours:(price*freq)/wage}}
 function calculateTime(doSave=true){const c=calc();appData.hourlyWage=c.wage;if(doSave)persist();const result=document.getElementById('calc-result-time'),impact=document.getElementById('calc-impact'),days=document.getElementById('calc-workdays'),label=document.getElementById('impact-label'),note=document.getElementById('projection-note');if(c.wage<=0||c.price<=0){result.textContent='0 Std';impact.textContent='0 €';days.textContent='0 Tage';return}let h=Math.floor(c.hours),m=Math.round((c.hours-h)*60);if(m===60){h++;m=0}result.textContent=h+' Std '+m+' Min';impact.textContent=c.projection.toLocaleString('de-DE')+' €';days.textContent=(c.hours/8).toLocaleString('de-DE',{maximumFractionDigits:1})+' Tage';label.textContent=c.freq===1?'Preis:':'Jahreswirkung:';note.classList.toggle('hidden',c.freq===1);const v=document.getElementById('calc-verdict');if(c.hours<3){v.className='inline-block mt-1.5 px-2.5 py-1 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-800 border border-emerald-500/30 font-mono';v.textContent='Leichtgewicht'}else if(c.hours<10){v.className='inline-block mt-1.5 px-2.5 py-1 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-800 border border-amber-500/30 font-mono';v.textContent='Spürbarer Aufwand'}else{v.className='inline-block mt-1.5 px-2.5 py-1 rounded-full text-[9px] font-bold bg-editorial/10 text-editorial border border-editorial/30 font-mono';v.textContent='Große Entscheidung'}}
-function sendToImpulse(){const item=document.getElementById('calc-item').value.trim()||'Unbenannter Wunsch',c=calc();if(!c.price)return;const now=Date.now();appData.timers.push({id:now,item:item,price:c.price,projection:c.projection,frequency:c.freq,createdAt:now,expiresAt:now+72*3600000});save();document.getElementById('calc-item').value='';switchView('impulseTimer');haptic(10);toast('Für 72 Stunden geparkt')}
+function sendToImpulse(){const item=document.getElementById('calc-item').value.trim().slice(0,120)||'Unbenannter Wunsch',c=calc();if(!c.price)return;const now=Date.now();appData.timers.push({id:now,item:item,price:c.price,projection:c.projection,frequency:c.freq,createdAt:now,expiresAt:now+72*3600000});save();document.getElementById('calc-item').value='';switchView('impulseTimer');haptic(10);toast('Für 72 Stunden geparkt')}
 function startReflection(mode,id){if(mode==='direct'){const c=calc(),item=document.getElementById('calc-item').value.trim()||'Unbenannter Wunsch';if(!c.price)return;reflection={mode:'direct',item:item,price:c.price,projection:c.projection,frequency:c.freq}}else{const t=appData.timers.find(function(x){return String(x.id)===String(id)});if(!t||Date.now()<t.expiresAt)return;reflection={mode:'timer',timerId:t.id,item:t.item,price:t.price,projection:t.projection||t.price,frequency:t.frequency||1}}selectedReason='';document.getElementById('reason-text').value='';document.querySelectorAll('.reason').forEach(function(x){x.classList.remove('selected')});openSheet('reflection-sheet')}
 function chooseReason(r,el){selectedReason=r;document.querySelectorAll('.reason').forEach(function(x){x.classList.remove('selected')});el.classList.add('selected')}
 function confirmReflection(withNote){if(!reflection)return;const custom=document.getElementById('reason-text').value.trim(),reason=withNote?(custom||selectedReason||'Bewusste Entscheidung gegen den Impuls'):'Keine Notiz';if(reflection.mode==='timer')appData.timers=appData.timers.filter(function(t){return String(t.id)!==String(reflection.timerId)});appData.graveyard.unshift({id:Date.now(),item:reflection.item,price:reflection.price,projection:reflection.projection,frequency:reflection.frequency,reason:reason,savedAt:new Date().toISOString()});if(reflection.mode==='direct')document.getElementById('calc-item').value='';reflection=null;closeSheet('reflection-sheet');save();switchView('graveyard');haptic(12);toast('Nicht-Kauf gespeichert')}
@@ -202,9 +248,9 @@ const ml=document.getElementById('milestones-list');ml.innerHTML=!appData.milest
 lucide.createIcons()}
 function openSheet(id){document.getElementById(id).classList.add('open');lucide.createIcons()}function closeSheet(id){document.getElementById(id).classList.remove('open')}function sheetBgClose(e,id){if(e.target.id===id)closeSheet(id)}
 function showStartscreen(){closeSheet('data-sheet');document.getElementById('welcome-wage').value=appData.hourlyWage;switchView('welcome')}function armReset(){document.getElementById('reset-confirm').classList.remove('hidden')}function cancelReset(){document.getElementById('reset-confirm').classList.add('hidden')}
-function resetApp(){[STORE].concat(LEGACY).forEach(function(k){localStorage.removeItem(k)});appData=defaults();persist();document.getElementById('calc-item').value='';document.getElementById('calc-price').value='180';document.getElementById('calc-wage').value='20';document.getElementById('welcome-wage').value='20';document.getElementById('calc-frequency').value='1';calculateTime(false);closeSheet('data-sheet');renderAll();switchView('welcome');toast('Morrow Money zurückgesetzt')}
+function resetApp(){[STORE].concat(LEGACY).forEach(function(k){storageRemove(k)});appData=defaults();persist();document.getElementById('calc-item').value='';document.getElementById('calc-price').value='180';document.getElementById('calc-wage').value='20';document.getElementById('welcome-wage').value='20';document.getElementById('calc-frequency').value='1';calculateTime(false);closeSheet('data-sheet');renderAll();switchView('welcome');toast('Morrow Money zurückgesetzt')}
 function exportData(){const blob=new Blob([JSON.stringify(appData,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='morrow-money-backup.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},0);toast('Backup exportiert')}
-function importData(e){const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(){try{appData=norm(JSON.parse(r.result));appData.onboarded=true;persist();document.getElementById('calc-wage').value=appData.hourlyWage;document.getElementById('welcome-wage').value=appData.hourlyWage;calculateTime(false);closeSheet('data-sheet');switchView('dashboard');renderAll();toast('Backup wiederhergestellt')}catch(err){toast('Ungültige Backup-Datei')}e.target.value=''};r.readAsText(f)}
+function importData(e){const f=e.target.files&&e.target.files[0];if(!f)return;if(f.size>1024*1024){toast('Backup ist zu groß');e.target.value='';return}const r=new FileReader();r.onload=function(){try{const raw=JSON.parse(r.result);if(!raw||typeof raw!=='object'||Array.isArray(raw))throw new Error('invalid');appData=norm(raw);appData.timers=appData.timers.slice(0,500);appData.graveyard=appData.graveyard.slice(0,2000);appData.milestones=appData.milestones.slice(0,100);appData.onboarded=true;persist();document.getElementById('calc-wage').value=appData.hourlyWage;document.getElementById('welcome-wage').value=appData.hourlyWage;calculateTime(false);closeSheet('data-sheet');switchView('dashboard');renderAll();toast('Backup wiederhergestellt')}catch(err){toast('Ungültige Backup-Datei')}e.target.value=''};r.readAsText(f)}
 function haptic(ms){if(navigator.vibrate)navigator.vibrate(ms)}function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show')},1700)}
 </script>
 </body>
