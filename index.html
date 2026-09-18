@@ -222,7 +222,21 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     </button>
   </div>
 
-  <button id="coach-card" onclick="openInsights()" class="tap rounded-[13px] px-2.5 py-2 min-h-[48px] shrink-0 text-left flex items-center gap-2 border border-charcoal/15 bg-[#fcfbf9]/80">
+
+
+  <button onclick="switchView('shouldIBuyIt')" class="module-primary card tap rounded-[19px] px-4 min-h-[72px] bg-editorial text-white flex items-center justify-between text-left shrink-0 mb-2.5">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-[14px] bg-white/90 text-editorial flex items-center justify-center"><i data-lucide="calculator" class="w-5 h-5"></i></div>
+      <div>
+        <div class="text-[8px] uppercase tracking-[.16em] font-mono font-bold text-white/65 mb-1">Dein nächster Check</div>
+        <div class="font-serif font-bold text-[1.18rem] leading-none">Should I Buy It?</div>
+        <div class="text-[10px] text-white/75 mt-1">Preis in Lebensarbeitszeit übersetzen</div>
+      </div>
+    </div>
+    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+  </button>
+
+  <button id="coach-card" onclick="openInsights()" class="tap rounded-[13px] mt-1 px-2.5 py-2 min-h-[48px] shrink-0 text-left flex items-center gap-2 border border-charcoal/15 bg-[#fcfbf9]/80">
     <div class="w-7 h-7 rounded-[9px] bg-editorial/8 text-editorial flex items-center justify-center shrink-0">
       <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
     </div>
@@ -237,19 +251,7 @@ main{padding-bottom:max(.875rem,env(safe-area-inset-bottom))}
     <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-charcoal/25 shrink-0"></i>
   </button>
 
-  <button onclick="switchView('shouldIBuyIt')" class="module-primary card tap rounded-[19px] px-4 min-h-[72px] bg-editorial text-white flex items-center justify-between text-left shrink-0 mb-2.5">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-[14px] bg-white/90 text-editorial flex items-center justify-center"><i data-lucide="calculator" class="w-5 h-5"></i></div>
-      <div>
-        <div class="text-[8px] uppercase tracking-[.16em] font-mono font-bold text-white/65 mb-1">Dein nächster Check</div>
-        <div class="font-serif font-bold text-[1.18rem] leading-none">Should I Buy It?</div>
-        <div class="text-[10px] text-white/75 mt-1">Preis in Lebensarbeitszeit übersetzen</div>
-      </div>
-    </div>
-    <i data-lucide="chevron-right" class="w-5 h-5"></i>
-  </button>
-
-  <div class="grid grid-cols-2 gap-2.5 shrink-0 mb-2">
+  <div class="grid grid-cols-2 gap-2.5 shrink-0 mb-2 mt-1">
     <button onclick="switchView('impulseTimer')" class="module-mini card tap rounded-[17px] p-3 text-left min-h-[106px] flex flex-col">
       <div class="flex items-start justify-between gap-2">
         <div class="w-7 h-7 rounded-[9px] bg-charcoal/[.035] border border-charcoal/10 flex items-center justify-center"><i data-lucide="timer" class="w-3.5 h-3.5"></i></div>
