@@ -423,15 +423,74 @@ const STATIC_I18N={
   'Data Vault':'Data Vault','Backup exportieren':'Export backup','Alle lokalen Daten als JSON':'All local data as JSON','Backup importieren':'Import backup','Gespeicherte JSON wiederherstellen':'Restore saved JSON','Startscreen anzeigen':'Show welcome screen','Ohne Daten zu löschen':'Without deleting data',
   'App zurücksetzen':'Reset app','Alle lokalen Daten löschen':'Delete all local data','Wirklich alles löschen?':'Really delete everything?','Timer, Graveyard, Ziele, Stundenlohn und Onboarding werden entfernt.':'Timers, Graveyard, goals, hourly wage and onboarding will be deleted.','Abbrechen':'Cancel','Alles löschen':'Delete everything',
   'Der Geist ist klar.':'Nothing waiting.','Keine aktiven Impulse.':'No active impulses.','Noch keine Siege.':'No wins yet.','Dein erster bewusster Nicht-Kauf erscheint hier.':'Your first conscious non-purchase will appear here.','Noch kein Sparziel definiert.':'No savings goal defined yet.','Erreicht ✓':'Reached ✓',
-  'nichts zu tun':'nothing to do','72h abgeschlossen':'72h complete','Keine Notiz':'No note'
+  'nichts zu tun':'nothing to do','72h abgeschlossen':'72h complete','Keine Notiz':'No note',
+  '€/Std':'€/hr','z. B. Neue Kopfhörer':'e.g. New headphones',
+  'Speichern auf diesem Gerät nicht verfügbar':'Saving on this device is unavailable',
+  'Lokales Speichern ist in diesem Browser eingeschränkt':'Local storage is restricted in this browser',
+  'Bereit für deinen ersten Check':'Ready for your first check',
+  'Bewusste Entscheidung gegen den Impuls':'Conscious decision against the impulse',
+  'Unbenannter Wunsch':'Unnamed wish','Sparziel':'Savings goal'
 };
 function translateStaticDOM(){
   const lang=appData&&appData.lang==='en'?'en':'de';
   const reverse={};Object.keys(STATIC_I18N).forEach(function(k){reverse[STATIC_I18N[k]]=k});
+  function dynamicText(s){
+    if(lang==='en'){
+      let m;
+      if((m=s.match(/^(\d+) Käufe vermieden$/)))return m[1]+' purchases avoided';
+      if((m=s.match(/^(\d+) Kauf vermieden$/)))return m[1]+' purchase avoided';
+      if((m=s.match(/^([\d.,]+) € insgesamt$/)))return m[1]+' € total';
+      if((m=s.match(/^Noch ([\d.,]+) € bis ([\d.,]+) €$/)))return 'Remaining '+m[1]+' € to '+m[2]+' €';
+      if((m=s.match(/^Noch (\d+) Std$/)))return m[1]+' h left';
+      if((m=s.match(/^(\d+) aktiv$/)))return m[1]+' active';
+      if((m=s.match(/^(\d+) Siege$/)))return m[1]+' wins';
+      if((m=s.match(/^([\d.,]+) € behalten$/)))return m[1]+' € retained';
+      if((m=s.match(/^(\d+) Ziele$/)))return m[1]+' goals';
+      if((m=s.match(/^(\d+) erreicht$/)))return m[1]+' reached';
+      if((m=s.match(/^Projektion: ([\d.,]+) €\/Jahr$/)))return 'Projection: '+m[1]+' €/year';
+      if((m=s.match(/^Deine Nicht-Käufe finanzieren (\d+) % dieses Ziels\.$/)))return 'Your non-purchases fund '+m[1]+'% of this goal.';
+      if((m=s.match(/^([\d.,]+) € Ziel$/)))return m[1]+' € goal';
+      if((m=s.match(/^(\d+) Std (\d+) Min$/)))return m[1]+' h '+m[2]+' min';
+      if((m=s.match(/^([\d.,]+) Tage$/)))return m[1]+' days';
+    }else{
+      let m;
+      if((m=s.match(/^(\d+) purchases avoided$/)))return m[1]+' Käufe vermieden';
+      if((m=s.match(/^(\d+) purchase avoided$/)))return m[1]+' Kauf vermieden';
+      if((m=s.match(/^([\d.,]+) € total$/)))return m[1]+' € insgesamt';
+      if((m=s.match(/^Remaining ([\d.,]+) € to ([\d.,]+) €$/)))return 'Noch '+m[1]+' € bis '+m[2]+' €';
+      if((m=s.match(/^(\d+) h left$/)))return 'Noch '+m[1]+' Std';
+      if((m=s.match(/^(\d+) active$/)))return m[1]+' aktiv';
+      if((m=s.match(/^(\d+) wins$/)))return m[1]+' Siege';
+      if((m=s.match(/^([\d.,]+) € retained$/)))return m[1]+' € behalten';
+      if((m=s.match(/^(\d+) goals$/)))return m[1]+' Ziele';
+      if((m=s.match(/^(\d+) reached$/)))return m[1]+' erreicht';
+      if((m=s.match(/^Projection: ([\d.,]+) €\/year$/)))return 'Projektion: '+m[1]+' €/Jahr';
+      if((m=s.match(/^Your non-purchases fund (\d+)% of this goal\.$/)))return 'Deine Nicht-Käufe finanzieren '+m[1]+' % dieses Ziels.';
+      if((m=s.match(/^([\d.,]+) € goal$/)))return m[1]+' € Ziel';
+      if((m=s.match(/^(\d+) h (\d+) min$/)))return m[1]+' Std '+m[2]+' Min';
+      if((m=s.match(/^([\d.,]+) days$/)))return m[1]+' Tage';
+    }
+    return s
+  }
   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-  let n;while(n=walker.nextNode()){const raw=n.nodeValue,trim=raw.trim();if(!trim)continue;let repl=null;if(lang==='en'&&STATIC_I18N[trim])repl=STATIC_I18N[trim];if(lang==='de'&&reverse[trim])repl=reverse[trim];if(repl!==null)n.nodeValue=raw.replace(trim,repl)}
-  document.querySelectorAll('input[placeholder],textarea[placeholder]').forEach(function(el){const p=el.getAttribute('placeholder');if(lang==='en'&&STATIC_I18N[p])el.setAttribute('placeholder',STATIC_I18N[p]);else if(lang==='de'&&reverse[p])el.setAttribute('placeholder',reverse[p])});
-  document.querySelectorAll('option').forEach(function(el){const x=el.textContent.trim();if(lang==='en'&&STATIC_I18N[x])el.textContent=STATIC_I18N[x];else if(lang==='de'&&reverse[x])el.textContent=reverse[x]});
+  let n;while(n=walker.nextNode()){
+    const raw=n.nodeValue,trim=raw.trim();if(!trim)continue;
+    let repl=null;
+    if(lang==='en'&&STATIC_I18N[trim])repl=STATIC_I18N[trim];
+    else if(lang==='de'&&reverse[trim])repl=reverse[trim];
+    else{const d=dynamicText(trim);if(d!==trim)repl=d}
+    if(repl!==null)n.nodeValue=raw.replace(trim,repl)
+  }
+  document.querySelectorAll('input[placeholder],textarea[placeholder]').forEach(function(el){
+    const p=el.getAttribute('placeholder');
+    if(lang==='en'&&STATIC_I18N[p])el.setAttribute('placeholder',STATIC_I18N[p]);
+    else if(lang==='de'&&reverse[p])el.setAttribute('placeholder',reverse[p])
+  });
+  document.querySelectorAll('option').forEach(function(el){
+    const x=el.textContent.trim();
+    if(lang==='en'&&STATIC_I18N[x])el.textContent=STATIC_I18N[x];
+    else if(lang==='de'&&reverse[x])el.textContent=reverse[x]
+  });
 }
 function localizedGoalTitle(title){if(title==='Wochenend-Trip'||title==='Weekend trip')return tr('weekendTrip');if(title==='Tech-Gadget Wunsch'||title==='Tech gadget wish')return tr('techWish');return title}
 function tr(key){const lang=appData&&appData.lang==='en'?'en':'de';return(I18N[lang]&&I18N[lang][key])||I18N.de[key]||key}
